@@ -1,0 +1,4 @@
+node_modules/
+.github-publish/
+art/qa/*.png
+npm-debug.log*

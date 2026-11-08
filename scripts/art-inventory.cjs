@@ -1,0 +1,14 @@
+const fs = require('node:fs');
+const vm = require('node:vm');
+const path = require('node:path');
+const root = path.resolve(__dirname, '..');
+const savedOriginal = path.join(root,'backups','index-placeholders.html');
+const html = fs.readFileSync(fs.existsSync(savedOriginal) ? savedOriginal : path.join(root, 'index.html'), 'utf8');
+const start = html.indexOf('/* Two Lanterns :: art core');
+const end = html.indexOf('/* Two Lanterns :: saved characters.');
+const ctx = vm.createContext({ console });
+vm.runInContext(html.slice(start, end), ctx);
+const inventory = { scenes: ctx.Art.names, rooms: ctx.Data.rooms.concat(ctx.Data.extra || []).map(r => ({ id:r.id, title:r.title, intro:r.intro, alt:r.alt })), icons: Object.keys(ctx.ArtCore.I), fates: ctx.Engine.FATES, endings: ctx.Engine.DUNK };
+fs.mkdirSync(path.join(root, 'art'), {recursive:true});
+fs.writeFileSync(path.join(root,'art','inventory.json'), JSON.stringify(inventory,null,2));
+console.log(JSON.stringify(inventory,null,2));

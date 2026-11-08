@@ -1,0 +1,825 @@
+{
+  "ok": true,
+  "createdChoices": 10,
+  "checks": [
+    {
+      "label": "desktop-title",
+      "screen": "title",
+      "overflow": false,
+      "scenes": [
+        "title"
+      ],
+      "portraits": 0,
+      "assets": true
+    },
+    {
+      "label": "create-0-0",
+      "screen": "create",
+      "overflow": false,
+      "scenes": [
+        "q-origin"
+      ],
+      "portraits": 1,
+      "assets": true
+    },
+    {
+      "label": "create-0-1",
+      "screen": "create",
+      "overflow": false,
+      "scenes": [
+        "q-calling"
+      ],
+      "portraits": 1,
+      "assets": true
+    },
+    {
+      "label": "create-0-2",
+      "screen": "create",
+      "overflow": false,
+      "scenes": [
+        "q-lantern"
+      ],
+      "portraits": 1,
+      "assets": true
+    },
+    {
+      "label": "create-0-3",
+      "screen": "create",
+      "overflow": false,
+      "scenes": [
+        "q-keepsake"
+      ],
+      "portraits": 1,
+      "assets": true
+    },
+    {
+      "label": "create-0-4",
+      "screen": "create",
+      "overflow": false,
+      "scenes": [
+        "q-motive"
+      ],
+      "portraits": 1,
+      "assets": true
+    },
+    {
+      "label": "create-1-0",
+      "screen": "create",
+      "overflow": false,
+      "scenes": [
+        "q-origin"
+      ],
+      "portraits": 1,
+      "assets": true
+    },
+    {
+      "label": "create-1-1",
+      "screen": "create",
+      "overflow": false,
+      "scenes": [
+        "q-calling"
+      ],
+      "portraits": 1,
+      "assets": true
+    },
+    {
+      "label": "create-1-2",
+      "screen": "create",
+      "overflow": false,
+      "scenes": [
+        "q-lantern"
+      ],
+      "portraits": 1,
+      "assets": true
+    },
+    {
+      "label": "create-1-3",
+      "screen": "create",
+      "overflow": false,
+      "scenes": [
+        "q-keepsake"
+      ],
+      "portraits": 1,
+      "assets": true
+    },
+    {
+      "label": "create-1-4",
+      "screen": "create",
+      "overflow": false,
+      "scenes": [
+        "q-motive"
+      ],
+      "portraits": 1,
+      "assets": true
+    },
+    {
+      "label": "meet",
+      "screen": "meet",
+      "overflow": false,
+      "scenes": [
+        "threshold"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "intro-0",
+      "screen": "intro",
+      "overflow": false,
+      "scenes": [
+        "stair"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "choose-0",
+      "screen": "choose",
+      "overflow": false,
+      "scenes": [
+        "stair"
+      ],
+      "portraits": 1,
+      "assets": true
+    },
+    {
+      "label": "handoff-0",
+      "screen": "handoff",
+      "overflow": false,
+      "scenes": [
+        "stair"
+      ],
+      "portraits": 0,
+      "assets": true
+    },
+    {
+      "label": "choose-0",
+      "screen": "choose",
+      "overflow": false,
+      "scenes": [
+        "stair"
+      ],
+      "portraits": 1,
+      "assets": true
+    },
+    {
+      "label": "roll-0",
+      "screen": "roll",
+      "overflow": false,
+      "scenes": [
+        "stair"
+      ],
+      "portraits": 0,
+      "assets": true
+    },
+    {
+      "label": "roll-0",
+      "screen": "roll",
+      "overflow": false,
+      "scenes": [
+        "stair",
+        "stair"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "intro-1",
+      "screen": "intro",
+      "overflow": false,
+      "scenes": [
+        "greenhouse"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "choose-1",
+      "screen": "choose",
+      "overflow": false,
+      "scenes": [
+        "greenhouse"
+      ],
+      "portraits": 1,
+      "assets": true
+    },
+    {
+      "label": "handoff-1",
+      "screen": "handoff",
+      "overflow": false,
+      "scenes": [
+        "greenhouse"
+      ],
+      "portraits": 0,
+      "assets": true
+    },
+    {
+      "label": "choose-1",
+      "screen": "choose",
+      "overflow": false,
+      "scenes": [
+        "greenhouse"
+      ],
+      "portraits": 1,
+      "assets": true
+    },
+    {
+      "label": "roll-1",
+      "screen": "roll",
+      "overflow": false,
+      "scenes": [
+        "greenhouse"
+      ],
+      "portraits": 0,
+      "assets": true
+    },
+    {
+      "label": "roll-1",
+      "screen": "roll",
+      "overflow": false,
+      "scenes": [
+        "greenhouse",
+        "greenhouse"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "intro-2",
+      "screen": "intro",
+      "overflow": false,
+      "scenes": [
+        "weaver"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "choose-2",
+      "screen": "choose",
+      "overflow": false,
+      "scenes": [
+        "weaver"
+      ],
+      "portraits": 1,
+      "assets": true
+    },
+    {
+      "label": "handoff-2",
+      "screen": "handoff",
+      "overflow": false,
+      "scenes": [
+        "weaver"
+      ],
+      "portraits": 0,
+      "assets": true
+    },
+    {
+      "label": "choose-2",
+      "screen": "choose",
+      "overflow": false,
+      "scenes": [
+        "weaver"
+      ],
+      "portraits": 1,
+      "assets": true
+    },
+    {
+      "label": "roll-2",
+      "screen": "roll",
+      "overflow": false,
+      "scenes": [
+        "weaver"
+      ],
+      "portraits": 0,
+      "assets": true
+    },
+    {
+      "label": "roll-2",
+      "screen": "roll",
+      "overflow": false,
+      "scenes": [
+        "weaver",
+        "weaver"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "intro-3",
+      "screen": "intro",
+      "overflow": false,
+      "scenes": [
+        "market"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "choose-3",
+      "screen": "choose",
+      "overflow": false,
+      "scenes": [
+        "market"
+      ],
+      "portraits": 1,
+      "assets": true
+    },
+    {
+      "label": "handoff-3",
+      "screen": "handoff",
+      "overflow": false,
+      "scenes": [
+        "market"
+      ],
+      "portraits": 0,
+      "assets": true
+    },
+    {
+      "label": "choose-3",
+      "screen": "choose",
+      "overflow": false,
+      "scenes": [
+        "market"
+      ],
+      "portraits": 1,
+      "assets": true
+    },
+    {
+      "label": "roll-3",
+      "screen": "roll",
+      "overflow": false,
+      "scenes": [
+        "market"
+      ],
+      "portraits": 0,
+      "assets": true
+    },
+    {
+      "label": "roll-3",
+      "screen": "roll",
+      "overflow": false,
+      "scenes": [
+        "market",
+        "market"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "stall-4",
+      "screen": "stall",
+      "overflow": false,
+      "scenes": [
+        "stall"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "intro-4",
+      "screen": "intro",
+      "overflow": false,
+      "scenes": [
+        "gallery"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "choose-4",
+      "screen": "choose",
+      "overflow": false,
+      "scenes": [
+        "gallery"
+      ],
+      "portraits": 1,
+      "assets": true
+    },
+    {
+      "label": "handoff-4",
+      "screen": "handoff",
+      "overflow": false,
+      "scenes": [
+        "gallery"
+      ],
+      "portraits": 0,
+      "assets": true
+    },
+    {
+      "label": "choose-4",
+      "screen": "choose",
+      "overflow": false,
+      "scenes": [
+        "gallery"
+      ],
+      "portraits": 1,
+      "assets": true
+    },
+    {
+      "label": "roll-4",
+      "screen": "roll",
+      "overflow": false,
+      "scenes": [
+        "gallery"
+      ],
+      "portraits": 0,
+      "assets": true
+    },
+    {
+      "label": "roll-4",
+      "screen": "roll",
+      "overflow": false,
+      "scenes": [
+        "gallery",
+        "gallery"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "intro-5",
+      "screen": "intro",
+      "overflow": false,
+      "scenes": [
+        "moths"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "choose-5",
+      "screen": "choose",
+      "overflow": false,
+      "scenes": [
+        "moths"
+      ],
+      "portraits": 1,
+      "assets": true
+    },
+    {
+      "label": "handoff-5",
+      "screen": "handoff",
+      "overflow": false,
+      "scenes": [
+        "moths"
+      ],
+      "portraits": 0,
+      "assets": true
+    },
+    {
+      "label": "choose-5",
+      "screen": "choose",
+      "overflow": false,
+      "scenes": [
+        "moths"
+      ],
+      "portraits": 1,
+      "assets": true
+    },
+    {
+      "label": "roll-5",
+      "screen": "roll",
+      "overflow": false,
+      "scenes": [
+        "moths"
+      ],
+      "portraits": 0,
+      "assets": true
+    },
+    {
+      "label": "roll-5",
+      "screen": "roll",
+      "overflow": false,
+      "scenes": [
+        "moths",
+        "moths"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "intro-6",
+      "screen": "intro",
+      "overflow": false,
+      "scenes": [
+        "armoury"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "choose-6",
+      "screen": "choose",
+      "overflow": false,
+      "scenes": [
+        "armoury"
+      ],
+      "portraits": 1,
+      "assets": true
+    },
+    {
+      "label": "handoff-6",
+      "screen": "handoff",
+      "overflow": false,
+      "scenes": [
+        "armoury"
+      ],
+      "portraits": 0,
+      "assets": true
+    },
+    {
+      "label": "choose-6",
+      "screen": "choose",
+      "overflow": false,
+      "scenes": [
+        "armoury"
+      ],
+      "portraits": 1,
+      "assets": true
+    },
+    {
+      "label": "roll-6",
+      "screen": "roll",
+      "overflow": false,
+      "scenes": [
+        "armoury"
+      ],
+      "portraits": 0,
+      "assets": true
+    },
+    {
+      "label": "roll-6",
+      "screen": "roll",
+      "overflow": false,
+      "scenes": [
+        "armoury",
+        "armoury"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "stall-7",
+      "screen": "stall",
+      "overflow": false,
+      "scenes": [
+        "stall2"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "intro-7",
+      "screen": "intro",
+      "overflow": false,
+      "scenes": [
+        "bellheart"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "choose-7",
+      "screen": "choose",
+      "overflow": false,
+      "scenes": [
+        "bellheart"
+      ],
+      "portraits": 1,
+      "assets": true
+    },
+    {
+      "label": "handoff-7",
+      "screen": "handoff",
+      "overflow": false,
+      "scenes": [
+        "bellheart"
+      ],
+      "portraits": 0,
+      "assets": true
+    },
+    {
+      "label": "choose-7",
+      "screen": "choose",
+      "overflow": false,
+      "scenes": [
+        "bellheart"
+      ],
+      "portraits": 1,
+      "assets": true
+    },
+    {
+      "label": "roll-7",
+      "screen": "roll",
+      "overflow": false,
+      "scenes": [
+        "bellheart"
+      ],
+      "portraits": 0,
+      "assets": true
+    },
+    {
+      "label": "roll-7",
+      "screen": "roll",
+      "overflow": false,
+      "scenes": [
+        "bellheart",
+        "bellheart"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "ending-7",
+      "screen": "ending",
+      "overflow": false,
+      "scenes": [
+        "end"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "book",
+      "screen": "ending",
+      "overflow": false,
+      "scenes": [
+        "book"
+      ],
+      "portraits": 0,
+      "assets": true
+    },
+    {
+      "label": "review-rooms",
+      "overflow": false,
+      "scenes": [
+        "stair",
+        "nave",
+        "gallery",
+        "ledger",
+        "weaver",
+        "mirror",
+        "treasury",
+        "bellheart",
+        "ossuary",
+        "salt",
+        "clock",
+        "candle",
+        "roots",
+        "kitchen",
+        "ferry",
+        "orchard",
+        "forge",
+        "weeping",
+        "moths",
+        "library",
+        "market",
+        "dice",
+        "well",
+        "armoury",
+        "rookery",
+        "cistern",
+        "chapter",
+        "bridge",
+        "organ",
+        "greenhouse",
+        "doors",
+        "scales",
+        "scriptorium",
+        "quarry",
+        "stable",
+        "windows",
+        "tomb",
+        "pennywell"
+      ],
+      "portraits": 0,
+      "assets": true
+    },
+    {
+      "label": "review-support",
+      "overflow": false,
+      "scenes": [
+        "title",
+        "names",
+        "q-origin",
+        "q-calling",
+        "q-lantern",
+        "q-keepsake",
+        "q-motive",
+        "threshold",
+        "roster",
+        "stall",
+        "stall2",
+        "book",
+        "lobby"
+      ],
+      "portraits": 0,
+      "assets": true
+    },
+    {
+      "label": "review-endings",
+      "overflow": false,
+      "scenes": [
+        "end",
+        "end",
+        "end",
+        "end",
+        "end",
+        "end",
+        "end",
+        "end",
+        "end",
+        "end",
+        "end",
+        "end",
+        "end",
+        "end",
+        "end"
+      ],
+      "portraits": 0,
+      "assets": true
+    },
+    {
+      "label": "review-portraits",
+      "overflow": false,
+      "scenes": [],
+      "portraits": 8,
+      "assets": true
+    },
+    {
+      "label": "review-symbols",
+      "overflow": false,
+      "scenes": [],
+      "portraits": 0,
+      "assets": true
+    },
+    {
+      "label": "mobile-title",
+      "screen": "title",
+      "overflow": false,
+      "scenes": [
+        "title"
+      ],
+      "portraits": 0,
+      "assets": true
+    },
+    {
+      "label": "mobile-names",
+      "screen": "names",
+      "overflow": false,
+      "scenes": [
+        "names"
+      ],
+      "portraits": 0,
+      "assets": true
+    },
+    {
+      "label": "mobile-create",
+      "screen": "create",
+      "overflow": false,
+      "scenes": [
+        "q-origin"
+      ],
+      "portraits": 1,
+      "assets": true
+    },
+    {
+      "label": "mobile-lobby",
+      "screen": "lobby",
+      "overflow": false,
+      "scenes": [
+        "lobby"
+      ],
+      "portraits": 0,
+      "assets": true
+    }
+  ],
+  "alpha": [
+    {
+      "name": "guard",
+      "alpha": true,
+      "width": 512,
+      "height": 640
+    },
+    {
+      "name": "thief",
+      "alpha": true,
+      "width": 512,
+      "height": 640
+    },
+    {
+      "name": "witch",
+      "alpha": true,
+      "width": 512,
+      "height": 640
+    },
+    {
+      "name": "cantor",
+      "alpha": true,
+      "width": 512,
+      "height": 640
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,375 @@
+{
+  "scenes": [
+    "title",
+    "names",
+    "q-origin",
+    "q-calling",
+    "q-lantern",
+    "q-keepsake",
+    "q-motive",
+    "threshold",
+    "stair",
+    "nave",
+    "gallery",
+    "ledger",
+    "weaver",
+    "mirror",
+    "treasury",
+    "bellheart",
+    "end",
+    "ossuary",
+    "salt",
+    "clock",
+    "candle",
+    "roots",
+    "kitchen",
+    "ferry",
+    "orchard",
+    "forge",
+    "weeping",
+    "moths",
+    "library",
+    "market",
+    "dice",
+    "well",
+    "roster",
+    "armoury",
+    "rookery",
+    "cistern",
+    "chapter",
+    "bridge",
+    "organ",
+    "greenhouse",
+    "doors",
+    "scales",
+    "scriptorium",
+    "quarry",
+    "stable",
+    "windows",
+    "tomb",
+    "pennywell",
+    "stall",
+    "stall2",
+    "book",
+    "lobby"
+  ],
+  "rooms": [
+    {
+      "id": "stair",
+      "title": "The Bell Stair",
+      "intro": "The chapel cellar ends in a stair that is on no plan of the building. It winds down around a bell-rope as thick as an arm. Far below, one stroke of bronze rolls up the well and stops against your teeth. Then nothing, which is worse.",
+      "alt": "A spiral stair seen from above, a bell-rope hanging into the dark"
+    },
+    {
+      "id": "nave",
+      "title": "The Drowned Nave",
+      "intro": "The way on lets out inside a chapel that is not yours. Black water fills the nave to the pew-tops, perfectly still. Candles burn beneath the surface. Something up in the choir loft is humming along with your breathing.",
+      "alt": "A flooded chapel, pale faces in the choir loft, candles under black water"
+    },
+    {
+      "id": "gallery",
+      "title": "The Glowmoss Gallery",
+      "intro": "A long gallery of robed statues, bowing in two rows, every face worn smooth. Pale moss climbs their shoulders and glows like slow breathing. The path between them is narrow. Every statue has turned its head a little further than it did a moment ago.",
+      "alt": "Two rows of bowing statues and glowing mushrooms along a narrow path"
+    },
+    {
+      "id": "ledger",
+      "title": "The Ledger Hall",
+      "intro": "A hall as long as a market street, shelved floor to ceiling with ledgers. At the far end a counting-desk sits under a single lamp. Behind it is a robe with no one in it. The great ledger opens by itself to two fresh lines. Both are your names, and there is a figure beside each. “PASSAGE,” says a pen, somewhere, “COSTS WHAT IT COSTS.”",
+      "alt": "A hall of ledger-shelves and a lamp-lit desk with an empty robe behind it"
+    },
+    {
+      "id": "weaver",
+      "title": "The Weaver’s Vault",
+      "intro": "Silk, floor to vault, grey with age and hung with bundles the size of people. A bell-founder’s crucible has been turned into a nest at the heart of it. The thing that lives there has too many knees. The whole web hums when it hears you breathe.",
+      "alt": "A vast spider in a web above a glowing crucible"
+    },
+    {
+      "id": "mirror",
+      "title": "The Mirror Crypt",
+      "intro": "A round chamber, floored in black and white, with one tall mirror hanging in the dark. It shows your two lanterns burning, and behind them, what you came down for. It looks very easy to reach. In the glass, your reflection raises a hand, though you have not.",
+      "alt": "A tall mirror showing two lantern-bearers and a far-off bell"
+    },
+    {
+      "id": "treasury",
+      "title": "The Bellwright’s Treasury",
+      "intro": "The old bellwright’s hoard: cracked bell-metal in heaps, coin by the cartload, and in the middle a chest the size of a rowboat. The air tastes of copper. Every bell hung from the ceiling is turning, very slowly, to look at you. One of them already is.",
+      "alt": "A hoard of gold and hanging bells, one chest, a hammer on a pedestal"
+    },
+    {
+      "id": "bellheart",
+      "title": "The Bellheart",
+      "intro": "The last chamber is a drowned cathedral turned inside out. The Bell hangs here, big as a house and split from lip to shoulder, and the crack glows. Chains thick as chimneys creak overhead. Black water breathes below in time with them. On the ringer’s stool sits a figure in a sexton’s coat. When it turns, it has a lantern’s light where a face should be. “Well,” says the Sexton. “One of you is going to do it. Which?”",
+      "alt": "A colossal cracked bell over black water, a figure in a sexton’s coat on a stool"
+    },
+    {
+      "id": "ossuary",
+      "title": "The Bone Choir",
+      "intro": "Ten thousand skulls sit in tiered stalls, facing a lectern. A thin ivory baton lies across it. Every jaw hangs open a finger’s width, and the whole room is breathing in.",
+      "alt": "Tiers of skulls in choir stalls facing a lectern and a baton"
+    },
+    {
+      "id": "salt",
+      "title": "The Salt Cellar",
+      "intro": "White crystal grows from every wall, pink at the roots, and the air tastes like the sea. A still brine pool fills the middle of the cave. Around it stand a dozen figures made entirely of salt, each reaching toward the water.",
+      "alt": "A cave of white salt crystals around a brine pool with salt figures"
+    },
+    {
+      "id": "clock",
+      "title": "The Clockwork Belfry",
+      "intro": "Gears the size of cartwheels turn in the dark, each tooth stamped with a name. A pendulum sweeps the whole room once a breath, and something has stopped the clock’s last hand a hair short of the hour.",
+      "alt": "Giant interlocking gears and a long pendulum in a dark belfry"
+    },
+    {
+      "id": "candle",
+      "title": "The Candle Warren",
+      "intro": "Wax has run down every wall in cream-coloured rivers, and where it has pooled it has grown into stalagmites crowned with flame. Thousands of small lights, none of them lit by anyone. Something warm moves between them, thin as a wick.",
+      "alt": "Wax stalagmites crowned with hundreds of small flames in a warm cavern"
+    },
+    {
+      "id": "roots",
+      "title": "The Root Cellar",
+      "intro": "The ceiling is a tangle of white roots as thick as thighs, and they have found the floor. The old yew above the chapel has been growing down here for centuries, and it has noticed the lanterns. Every root points the same way, like a compass that wants your name.",
+      "alt": "Thick pale roots hanging from a ceiling and gripping a cellar floor"
+    },
+    {
+      "id": "kitchen",
+      "title": "The Quiet Kitchen",
+      "intro": "A long kitchen, cold as a cellar and tidy as a chapel. Copper pots hang by size above a hearth that has not been lit in a century. Something is stirring a pot that is not on any fire. It stops when you stop.",
+      "alt": "A cold hearth and hanging copper pots in a long stone kitchen"
+    },
+    {
+      "id": "ferry",
+      "title": "The Hollow Ferry",
+      "intro": "A black river runs through the cave without a sound. A flat barge waits at a post, with a lantern hanging from it and no one to carry it. Across the water a tall figure leans on a pole, and does not so much as turn its head to see who is coming.",
+      "alt": "A dark underground river, a flat ferry, and a tall figure with a pole"
+    },
+    {
+      "id": "orchard",
+      "title": "The Glass Orchard",
+      "intro": "Trees of blown glass grow in rows, each hung with fruit that holds a small steady light. The ground chimes under your boots. Nothing else here makes a sound, because anything else here would break.",
+      "alt": "Rows of glass trees hung with softly glowing fruit"
+    },
+    {
+      "id": "forge",
+      "title": "The Bellfounder’s Forge",
+      "intro": "A foundry carved into the rock, its furnace banked to a deep red. Moulds as tall as people stand in rows, each cast for a bell that was never rung. The air is thick enough to chew. On the anvil, a hammer waits with its head still glowing.",
+      "alt": "A red-lit foundry with tall bell moulds and a glowing anvil"
+    },
+    {
+      "id": "weeping",
+      "title": "The Weeping Wall",
+      "intro": "One wall of the corridor is carved from floor to ceiling with faces, each caught mid-sob, and every face is wet. The tears run in tidy channels into a trough at the base, the only thing in the corridor that is full. A shallow door waits beyond the weeping.",
+      "alt": "A wall carved with weeping faces and tear-channels running into a stone trough"
+    },
+    {
+      "id": "moths",
+      "title": "The Moth Chapel",
+      "intro": "Every pew, pillar and inch of vaulting is furred with sleeping moths, grey as ash and broad as hands. A single candle burns on the altar. Whatever the moths are waiting for, it is not you, and they would very much like to keep it that way.",
+      "alt": "A chapel hung with sleeping grey moths around one altar candle"
+    },
+    {
+      "id": "library",
+      "title": "The Chained Library",
+      "intro": "Every book here is chained to its shelf, and every chain is taut. The books are pulling, very gently, toward the spiral stair at the far end, as if they would like to leave. On a lectern sits an index in a hand so small it takes a minute to see that it is still writing.",
+      "alt": "Chained books straining on tall shelves around a lectern"
+    },
+    {
+      "id": "market",
+      "title": "The Midnight Market",
+      "intro": "Stalls under paper lanterns line a cavern street, hung with things you recognise from your own life. Faint vendors call prices in a language of small bells. At the first stall, a grey hand holds out a pair of brass scales, and waits.",
+      "alt": "A street of lantern-lit stalls with faint bowing vendors"
+    },
+    {
+      "id": "dice",
+      "title": "The Gambler’s Alcove",
+      "intro": "A small round chamber holds a round table and two stools, and between them a pair of bone dice, already mid-roll. They have been mid-roll for a century. The tabletop is carved with a single line: ONE WINS. ONE PAYS.",
+      "alt": "A round table with two stools and two ivory dice in a single beam of light"
+    },
+    {
+      "id": "well",
+      "title": "The Well of Echoes",
+      "intro": "A shaft without a bottom, ringed by a low wall of wet stone. Drop a pebble and the sound comes back hours later in someone else’s voice. A thin rope runs down into the dark, and at the end of it, something small is tied on.",
+      "alt": "A round well shaft with a low stone wall and a rope vanishing into darkness"
+    },
+    {
+      "id": "armoury",
+      "title": "The Dented Armoury",
+      "intro": "Racks of armour stand in ranks, every piece dented, every helm turned toward the door. They are empty, and they are listening. At the far end a single gauntlet lies on a plinth, fingers curled as if it were thinking of a fist.",
+      "alt": "Ranks of empty dented armour and a gauntlet on a plinth"
+    },
+    {
+      "id": "rookery",
+      "title": "The Rookery",
+      "intro": "The ceiling is gone in the dark, and everything above you is rope, and every rope is crowded with sleeping rooks, black as cloth, tens of thousands strong. A single feather drifts down, glossy as ink, and lands on your lantern with a sound you feel in your teeth.",
+      "alt": "Hanging bell ropes crowded with sleeping black birds in a tall dark hall"
+    },
+    {
+      "id": "cistern",
+      "title": "The Frozen Cistern",
+      "intro": "A vaulted cistern, drained and frozen. Every pillar wears a coat of blue ice, and in the ice, like flies in amber, are the faces of people who stood very still. A thin sheet covers the floor. Under it, black water moves.",
+      "alt": "A vaulted frozen cistern with ice pillars and faces under a glass floor"
+    },
+    {
+      "id": "chapter",
+      "title": "The Silent Chapter",
+      "intro": "Twelve hooded abbots sit at a round table with their hands folded, and not one has breathed in a hundred years. The vow of silence hangs in the air like cold. A signet ring lies at the centre of the table, in a circle of candle-stubs, and a thirteenth stool is pulled out and waiting.",
+      "alt": "Twelve hooded figures around a round table with a ring at the centre"
+    },
+    {
+      "id": "bridge",
+      "title": "The Chain Bridge",
+      "intro": "A bridge of iron chain crosses a gap too wide to throw a light across. Below, the Deep breathes in and out, slow as a sleeper. Every link is the size of a thigh and stamped with a name. The bridge sways in time with the breathing.",
+      "alt": "A bridge of enormous chain links over a black abyss"
+    },
+    {
+      "id": "organ",
+      "title": "The Self-Playing Organ",
+      "intro": "A pipe organ climbs the whole west wall, gilt pipes rising into the dark, keys sinking and lifting by themselves. It is playing a hymn you almost know. The bellows breathe. The organist’s bench is empty, and warm.",
+      "alt": "A vast pipe organ with sinking keys and an empty warm bench"
+    },
+    {
+      "id": "greenhouse",
+      "title": "The Pale Greenhouse",
+      "intro": "Glass panes gone grey, iron ribs furred with ivy. Inside it is warm, and the plants have grown the way plants grow when nobody is watching: very large, and toward the door. At the centre a flower the size of a cartwheel hangs closed, and breathes.",
+      "alt": "A grey-paned greenhouse choked with giant leaves and one huge closed bloom"
+    },
+    {
+      "id": "doors",
+      "title": "The Hall of Doors",
+      "intro": "A corridor with no end, and a door on every side: oak, iron, glass, a small round one at ankle height. Each carries a name. A key hangs from a nail beside the third door on the left, and a faint sound is going on behind all of them.",
+      "alt": "A long corridor lined with mismatched doors and a key on a nail"
+    },
+    {
+      "id": "scales",
+      "title": "The Weighing Room",
+      "intro": "A great pair of brass scales fills the room, one pan low and one pan high. On the low pan lies a heap of grey stones. On the high pan, a single white feather. A voice like a clerk clearing its throat asks, with some courtesy, what you have brought to be weighed.",
+      "alt": "Giant brass scales with a heap of stones on one pan and a feather on the other"
+    },
+    {
+      "id": "scriptorium",
+      "title": "The Scriptorium",
+      "intro": "Slanted desks in rows, and at every desk a pen standing in an inkwell, copying something. The ink is the wrong colour. A long page runs from desk to desk like a stream, and at the end of it, a blank space is slowly being filled with your names.",
+      "alt": "Rows of slanted desks with self-writing pens and a long page across them"
+    },
+    {
+      "id": "quarry",
+      "title": "The Bellmetal Quarry",
+      "intro": "An open pit cut down in terraces, glittering with green bronze at every face. Picks stand in the rock where the last quarrymen left them. A long ladder runs down, and a long drop runs beside it. Something is chiselling in the dark below, with the patience of a very large clock.",
+      "alt": "A terraced pit of green bronze and a long ladder going down into the dark"
+    },
+    {
+      "id": "stable",
+      "title": "The Pale Stable",
+      "intro": "A long low stable of forty stalls, and in each a horse made of mist and lantern-light, standing with its head down. A single black horseshoe hangs on a nail over the last stall, and the last horse is watching you with eyes like dropped coins.",
+      "alt": "A long stable of misty ghost horses and a horseshoe on a nail"
+    },
+    {
+      "id": "windows",
+      "title": "The Window Hall",
+      "intro": "Tall stained-glass windows line a corridor underground, each lit from behind by nothing at all. They show Ashmere: the market, the docks, the chapel, the people you know, small and bright and going about their day without you. The last window is cracked, and its light falls on a prism lying on the sill.",
+      "alt": "A corridor of tall stained-glass windows showing a town, one cracked"
+    },
+    {
+      "id": "tomb",
+      "title": "The Last Ringer’s Tomb",
+      "intro": "A narrow tomb, scarcely wider than the coffin that fills it. The lid is carved with a man in a ringer’s smock, hands folded over a length of rope. Candles in the wall niches have burned to stubs and not gone out. Someone has been here recently, and left a hymn-book open.",
+      "alt": "A narrow tomb with a carved ringer on the lid and candles in niches"
+    },
+    {
+      "id": "pennywell",
+      "title": "The Penny Well",
+      "intro": "A round pool in a round room, no wider than a cartwheel, its floor paved with coins of every age: pennies, bronze, bits of silver, a tooth. A sign that nobody wrote says ONE WISH, PAID IN FULL. The water is perfectly clear, and a long way down.",
+      "alt": "A round pool of clear water paved with old coins, lit from above"
+    }
+  ],
+  "icons": [
+    "hammer",
+    "shield",
+    "dagger",
+    "sword",
+    "eye",
+    "flame",
+    "book",
+    "scroll",
+    "key",
+    "skull",
+    "bell",
+    "coin",
+    "coins",
+    "chest",
+    "door",
+    "stairs",
+    "wave",
+    "note",
+    "heart",
+    "star",
+    "crown",
+    "mirror",
+    "mushroom",
+    "spider",
+    "web",
+    "rope",
+    "torch",
+    "potion",
+    "ring",
+    "feather",
+    "ghost",
+    "cross",
+    "anchor",
+    "mask",
+    "gem",
+    "fang",
+    "hourglass",
+    "candle",
+    "shovel",
+    "envelope",
+    "locket",
+    "clapper",
+    "scale",
+    "chain",
+    "check",
+    "scratch",
+    "net",
+    "lantern",
+    "lantern_tallow",
+    "lantern_witch",
+    "lantern_moss",
+    "lantern_saint",
+    "dice",
+    "ear",
+    "fist",
+    "moth",
+    "pick",
+    "horseshoe",
+    "window",
+    "flower"
+  ],
+  "fates": [
+    "whole",
+    "weary",
+    "ruined",
+    "carried",
+    "fallen",
+    "martyr",
+    "thief",
+    "keeper",
+    "bound"
+  ],
+  "endings": [
+    "ring:strong",
+    "ring:fair",
+    "ring:weak",
+    "break:strong",
+    "break:fair",
+    "break:weak",
+    "steal:strong",
+    "steal:fair",
+    "steal:weak",
+    "keep:strong",
+    "keep:fair",
+    "keep:weak",
+    "collapse",
+    "deadlock"
+  ]
+}

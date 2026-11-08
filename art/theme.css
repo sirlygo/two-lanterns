@@ -1,0 +1,27 @@
+/* Undertoll: cold stone, shadow cloth and two small lights. */
+:root{--bg:#090e13;--bg2:#0e171e;--card:#121d25;--card2:#182830;--line:#273b43;--line2:#40565d;--fg:#e0e4d9;--mute:#a3b5b9;--dim:#91a4aa;--ember:#e4ae60;--ember-d:#ad7838;--ember-a:rgba(228,174,96,.12);--verd:#81cbb1;--verd-d:#478a77;--verd-a:rgba(129,203,177,.12);--gold:#cec59e;--r:7px}
+#app{background:radial-gradient(ellipse at 50% 0,rgba(78,119,122,.1),transparent 65%)}
+.plate{background:#080d11;border-radius:6px;box-shadow:0 0 0 1px #30434a,0 25px 65px -28px #000}
+.plate.hero,.plate.tall{aspect-ratio:16/9;max-height:540px}
+.plate::after,.handoff.p0 .plate::after,.handoff.p1 .plate::after{background:linear-gradient(180deg,rgba(3,8,12,.03),transparent 70%,rgba(3,8,12,.15));mix-blend-mode:normal;animation:none}
+.plate svg{transform-origin:50% 60%;animation:undertoll-drift 36s ease-in-out infinite alternate}
+.scene-motes{animation:undertoll-motes 18s ease-in-out infinite alternate;pointer-events:none}
+@keyframes undertoll-drift{from{transform:scale(1)}to{transform:scale(1.025)}}
+@keyframes undertoll-motes{from{transform:translateY(0);opacity:.35}to{transform:translateY(-12px);opacity:.8}}
+.shadow-portrait{overflow:visible;filter:drop-shadow(0 5px 10px rgba(0,0,0,.28))}
+.held-lamp{transform-box:view-box}
+.portrait-body{filter:drop-shadow(0 0 1px rgba(158,193,183,.12))}
+.cport{width:116px;height:145px}.fate .cport{width:108px;height:135px}
+.oic{background:rgba(139,174,174,.035);border:1px solid rgba(139,174,174,.08);border-radius:5px;color:#b8c8c2}
+.opt.sel .oic{color:var(--who);border-color:var(--who-d)}
+.btn{border-radius:5px;letter-spacing:.12em;background:linear-gradient(180deg,var(--who),var(--who-d));box-shadow:inset 0 1px rgba(255,255,255,.14)}
+.btn.ghost{background:rgba(13,24,31,.6);box-shadow:none}
+.opt,.char,.rcard,.pick,.res,.fate,.sheet,.how li{border-radius:7px}
+.brand{letter-spacing:.17em}.brand .lp{gap:3px}.brand .lp svg{width:22px;height:26px}
+h1{letter-spacing:.09em}h1 em{background:none;-webkit-text-fill-color:var(--verd);color:var(--verd)}
+.pips i{background:#26363e;border-radius:1px;transform:rotate(45deg);width:8px;height:8px;margin:2px}
+.sheet .pips i,.rstats .pips i{transform:none;border-radius:1px;margin:0}
+.dots i,.prog i{border-radius:1px;transform:rotate(45deg);width:6px;height:6px;margin:2px}
+.rplate .undertoll-scene{height:100%}
+@media (max-width:600px){.plate,.plate.hero,.plate.tall{aspect-ratio:8/5;max-height:none}.plate.short{aspect-ratio:16/8;max-height:none}.cport{width:104px;height:130px}.rplate{aspect-ratio:16/9;max-height:none}}
+@media(prefers-reduced-motion:reduce){.plate svg,.scene-motes,.shadow-portrait,.held-lamp{animation:none!important;transition:none!important}}

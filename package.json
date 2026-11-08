@@ -1,0 +1,15 @@
+{
+  "name": "two-lanterns",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Two-player dungeon crawler with the Undertoll art edition",
+  "scripts": {
+    "build": "node scripts/build-art.cjs && node scripts/build-art-review.cjs",
+    "verify": "node scripts/verify-art.cjs",
+    "qa": "node scripts/browser-art-qa.cjs"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1",
+    "sharp": "0.35.5"
+  }
+}
