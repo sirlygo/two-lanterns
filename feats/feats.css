@@ -1,0 +1,13 @@
+/* Two Lanterns :: feats, on the ending and in the Book of Endings. */
+.ft-note{margin:18px auto 0;max-width:64ch;padding:14px 16px;border:1px solid var(--line2);border-left:3px solid var(--gold);border-radius:var(--r,7px);background:var(--card)}
+.ft-h{margin:0 0 8px;font:600 .74rem/1.2 var(--disp);letter-spacing:.16em;text-transform:uppercase;color:var(--gold);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.ft-c{color:var(--mute);letter-spacing:.1em}
+.ft-new,.ft-list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.ft-list{grid-template-columns:repeat(auto-fill,minmax(230px,1fr));margin-top:12px}
+.ft-new li,.ft-list li{display:grid;gap:2px;min-width:0}
+.ft-list li{padding:10px 12px;border:1px solid var(--line);border-radius:var(--r,7px);background:var(--card)}
+.ft-new b,.ft-list b{font:600 .86rem/1.25 var(--disp);letter-spacing:.06em;color:var(--fg)}
+.ft-new span,.ft-list span{font-size:.86rem;line-height:1.4;color:var(--mute)}
+.ft-list li.on{border-color:var(--gold)}
+.ft-list li.on b{color:var(--gold)}
+.ft-list li.off{opacity:.62}

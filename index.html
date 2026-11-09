@@ -771,6 +771,10 @@ h1{letter-spacing:.09em}h1 em{background:none;-webkit-text-fill-color:var(--verd
 .subnav{margin-top:18px;min-height:44px}
 .subnav .linkbtn{display:inline-flex;align-items:center;gap:.5em;min-height:44px;padding:.6rem 1.3rem;border:1px solid var(--line2);border-radius:5px;background:rgba(13,24,31,.6);color:var(--fg);font:600 .78rem/1 var(--disp);letter-spacing:.14em;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:border-color .15s,background .15s}
 .subnav .linkbtn:hover{border-color:var(--who,var(--ember));background:rgba(228,174,96,.08)}
+/* Phones: the way in comes before the long read, the header stays on one line, and every link is big enough for a thumb. */
+@media (max-width:600px){.screen.title{display:flex;flex-direction:column}.screen.title .how{order:1;margin-top:22px}.brand{white-space:nowrap}.top{gap:8px}}
+@media (max-width:420px){.brand{letter-spacing:.08em;font-size:.72rem}.brand .lp svg{width:18px;height:22px}}
+@media (max-width:600px),(pointer:coarse){.linkbtn{display:inline-flex;align-items:center;min-height:44px}.rules summary{min-height:44px;display:flex;align-items:center}}
 
 </style>
 <style id="narrator-css">
@@ -1013,6 +1017,376 @@ if (typeof module !== 'undefined' && module.exports) module.exports = narrationK
 })();
 
 </script>
+<!-- extras -->
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#090e13">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Two Lanterns">
+<link rel="apple-touch-icon" href="pwa/icon-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="pwa/icon-192.png">
+<style id="sound-css">
+/* Two Lanterns :: the sound button, in the header beside the progress marks. */
+.top .snd{flex:none;display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;margin-left:auto;padding:0;border:1px solid var(--line);border-radius:50%;background:rgba(13,24,31,.6);color:var(--mute);cursor:pointer;transition:color .15s,border-color .15s}
+.top .where{margin-left:auto}
+.top .where+.snd{margin-left:0}
+.top .snd:hover,.top .snd:focus-visible{color:var(--fg);border-color:var(--line2)}
+.top .snd svg{width:20px;height:20px}
+.top .snd[data-mode="off"]{color:var(--dim);opacity:.8}
+.top .where:empty{display:none}
+</style>
+<script id="sound-runtime">
+/* Two Lanterns :: sound and touch.
+   Every sound is made in the browser as it is needed: there are no audio files. A low bed for the Undertoll that tightens as the Bell
+   grows restless, a toll at each new room, dice, a short phrase for each outcome, coin at the stall, and a small buzz on phones that
+   can. One button in the header steps through All sound, Effects only and Off, and the choice is saved on this device.
+   It watches the page and never touches the game: with this file left out, the game plays exactly as before.
+   scripts/build-extras.cjs injects it into <head>. */
+(function () {
+  'use strict';
+  var STORE = 'twolanterns.sound', MODES = ['all', 'fx', 'off'];
+  var LABEL = { all: 'Sound: all', fx: 'Sound: effects only', off: 'Sound: off' };
+  var ICON = {
+    all: '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z" fill="currentColor"/><path d="M15 9a4.2 4.2 0 0 1 0 6M17.6 6.6a7.6 7.6 0 0 1 0 10.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>',
+    fx: '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z" fill="currentColor"/><path d="M15 9a4.2 4.2 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>',
+    off: '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z" fill="currentColor"/><path d="M15.5 9.5l5 5M20.5 9.5l-5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>'
+  };
+  var mode = 'all', host = null, queued = false, touched = false;
+  var ctx = null, master = null, fx = null, amb = null, bed = null, noiseBuf = null, dripT = null, duckT = null;
+  var last = { room: -1, intro: '', rolling: false, res: '', buys: -1, screen: '', linked: false, end: '', stall: -1 };
+  var log = [];
+  try { var s = localStorage.getItem(STORE); if (MODES.indexOf(s) >= 0) mode = s; } catch (e) {}
+  var still = false;
+  try { still = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+
+  function note(n) { log.push(n); if (log.length > 60) log.shift(); }
+  function T() { return window.__tl || null; }
+  function buzz(p) { try { if (mode !== 'off' && touched && !still && navigator.vibrate) navigator.vibrate(p); } catch (e) {} }
+
+  /* ---------- the instrument ---------- */
+  function boot() {
+    if (ctx || mode === 'off') return !!ctx;
+    var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return false;
+    try {
+      ctx = new AC();
+      var comp = ctx.createDynamicsCompressor(); comp.threshold.value = -16; comp.ratio.value = 5; comp.connect(ctx.destination);
+      master = ctx.createGain(); master.gain.value = 0.9; master.connect(comp);
+      fx = ctx.createGain(); fx.gain.value = 1; fx.connect(master);
+      /* a stone room: one echo, darkened, fed back a little */
+      var d = ctx.createDelay(1); d.delayTime.value = 0.29;
+      var fb = ctx.createGain(); fb.gain.value = 0.33;
+      var lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 1700;
+      var wet = ctx.createGain(); wet.gain.value = 0.3;
+      fx.connect(d); d.connect(lp); lp.connect(fb); fb.connect(d); lp.connect(wet); wet.connect(master);
+      amb = ctx.createGain(); amb.gain.value = 0; amb.connect(master);
+      var n = ctx.sampleRate * 2, b = ctx.createBuffer(1, n, ctx.sampleRate), ch = b.getChannelData(0);
+      for (var i = 0; i < n; i++) ch[i] = Math.random() * 2 - 1;
+      noiseBuf = b;
+    } catch (e) { ctx = null; return false; }
+    return true;
+  }
+  function wake() {
+    if (mode === 'off') return;
+    if (!boot()) return;
+    if (ctx.state === 'suspended' && !document.hidden) { try { ctx.resume(); } catch (e) {} }
+    if (mode === 'all') bedOn();
+  }
+  function env(g, t, peak, a, dur) { g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(Math.max(0.0002, peak), t + a); g.gain.exponentialRampToValueAtTime(0.0001, t + dur); }
+  function tone(type, f0, f1, dur, peak, when, dest) {
+    if (!ctx) return; var t = ctx.currentTime + (when || 0), o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = type; o.frequency.setValueAtTime(f0, t); if (f1 && f1 !== f0) o.frequency.exponentialRampToValueAtTime(f1, t + dur);
+    env(g, t, peak, 0.006, dur); o.connect(g); g.connect(dest || fx); o.start(t); o.stop(t + dur + 0.05);
+  }
+  function hiss(kind, freq, q, dur, peak, when, dest) {
+    if (!ctx) return; var t = ctx.currentTime + (when || 0), s = ctx.createBufferSource(), f = ctx.createBiquadFilter(), g = ctx.createGain();
+    s.buffer = noiseBuf; s.loop = true; f.type = kind; f.frequency.value = freq; f.Q.value = q;
+    env(g, t, peak, 0.004, dur); s.connect(f); f.connect(g); g.connect(dest || fx); s.start(t, Math.random()); s.stop(t + dur + 0.05);
+  }
+  var BELL = [[0.5, 0.5, 1], [1, 1, 0.85], [1.19, 0.45, 0.7], [1.5, 0.3, 0.55], [2, 0.28, 0.45], [2.51, 0.16, 0.3], [3.01, 0.1, 0.22]];
+  function bell(f, dur, peak, when) { for (var i = 0; i < BELL.length; i++) tone('sine', f * BELL[i][0], 0, dur * BELL[i][2], peak * BELL[i][1], when); hiss('bandpass', f * 4, 2, 0.05, peak * 0.5, when); }
+
+  var CUE = {
+    tick: function () { hiss('highpass', 2600, 0.7, 0.03, 0.05); },
+    rattle: function () { for (var i = 0; i < 9; i++) hiss('bandpass', 1100 + Math.random() * 1500, 5, 0.035, 0.16, i * 0.09 + Math.random() * 0.02); },
+    land: function () { hiss('bandpass', 900, 3, 0.06, 0.3); tone('sine', 150, 70, 0.14, 0.3); buzz(14); },
+    toll: function (k) { bell(196 * Math.pow(2, -Math.min(7, k) / 9), 4.2, 0.2); },
+    t0: function (w, hi) { tone('sine', 82, 38, 0.7, 0.5, w); hiss('lowpass', 240, 0.8, 0.5, 0.35, w); tone('sawtooth', 110 * hi, 104 * hi, 0.5, 0.05, w); },
+    t1: function (w, hi) { tone('triangle', 196 * hi, 185 * hi, 0.35, 0.16, w); hiss('lowpass', 500, 1, 0.12, 0.14, w); },
+    t2: function (w, hi) { bell(392 * hi, 0.9, 0.09, w); bell(523.25 * hi, 1.1, 0.09, w + 0.13); },
+    t3: function (w, hi) { bell(392 * hi, 0.9, 0.09, w); bell(493.88 * hi, 0.9, 0.09, w + 0.11); bell(587.33 * hi, 1.0, 0.09, w + 0.22); bell(783.99 * hi, 1.8, 0.1, w + 0.34); },
+    coin: function () { tone('sine', 2350, 0, 0.22, 0.09); tone('sine', 3520, 0, 0.3, 0.06, 0.05); tone('sine', 2960, 0, 0.25, 0.05, 0.11); buzz(8); },
+    shop: function () { bell(880, 1.1, 0.06); bell(1174.7, 1.3, 0.05, 0.16); },
+    joined: function () { bell(523.25, 0.9, 0.07); bell(783.99, 1.3, 0.07, 0.15); buzz([10, 40, 10]); },
+    end: function (kind) {
+      bell(98, 7, 0.32); bell(196, 5, 0.1, 0.02);
+      if (kind === 'break') { hiss('highpass', 1800, 0.6, 0.35, 0.3, 0.5); tone('sawtooth', 300, 60, 0.9, 0.12, 0.5); }
+      else if (kind === 'collapse' || kind === 'deadlock') { hiss('lowpass', 160, 0.7, 3, 0.5, 0.4); }
+      else if (kind === 'ring') { bell(98, 7, 0.26, 1.6); }
+      buzz([30, 60, 30]);
+    }
+  };
+  function play(name, a, b) {
+    note(name + (a === undefined || a === null ? '' : ':' + a));
+    if (mode === 'off' || !touched) return;
+    wake(); if (!ctx || ctx.state !== 'running') return;
+    try { CUE[name](a, b); } catch (e) {}
+  }
+
+  /* ---------- the bed: what the Undertoll sounds like when nothing is happening ---------- */
+  function bedOn() {
+    if (!ctx || bed) return;
+    var t = ctx.currentTime, lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 170; lp.Q.value = 0.9;
+    var lfo = ctx.createOscillator(), lg = ctx.createGain(); lfo.frequency.value = 0.045; lg.gain.value = 55; lfo.connect(lg); lg.connect(lp.frequency); lfo.start(t);
+    var os = [['sawtooth', 55, 0.5], ['sawtooth', 82.2, 0.28], ['sine', 27.5, 0.7]].map(function (d) { var o = ctx.createOscillator(), g = ctx.createGain(); o.type = d[0]; o.frequency.value = d[1]; g.gain.value = d[2]; o.connect(g); g.connect(lp); o.start(t); return o; });
+    var uo = ctx.createOscillator(), ug = ctx.createGain(); uo.type = 'sine'; uo.frequency.value = 58.27; ug.gain.value = 0; uo.connect(ug); ug.connect(lp); uo.start(t);      /* the Bell stirring: a note that does not belong */
+    var air = ctx.createBufferSource(), af = ctx.createBiquadFilter(), ag = ctx.createGain(); air.buffer = noiseBuf; air.loop = true; af.type = 'bandpass'; af.frequency.value = 420; af.Q.value = 0.5; ag.gain.value = 0.05; air.connect(af); af.connect(ag); ag.connect(amb); air.start(t);
+    lp.connect(amb);
+    bed = { nodes: os.concat([uo, lfo, air]), unease: ug };
+    level();
+    drip();
+    if (!duckT) duckT = setInterval(level, 400);
+  }
+  function bedOff() {
+    if (!bed) return;
+    var b = bed; bed = null; clearTimeout(dripT); dripT = null;
+    try { amb.gain.cancelScheduledValues(ctx.currentTime); amb.gain.setTargetAtTime(0, ctx.currentTime, 0.25); } catch (e) {}
+    setTimeout(function () { b.nodes.forEach(function (n) { try { n.stop(); } catch (e) {} }); }, 1500);
+  }
+  function mood() { try { var t = T(); return t && t.S && t.S.p ? t.E.mood(t.S) : 0; } catch (e) { return 0; } }
+  function level() {
+    if (!ctx || !bed) return;
+    var talk = false; try { talk = !!(window.__narrator && window.__narrator.state().playing); } catch (e) {}
+    var m = mood();
+    try { amb.gain.setTargetAtTime(talk ? 0.035 : 0.11, ctx.currentTime, 0.6); bed.unease.gain.setTargetAtTime(m * 0.22, ctx.currentTime, 1.5); } catch (e) {}
+  }
+  function drip() {
+    clearTimeout(dripT);
+    dripT = setTimeout(function () {
+      if (bed && ctx && ctx.state === 'running' && !document.hidden) { var f = 900 + Math.random() * 900; tone('sine', f, f * 0.55, 0.07, 0.035); }
+      if (bed) drip();
+    }, 5000 + Math.random() * 9000);
+  }
+
+  /* ---------- reading the page ---------- */
+  function scan() {
+    queued = false;
+    mount();
+    var t = T(); if (!t || !t.S) return;
+    var S = t.S, scr = host.querySelector('.screen'), cls = scr ? scr.className : '';
+    var has = function (c) { return (' ' + cls + ' ').indexOf(' ' + c + ' ') >= 0; };
+    var rolling = !!(t.ui && t.ui.rolling);
+    if (rolling && !last.rolling) play('rattle');
+    if (!rolling && last.rolling) play('land');
+    last.rolling = rolling;
+    if (has('intro')) { var ik = S.room + '|' + (S.order ? S.order[S.room] : ''); if (ik !== last.intro) { last.intro = ik; play('toll', S.room); } }
+    if (has('results') && S.rl && S.rl.d) {
+      var rk = S.room + '|' + S.rl.d.join(',');
+      if (rk !== last.res) {
+        var prev = last.res.split('|'), same = prev[0] === String(S.room), old = same ? prev[1].split(',') : null, tiers = null;
+        try { tiers = t.E.preview(S).ev.tier; } catch (e) {}
+        last.res = rk;
+        if (tiers) {
+          var w = same ? 0.05 : 0.75, worst = 3;
+          for (var i = 0; i < 2; i++) { if (old && old[i] === String(S.rl.d[i])) continue; play('t' + tiers[i], w, i ? 1.335 : 1); w += 0.55; if (tiers[i] < worst) worst = tiers[i]; }
+          if (same) buzz(12); else buzz(worst === 0 ? [40, 50, 40] : worst === 3 ? [12, 40, 12, 40, 18] : 16);
+        }
+      }
+    }
+    if (has('stall')) { var due = -1; try { due = t.E.stopDue(S); } catch (e) {} if (due >= 0 && due !== last.stall) { last.stall = due; play('shop'); } }
+    var buys = S.shop && S.shop.buys ? S.shop.buys.length : 0;
+    if (last.buys >= 0 && buys > last.buys) play('coin');
+    last.buys = buys;
+    if (has('ending') && S.end) { var ek = String(S.end.index); if (ek !== last.end) { last.end = ek; play('end', S.end.kind); } }
+    if (!S.end) last.end = '';
+    if (!S.p) { last.intro = ''; last.res = ''; last.stall = -1; }
+    var linked = false; try { linked = !!(S.net && t.NT.info().linked); } catch (e) {}
+    if (linked && !last.linked) play('joined');
+    last.linked = linked;
+  }
+  function queue() { if (queued) return; queued = true; (window.requestAnimationFrame || window.setTimeout)(scan, 16); }
+
+  /* ---------- the button ---------- */
+  function paint(b) { b.innerHTML = ICON[mode] + '<span class="sr">' + LABEL[mode] + '</span>'; b.setAttribute('title', LABEL[mode] + '. Tap to change.'); b.setAttribute('aria-label', LABEL[mode] + '. Change sound.'); b.setAttribute('data-mode', mode); }
+  function mount() {
+    var top = host.querySelector('header.top'); if (!top) return;
+    var b = top.querySelector('.snd');
+    if (!b) { b = document.createElement('button'); b.type = 'button'; b.className = 'snd'; paint(b); top.appendChild(b); }
+    else if (b.getAttribute('data-mode') !== mode) paint(b);
+  }
+  function onClick(e) {
+    var t = e.target && e.target.closest ? e.target : null; if (!t) return;
+    var b = t.closest('.snd');
+    if (b) {
+      mode = MODES[(MODES.indexOf(mode) + 1) % MODES.length];
+      try { localStorage.setItem(STORE, mode); } catch (err) {}
+      paint(b);
+      if (mode === 'off') { bedOff(); if (ctx) { try { ctx.suspend(); } catch (err) {} } }
+      else { wake(); if (mode === 'fx') bedOff(); play('tick'); }
+      return;
+    }
+    if (t.closest('button, .opt, .rcard, summary, [data-act]')) play('tick');
+  }
+  function first() { if (!touched) { touched = true; } wake(); }
+
+  window.__sound = { state: function () { return { mode: mode, ctx: ctx ? ctx.state : 'none', bed: !!bed, touched: touched }; }, log: log, cues: Object.keys(CUE) };
+
+  function init() {
+    host = document.getElementById('app'); if (!host) return;
+    new MutationObserver(queue).observe(host, { childList: true, subtree: true });
+    scan();
+  }
+  document.addEventListener('click', onClick);
+  ['pointerdown', 'keydown', 'touchstart'].forEach(function (t) { document.addEventListener(t, first, { capture: true, passive: true }); });
+  document.addEventListener('visibilitychange', function () { if (!ctx) return; try { if (document.hidden) ctx.suspend(); else if (mode !== 'off') ctx.resume(); } catch (e) {} });
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
+</script>
+<style id="feats-css">
+/* Two Lanterns :: feats, on the ending and in the Book of Endings. */
+.ft-note{margin:18px auto 0;max-width:64ch;padding:14px 16px;border:1px solid var(--line2);border-left:3px solid var(--gold);border-radius:var(--r,7px);background:var(--card)}
+.ft-h{margin:0 0 8px;font:600 .74rem/1.2 var(--disp);letter-spacing:.16em;text-transform:uppercase;color:var(--gold);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.ft-c{color:var(--mute);letter-spacing:.1em}
+.ft-new,.ft-list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.ft-list{grid-template-columns:repeat(auto-fill,minmax(230px,1fr));margin-top:12px}
+.ft-new li,.ft-list li{display:grid;gap:2px;min-width:0}
+.ft-list li{padding:10px 12px;border:1px solid var(--line);border-radius:var(--r,7px);background:var(--card)}
+.ft-new b,.ft-list b{font:600 .86rem/1.25 var(--disp);letter-spacing:.06em;color:var(--fg)}
+.ft-new span,.ft-list span{font-size:.86rem;line-height:1.4;color:var(--mute)}
+.ft-list li.on{border-color:var(--gold)}
+.ft-list li.on b{color:var(--gold)}
+.ft-list li.off{opacity:.62}
+</style>
+<script id="feats-runtime">
+/* Two Lanterns :: feats.
+   Thirty-two things worth doing on the way down, kept on this device beside the Book of Endings. A feat is earned when a descent ends,
+   from what that descent actually did, and is shown on the ending and in the Book. Nothing here changes a roll, a rule or a word of
+   the story: with this file left out, the game plays exactly as before. Erasing the Book erases the feats with it.
+   scripts/build-extras.cjs injects it into <head>. */
+(function (g) {
+  'use strict';
+  var STORE = 'twolanterns.feats';
+  var rooms = function (S) { return (S.log || []).filter(function (l) { return l.pair !== 'fin'; }); };
+  var count = function (a, f) { var n = 0; for (var i = 0; i < a.length; i++) if (f(a[i])) n++; return n; };
+  var both = function (f) { return f(0) && f(1); }, either = function (f) { return f(0) || f(1); };
+  var buys = function (S) { return (S.shop && S.shop.buys) || []; };
+  var jar = function (S) { var b = buys(S).filter(function (x) { return x.kind === 'gamble'; })[0]; return b ? b.slip : ''; };
+  /* id, name, what it asks, and the test. S is the finished descent; C is what this device remembers across descents. */
+  var FEATS = [
+    ['first', 'First Light', 'Reach the Bell and see how it ends.', function (S) { return true; }],
+    ['ring', 'A True Toll', 'Ring the Bell, and ring it well.', function (S) { return S.end.dk === 'ring:strong'; }],
+    ['break', 'Bellbreaker', 'Break the Bell cleanly.', function (S) { return S.end.dk === 'break:strong'; }],
+    ['steal', 'Light Fingers', 'Carry the Bell’s heart out with barely a sound.', function (S) { return S.end.dk === 'steal:strong'; }],
+    ['keep', 'The Long Watch', 'Take up the keeping of the Bell, and do it properly.', function (S) { return S.end.dk === 'keep:strong'; }],
+    ['ruin', 'It Could Have Gone Worse', 'End a descent in collapse or deadlock.', function (S) { return S.end.kind === 'collapse' || S.end.kind === 'deadlock'; }],
+    ['whole', 'Not a Scratch', 'Both lanterns finish without a single scar.', function (S) { return both(function (i) { return S.p[i].scars === 0; }); }],
+    ['scars', 'Scarred but Standing', 'Finish on your feet with three scars or more.', function (S) { return either(function (i) { return S.p[i].scars >= 3 && S.end.fates[i] !== 'fallen'; }); }],
+    ['stay', 'Someone Has to Stay', 'A lantern stays below as keeper, bound or martyr.', function (S) { return either(function (i) { return ['keeper', 'bound', 'martyr'].indexOf(S.end.fates[i]) >= 0; }); }],
+    ['carried', 'Carried Home', 'One lantern brings the other back up the stair.', function (S) { return S.end.fates.indexOf('carried') >= 0; }],
+    ['unbreakable', 'Thick as Thieves', 'End a descent with an unbreakable bond.', function (S) { return S.end.bond.id === 'unbreakable'; }],
+    ['enemies', 'Daggers Drawn', 'End a descent as enemies, or betrayed.', function (S) { return S.end.bond.id === 'enemies' || S.end.bond.id === 'betray'; }],
+    ['together', 'Shoulder to Shoulder', 'Both help each other in the same room, four times in one descent.', function (S) { return count(rooms(S), function (l) { return l.pair === 'tt'; }) >= 4; }],
+    ['alone', 'Every Lantern for Itself', 'Finish a descent in which nobody ever helped.', function (S) { var r = rooms(S); return r.length >= 6 && count(r, function (l) { return l.a[0] === 'team' || l.a[1] === 'team'; }) === 0; }],
+    ['glad', 'What We Came For', 'Both lanterns get what they went down for.', function (S) { return both(function (i) { return S.end.motiveLines[i].glad; }); }],
+    ['snake', 'Snake Eyes', 'Both dice come up 1 in the same room.', function (S) { return count(S.log, function (l) { return l.d[0] === 1 && l.d[1] === 1; }) > 0; }],
+    ['boxcars', 'Boxcars', 'Both dice come up 6 in the same room.', function (S) { return count(S.log, function (l) { return l.d[0] === 6 && l.d[1] === 6; }) > 0; }],
+    ['instep', 'In Step', 'Both lanterns triumph in the same room.', function (S) { return count(S.log, function (l) { return l.tier[0] === 3 && l.tier[1] === 3; }) > 0; }],
+    ['streak', 'On a Roll', 'One lantern triumphs four times in one descent.', function (S) { return either(function (i) { return count(S.log, function (l) { return l.tier[i] === 3; }) >= 4; }); }],
+    ['clean', 'Sure-Footed', 'One lantern gets through a whole descent without a Disaster or a Scrape.', function (S) { return S.log.length >= 8 && either(function (i) { return count(S.log, function (l) { return l.tier[i] < 2; }) === 0; }); }],
+    ['magpie', 'Magpie', 'One lantern comes up carrying three relics.', function (S) { return either(function (i) { return S.p[i].relics.length >= 3; }); }],
+    ['purse', 'Heavy Purse', 'Come up with ten gold between you.', function (S) { return S.p[0].gold + S.p[1].gold >= 10; }],
+    ['customer', 'Good Customer', 'Spend ten coin at the chandler’s in one descent.', function (S) { var t = 0; buys(S).forEach(function (b) { t += b.price; }); return t >= 10; }],
+    ['window', 'Just Looking', 'Pass both landings without buying a thing.', function (S) { return !!S.shop && buys(S).length === 0; }],
+    ['treat', 'My Treat', 'Pay for your partner at the chandler’s counter.', function (S) { return count(buys(S), function (b) { return b.payer !== b.to; }) > 0; }],
+    ['dip', 'Lucky Dip', 'Draw a relic out of the sealed jar.', function (S) { return jar(S) === 'relic'; }],
+    ['bitten', 'The Jar Bites Back', 'Draw the sting out of the sealed jar.', function (S) { return jar(S) === 'sting'; }],
+    ['quiet', 'Let It Sleep', 'Reach the end with the Undertoll at nothing.', function (S) { return S.toll === 0; }],
+    ['page', 'The Sexton’s Hand', 'Work out why the bells stopped.', function (S, C) { return C.solved; }],
+    ['truth', 'Every Reason Why', 'Work out every reason the bells could have stopped.', function (S, C) { return C.causeTotal > 0 && C.causes >= C.causeTotal; }],
+    ['ten', 'Regulars', 'Finish ten descents.', function (S, C) { return C.games >= 10; }],
+    ['callings', 'All Four Callings', 'Finish a descent with each of the four callings.', function (S, C) { return C.callings >= 4; }]
+  ];
+  function evaluate(S, C) {
+    var out = [];
+    if (!S || !S.end || !S.p || !S.log) return out;
+    FEATS.forEach(function (f) { try { if (f[3](S, C || {})) out.push(f[0]); } catch (e) { /* a descent this feat cannot read earns nothing */ } });
+    return out;
+  }
+
+  var api = { FEATS: FEATS.map(function (f) { return { id: f[0], name: f[1], ask: f[2] }; }), evaluate: evaluate };
+  g.__feats = api;
+  if (typeof document === 'undefined') return;
+
+  var mem = { v: 1, got: {}, calls: {}, last: '' }, fresh = [], freshFor = '', host = null, queued = false;
+  function load() { try { var d = JSON.parse(localStorage.getItem(STORE) || 'null'); if (d && d.v === 1 && d.got) mem = { v: 1, got: d.got, calls: d.calls || {}, last: d.last || '' }; } catch (e) {} }
+  function keep() { try { localStorage.setItem(STORE, JSON.stringify(mem)); } catch (e) {} }
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+  function sig(S) { var s = S.end.index + '|' + S.log.map(function (l) { return l.rid + l.d.join('') + l.oi.join(''); }).join('.') + '|' + S.p.map(function (c) { return c.name; }).join('+'), h = 2166136261; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return String(h >>> 0); }
+  api.got = function () { return Object.keys(mem.got); };
+  api.total = FEATS.length;
+
+  function settle(t) {
+    var S = t.S, k = sig(S);
+    if (k === freshFor) return;
+    if (k === mem.last) { freshFor = k; fresh = []; return; }      /* this ending was counted already: a reload, or the Book opened and closed */
+    S.p.forEach(function (c) { if (c.picks && c.picks.calling) mem.calls[c.picks.calling] = 1; });
+    var C = { games: 0, causes: 0, causeTotal: 0, solved: false, callings: Object.keys(mem.calls).length };
+    try { C.games = t.B.games(); C.causes = Object.keys(t.B.causes()).length; C.causeTotal = t.D.story.causes.length; C.solved = t.ST.uncovered(S) >= 0; } catch (e) {}
+    fresh = evaluate(S, C).filter(function (id) { return !mem.got[id]; });
+    fresh.forEach(function (id) { mem.got[id] = Date.now(); });
+    mem.last = k; freshFor = k; keep();
+  }
+  function name(id) { for (var i = 0; i < FEATS.length; i++) if (FEATS[i][0] === id) return FEATS[i]; return null; }
+  function mountEnding(scr) {
+    var old = scr.querySelector('.ft-note'), want = fresh.join(',');
+    if (old && old.getAttribute('data-k') === want) return;
+    if (old) old.parentNode.removeChild(old);
+    if (!fresh.length) return;
+    var n = document.createElement('aside'); n.className = 'ft-note'; n.setAttribute('data-k', want); n.setAttribute('role', 'status');
+    n.innerHTML = '<p class="ft-h">' + (fresh.length === 1 ? 'Feat earned' : fresh.length + ' feats earned') + ' <span class="ft-c">' + api.got().length + ' of ' + FEATS.length + '</span></p><ul class="ft-new">' +
+      fresh.map(function (id) { var f = name(id); return '<li><b>' + esc(f[1]) + '</b><span>' + esc(f[2]) + '</span></li>'; }).join('') + '</ul>';
+    var at = scr.querySelector('.bk-note'), bars = scr.querySelectorAll('.bar'), bar = bars[bars.length - 1];
+    if (at && at.parentNode) at.parentNode.insertBefore(n, at.nextSibling); else if (bar) bar.parentNode.insertBefore(n, bar); else scr.appendChild(n);
+  }
+  function mountBook(scr) {
+    var have = api.got().length, old = scr.querySelector('.ft-chapter');
+    if (old && old.getAttribute('data-k') === String(have)) return;
+    if (old) old.parentNode.removeChild(old);
+    var n = document.createElement('div'); n.className = 'chapter ft-chapter'; n.setAttribute('data-k', String(have));
+    n.innerHTML = '<h3>Feats</h3><p class="fine">Things worth doing on the way down. ' + have + ' of ' + FEATS.length + ' done.</p><ul class="ft-list">' +
+      FEATS.map(function (f) { var on = !!mem.got[f[0]]; return '<li class="' + (on ? 'on' : 'off') + '"><b>' + esc(f[1]) + '</b><span>' + esc(f[2]) + '</span><span class="sr">' + (on ? 'Done' : 'Not yet done') + '</span></li>'; }).join('') + '</ul>';
+    var ch = scr.querySelectorAll('.chapter:not(.ft-chapter)'), lastCh = ch[ch.length - 1];
+    if (lastCh) lastCh.parentNode.insertBefore(n, lastCh.nextSibling); else scr.appendChild(n);
+  }
+  function scan() {
+    queued = false;
+    var t = g.__tl; if (!t || !t.S) return;
+    var scr = host.querySelector('.screen'); if (!scr) return;
+    if (scr.classList.contains('book')) { mountBook(scr); return; }
+    if (scr.classList.contains('ending') && t.S.end && t.S.p && t.S.log) { try { settle(t); } catch (e) { fresh = []; } mountEnding(scr); }
+  }
+  function queue() { if (queued) return; queued = true; (g.requestAnimationFrame || g.setTimeout)(scan, 16); }
+  function init() {
+    host = document.getElementById('app'); if (!host) return;
+    load();
+    new MutationObserver(queue).observe(host, { childList: true, subtree: true });
+    document.addEventListener('click', function (e) { var b = e.target && e.target.closest && e.target.closest('[data-act="erase-yes"]'); if (b) { mem = { v: 1, got: {}, calls: {}, last: mem.last }; fresh = []; keep(); queue(); } });
+    scan();
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+})(typeof window !== 'undefined' ? window : globalThis);
+</script>
+<script id="offline-register">
+/* Two Lanterns :: keep an offline copy, where the page is served over https. */
+(function () {
+  'use strict';
+  try {
+    if (!('serviceWorker' in navigator) || location.protocol !== 'https:') return;
+    window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
+  } catch (e) {}
+})();
+</script>
+<!-- /extras -->
 </head>
 <body>
 <main id="app"></main>

@@ -36,3 +36,7 @@ h1{letter-spacing:.09em}h1 em{background:none;-webkit-text-fill-color:var(--verd
 .subnav{margin-top:18px;min-height:44px}
 .subnav .linkbtn{display:inline-flex;align-items:center;gap:.5em;min-height:44px;padding:.6rem 1.3rem;border:1px solid var(--line2);border-radius:5px;background:rgba(13,24,31,.6);color:var(--fg);font:600 .78rem/1 var(--disp);letter-spacing:.14em;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:border-color .15s,background .15s}
 .subnav .linkbtn:hover{border-color:var(--who,var(--ember));background:rgba(228,174,96,.08)}
+/* Phones: the way in comes before the long read, the header stays on one line, and every link is big enough for a thumb. */
+@media (max-width:600px){.screen.title{display:flex;flex-direction:column}.screen.title .how{order:1;margin-top:22px}.brand{white-space:nowrap}.top{gap:8px}}
+@media (max-width:420px){.brand{letter-spacing:.08em;font-size:.72rem}.brand .lp svg{width:18px;height:22px}}
+@media (max-width:600px),(pointer:coarse){.linkbtn{display:inline-flex;align-items:center;min-height:44px}.rules summary{min-height:44px;display:flex;align-items:center}}

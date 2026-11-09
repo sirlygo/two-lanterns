@@ -1,0 +1,16 @@
+{
+  "name": "Two Lanterns",
+  "short_name": "Two Lanterns",
+  "description": "A dungeon crawler for two players, on one device or one each, online.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#090e13",
+  "theme_color": "#090e13",
+  "icons": [
+    { "src": "pwa/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "pwa/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "pwa/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
