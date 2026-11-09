@@ -761,6 +761,246 @@ h1{letter-spacing:.09em}h1 em{background:none;-webkit-text-fill-color:var(--verd
 @media(prefers-reduced-motion:reduce){.plate svg,.scene-motes,.shadow-portrait,.held-lamp{animation:none!important;transition:none!important}}
 
 </style>
+<style id="narrator-css">
+/* Two Lanterns :: narrator controls. Built on the page's own tokens, so the Undertoll theme carries through. */
+.nv{display:flex;align-items:center;flex-wrap:wrap;gap:.6rem 1rem;margin-top:.9rem;max-width:64ch}
+.title .nv{justify-content:center;margin-left:auto;margin-right:auto}
+.nv .nv-play{min-height:40px;padding:.5rem 1.05rem;font-size:.7rem;gap:.55em}
+.nv .nv-play svg{width:1.05em;height:1.05em}
+.nv .nv-play[disabled]{opacity:.5;cursor:default;transform:none}
+.nv-bar{flex:1 1 96px;min-width:72px;height:3px;border-radius:2px;background:var(--line);overflow:hidden}
+.nv-fill{display:block;width:100%;height:100%;background:var(--who,var(--ember));transform-origin:0 50%;transform:scaleX(0);transition:transform .25s linear}
+.nv-switch{display:inline-flex;align-items:center;gap:.6rem;min-height:44px;padding:0 .15rem;background:none;border:0;cursor:pointer;color:var(--mute);font:600 .7rem/1 var(--disp);letter-spacing:.16em;text-transform:uppercase}
+.nv-switch:hover,.nv-switch[aria-checked="true"]{color:var(--fg)}
+.nv-knob{position:relative;flex:none;width:36px;height:20px;border-radius:999px;border:1px solid var(--line2);background:var(--bg2);transition:background .2s,border-color .2s}
+.nv-knob::after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:var(--dim);transition:transform .2s,background .2s}
+.nv-switch[aria-checked="true"] .nv-knob{border-color:var(--who-d,var(--ember-d));background:var(--who-a,var(--ember-a))}
+.nv-switch[aria-checked="true"] .nv-knob::after{transform:translateX(16px);background:var(--who,var(--ember))}
+@media (max-width:600px){.nv-bar{order:3;flex-basis:100%}}
+@media (prefers-reduced-motion:reduce){.nv-fill,.nv-knob,.nv-knob::after{transition:none}}
+
+</style>
+<script id="narrator-runtime">
+/* Two Lanterns :: narrator.
+   Optional recorded narration for the room, landing and title passages. Off by default and saved per device.
+   It never blocks play, the text always stays on screen, and moving on stops the voice.
+   scripts/build-narrator.cjs injects this into <head> only when narration/manifest.json lists clips. */
+(function () {
+  'use strict';
+  var M = {"base":"audio/narration/","clips":{"2e7q4gkjk4e":{"f":"room-armoury.1kdb97.mp3"},"160hhu99pqh":{"f":"room-bellheart.7wxlwu.mp3"},"zuvvpssy0y":{"f":"room-bridge.1wmuaf.mp3"},"2r5yrkgfke":{"f":"room-candle.2f22bv.mp3"},"2avc68kqv6z":{"f":"room-chapter.1vrqeb.mp3"},"tr4ptg3me6":{"f":"room-cistern.1plr4a.mp3"},"2a8atzcaz2h":{"f":"room-clock.29h2u7.mp3"},"1uvrl95pbsw":{"f":"room-dice.1mvgsk.mp3"},"l725u6bmom":{"f":"room-doors.2972we.mp3"},"67w2693zxb":{"f":"room-ferry.1fxen4.mp3"},"1fkv7m7px70":{"f":"room-forge.1ssso4.mp3"},"18f1qdp6h9h":{"f":"room-gallery.2cflr2.mp3"},"yitaoxh9pi":{"f":"room-greenhouse.z0zbpc.mp3"},"7uv9aac9xf":{"f":"room-kitchen.2clxov.mp3"},"13p4py6q1sb":{"f":"room-ledger.22da5u.mp3"},"1ixb4rq1lv8":{"f":"room-library.q3crmq.mp3"},"ve9cqzuujz":{"f":"room-market.2eccwy.mp3"},"1pq1rjqp2t1":{"f":"room-mirror.tvzblz.mp3"},"yq1qycy9c1":{"f":"room-moths.10a77n.mp3"},"1luc3h2h1lc":{"f":"room-nave.2du2k3.mp3"},"2cv6igimodt":{"f":"room-orchard.f8ujf8.mp3"},"tlxak34x2a":{"f":"room-organ.24itq3.mp3"},"g27v80inbz":{"f":"room-ossuary.kzu3l1.mp3"},"2e6828jzwo6":{"f":"room-pennywell.1my3wf.mp3"},"1cxnbfh4ymj":{"f":"room-quarry.dl2n8x.mp3"},"1jaen3g2ykw":{"f":"room-rookery.leevjg.mp3"},"uli28tcp4l":{"f":"room-roots.tygzj3.mp3"},"1321vshhdvk":{"f":"room-salt.1n0zc9.mp3"},"2fgxmo9ovq8":{"f":"room-scales.1872cz.mp3"},"1aaojm6ve1k":{"f":"room-scriptorium.14py9v.mp3"},"16z4f1d4eze":{"f":"room-stable.1hnkti.mp3"},"s02nph0fhg":{"f":"room-stair.1mxydk.mp3"},"1n9rwfqyhfl":{"f":"room-tomb.1ntq73.mp3"},"2au4ju9dwzf":{"f":"room-treasury.gkntmd.mp3"},"1zqvlxc53zx":{"f":"room-weaver.4qwabl.mp3"},"1eovp8uyhaw":{"f":"room-weeping.28fai3.mp3"},"1wwgknj8cn1":{"f":"room-well.1l236z.mp3"},"21xem0p8jwp":{"f":"room-windows.oi02ve.mp3"},"1jdf3c85xo4":{"f":"stall-stall.1j0pna.mp3"},"panhumugic":{"f":"stall-stall2.14u3t3.mp3"},"8v5fneyn75":{"f":"title-tag.1ag77x.mp3"}}};
+  if (!M || !M.clips) return;
+/* Narration key: cyrb53 over whitespace-normalised text.
+   One source of truth. The generator and the verifier require this file; the build inlines the same text into the in-game narrator,
+   so a clip is found only when the passage on screen is word for word the passage that was spoken. */
+function narrationKey(text) {
+  var s = String(text).replace(/\s+/g, ' ').trim(), h1 = 0xdeadbeef, h2 = 0x41c6ce57, i, c;
+  for (i = 0; i < s.length; i++) {
+    c = s.charCodeAt(i);
+    h1 = Math.imul(h1 ^ c, 2654435761);
+    h2 = Math.imul(h2 ^ c, 1597334677);
+  }
+  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+  return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(36);
+}
+if (typeof module !== 'undefined' && module.exports) module.exports = narrationKey;
+
+  var STORE = 'twolanterns.narrator';
+  var SPOTS = ['.screen.intro p.story', '.screen.stall p.story', '.screen.title p.tag'];
+  var TITLE = 2;
+  var PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5.5v13l11-6.5z" fill="currentColor"></path></svg>';
+  var STOP = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="6.5" y="6.5" width="11" height="11" rx="1.5" fill="currentColor"></rect></svg>';
+  var on = false, activated = false, audio = null, loaded = null, shown = null, auto = null, hush = null;
+  var queued = false, host = null;
+  try { on = localStorage.getItem(STORE) === 'on'; } catch (e) {}
+
+  function node(tag, cls, html) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (html) n.innerHTML = html;
+    return n;
+  }
+
+  function live() { return !!(audio && shown && loaded === shown && !audio.paused && !audio.ended); }
+  function broken() { return !!(audio && shown && loaded === shown && audio.error); }
+
+  function player() {
+    if (audio) return audio;
+    audio = new Audio();
+    audio.preload = 'none';
+    ['play', 'pause', 'ended', 'error', 'loadedmetadata', 'timeupdate'].forEach(function (t) { audio.addEventListener(t, sync); });
+    return audio;
+  }
+
+  /* 50 ms of silence, played once inside the tap that switches the narrator on, so iOS lets later passages start by themselves. */
+  function primer() {
+    var n = 400, b = new Uint8Array(44 + n), v = new DataView(b.buffer), i;
+    function put(o, t) { for (var k = 0; k < t.length; k++) b[o + k] = t.charCodeAt(k); }
+    put(0, 'RIFF'); v.setUint32(4, 36 + n, true); put(8, 'WAVEfmt '); v.setUint32(16, 16, true);
+    v.setUint16(20, 1, true); v.setUint16(22, 1, true); v.setUint32(24, 8000, true); v.setUint32(28, 8000, true);
+    v.setUint16(32, 1, true); v.setUint16(34, 8, true); put(36, 'data'); v.setUint32(40, n, true);
+    for (i = 44; i < b.length; i++) b[i] = 128;
+    return URL.createObjectURL(new Blob([b], { type: 'audio/wav' }));
+  }
+
+  function prime() {
+    var a = player();
+    if (!hush) hush = primer();
+    loaded = null;
+    a.src = hush;
+    var p = a.play();
+    if (p && p.catch) p.catch(function () {});
+  }
+
+  function play(key) {
+    var clip = M.clips[key];
+    if (!clip) return;
+    var a = player();
+    if (loaded !== key || a.error) { loaded = key; a.src = M.base + clip.f; }
+    else { try { a.currentTime = 0; } catch (e) {} }
+    var p = a.play();
+    if (p && p.catch) p.catch(function () { sync(); });
+    sync();
+  }
+
+  function halt() {
+    if (!audio) return;
+    audio.pause();
+    try { audio.currentTime = 0; } catch (e) {}
+    sync();
+  }
+
+  function sync() {
+    var row = host && host.querySelector('.nv');
+    if (!row) return;
+    var state = broken() ? 'bad' : live() ? 'live' : 'idle';
+    var btn = row.querySelector('.nv-play');
+    if (btn && btn.getAttribute('data-s') !== state) {
+      btn.setAttribute('data-s', state);
+      btn.innerHTML = (state === 'live' ? STOP : PLAY) + '<span>' + (state === 'bad' ? 'Unavailable' : state === 'live' ? 'Stop' : 'Listen') + '</span>';
+      btn.disabled = state === 'bad';
+    }
+    var fill = row.querySelector('.nv-fill');
+    if (fill) {
+      var d = audio ? audio.duration : 0;
+      fill.style.transform = 'scaleX(' + (state === 'live' && d && isFinite(d) ? Math.min(1, audio.currentTime / d) : 0) + ')';
+    }
+    var sw = row.querySelector('.nv-switch');
+    if (sw) sw.setAttribute('aria-checked', on ? 'true' : 'false');
+    row.setAttribute('data-live', state === 'live' ? '1' : '0');
+  }
+
+  function build(key) {
+    var row = node('div', 'nv');
+    row.setAttribute('role', 'group');
+    row.setAttribute('aria-label', 'Narration');
+    row.setAttribute('data-key', key);
+    if (key) {
+      var b = node('button', 'btn ghost small nv-play');
+      b.type = 'button';
+      row.appendChild(b);
+      var bar = node('span', 'nv-bar', '<i class="nv-fill"></i>');
+      bar.setAttribute('aria-hidden', 'true');
+      row.appendChild(bar);
+    }
+    var s = node('button', 'nv-switch', '<span class="nv-knob" aria-hidden="true"></span><span>Narrator</span>');
+    s.type = 'button';
+    s.setAttribute('role', 'switch');
+    s.setAttribute('title', 'Read each room aloud as it appears. Saved on this device only.');
+    row.appendChild(s);
+    return row;
+  }
+
+  function mount(spot, key) {
+    var next = spot.nextElementSibling;
+    if (next && next.classList.contains('nv') && next.getAttribute('data-key') === key) return;
+    var old = host.querySelectorAll('.nv');
+    for (var i = 0; i < old.length; i++) old[i].parentNode.removeChild(old[i]);
+    spot.parentNode.insertBefore(build(key), spot.nextSibling);
+  }
+
+  function leave() {
+    shown = null;
+    auto = null;
+    if (audio && !audio.paused) audio.pause();
+  }
+
+  function scan() {
+    queued = false;
+    var spot = null, i;
+    for (i = 0; i < SPOTS.length; i++) { spot = host.querySelector(SPOTS[i]); if (spot) break; }
+    var key = spot ? narrationKey(spot.textContent) : '';
+    var has = !!(key && M.clips[key]);
+    if (!spot || (!has && i !== TITLE)) { leave(); return; }
+    var want = has ? key : '';
+    mount(spot, want);
+    if (want !== shown) {
+      if (audio && loaded && loaded !== want && !audio.paused) audio.pause();
+      shown = want;
+      if (want && on && activated && want !== auto) { auto = want; play(want); }
+    }
+    sync();
+  }
+
+  function queue() {
+    if (queued) return;
+    queued = true;
+    (window.requestAnimationFrame || window.setTimeout)(scan, 16);
+  }
+
+  function mine(n) { return !!(n && n.nodeType === 1 && (n.classList.contains('nv') || (n.closest && n.closest('.nv')))); }
+
+  function onChange(list) {
+    for (var i = 0; i < list.length; i++) {
+      var r = list[i];
+      if (mine(r.target)) continue;
+      var nodes = [].slice.call(r.addedNodes).concat([].slice.call(r.removedNodes));
+      if (nodes.length && nodes.every(mine)) continue;
+      queue();
+      return;
+    }
+  }
+
+  function onClick(e) {
+    var t = e.target && e.target.closest && e.target.closest('.nv-play, .nv-switch');
+    if (!t) return;
+    activated = true;
+    var key = shown || '';
+    if (t.classList.contains('nv-play')) {
+      if (live()) halt();
+      else if (key) { auto = key; play(key); }
+    } else {
+      on = !on;
+      try { localStorage.setItem(STORE, on ? 'on' : 'off'); } catch (err) {}
+      if (!on) halt();
+      else if (key) { auto = key; play(key); }
+      else prime();
+      sync();
+    }
+  }
+
+  function init() {
+    host = document.getElementById('app');
+    if (!host) return;
+    new MutationObserver(onChange).observe(host, { childList: true, subtree: true });
+    scan();
+  }
+
+  window.__narrator = {
+    key: narrationKey,
+    clips: M.clips,
+    state: function () {
+      return { on: on, shown: shown, loaded: loaded, activated: activated, playing: live(), time: audio ? audio.currentTime : 0, length: audio ? audio.duration : 0, src: audio ? (audio.currentSrc || audio.src) : '' };
+    }
+  };
+
+  document.addEventListener('click', onClick);
+  ['pointerdown', 'keydown', 'touchstart'].forEach(function (t) { document.addEventListener(t, function () { activated = true; }, { capture: true, passive: true }); });
+  document.addEventListener('visibilitychange', function () { if (document.hidden && audio && !audio.paused) audio.pause(); });
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
+
+</script>
 </head>
 <body>
 <main id="app"></main>
