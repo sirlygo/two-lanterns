@@ -731,6 +731,7 @@ h2.q{max-width:26ch}
 @media (min-width:700px){.lgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
 </style>
+<script>window.TL_ICE=window.TL_ICE||[];</script>
 <style id="undertoll-theme">
 /* Undertoll: cold stone, shadow cloth and two small lights. */
 :root{--bg:#090e13;--bg2:#0e171e;--card:#121d25;--card2:#182830;--line:#273b43;--line2:#40565d;--fg:#e0e4d9;--mute:#a3b5b9;--dim:#91a4aa;--ember:#e4ae60;--ember-d:#ad7838;--ember-a:rgba(228,174,96,.12);--verd:#81cbb1;--verd-d:#478a77;--verd-a:rgba(129,203,177,.12);--gold:#cec59e;--r:7px}
@@ -3998,13 +3999,14 @@ if (typeof module !== 'undefined' && module.exports) module.exports = O;
 
 /* Two Lanterns :: net.js. A room for two over PeerJS, which opens a WebRTC data channel between the two browsers.
    There is no game in here. It opens a room (host) or finds one (guest), keeps the line alive, wins the line back when it drops, and passes small JSON messages.
-   The only server is PeerJS's public broker, and it is used just to introduce the two browsers: once the channel is open, every move goes straight between them. */
+   The only server is PeerJS's public broker, and it is used just to introduce the two browsers: once the channel is open, every move goes straight between them.
+   When the two browsers cannot reach each other at all, the broker carries the moves instead (see 'a line through the broker'). */
 (function (g) {
 'use strict';
 const Net = { V: 1 };
 const PREFIX = 'twolanterns-';            /* room ids on a shared broker are global, so every room code gets this prefix */
 const ALPHA = 'BCDFGHJKLMNPQRSTVWXZ';     /* twenty consonants: no vowels (so no words) and nothing that reads as 0, 1, I or O */
-const BEAT = 2500, DEAD = 9000, DIAL_MS = 25000, HELLO_MS = 8000, RETRY = [900, 1800, 3000, 5000, 8000];
+const BEAT = 2500, DEAD = 9000, DIAL_MS = 25000, HELLO_MS = 8000, OPEN_MS = 30000, RETRY = [900, 1800, 3000, 5000, 8000];
 const DIRECT = 15000, PIECE = 2400;       /* JSON messages must stay under 16 kB: past 15 kB a message goes in pieces */
 const now = () => Date.now();
 
@@ -4021,11 +4023,22 @@ Net.config = function () {
   if (q && q.get('tls') === '0') cfg.secure = false;
   if (q && q.get('tls') === '1') cfg.secure = true;
   if (q && q.get('ice') === 'none') cfg.config = { iceServers: [] };      /* for a test on one machine */
+  if (q && q.get('ice') === 'relay' && !cfg.config) cfg.config = { iceServers: Net.ice(), iceTransportPolicy: 'relay' };      /* to try a relay: no direct line is allowed */
+  if (!cfg.config) cfg.config = { iceServers: Net.ice() };
   return cfg;
 };
 Net.broker = () => { const c = Net.config(); return c.host || '0.peerjs.com'; };
 Net.custom = () => !!Net.config().host;
 Net.available = () => typeof g.Peer === 'function';
+/* Which servers help two browsers find each other.
+   PeerJS ships a list of relay (TURN) servers, eu-0.turn.peerjs.com and us-0.turn.peerjs.com. Its maintainers switched them off and the names no longer point anywhere,
+   so the library's list is replaced here. STUN is enough for two browsers behind ordinary home routers to find each other. When they cannot (one side on mobile data,
+   a strict school or office network) only a relay can carry the line: a page can set window.TL_ICE to a list of { urls, username, credential } and those are added.
+   The build fills window.TL_ICE from net/ice.json. */
+const STUN = [{ urls: ['stun:stun.l.google.com:19302', 'stun:stun1.l.google.com:19302'] }, { urls: 'stun:stun.cloudflare.com:3478' }, { urls: 'stun:global.stun.twilio.com:3478' }];
+const isRelay = s => !!s && [].concat(s.urls || []).some(u => /^turns?:/i.test(String(u)));
+Net.ice = () => STUN.concat(Array.isArray(g.TL_ICE) ? g.TL_ICE.filter(s => s && s.urls) : []);
+Net.relayed = () => Array.isArray(g.TL_ICE) && g.TL_ICE.some(isRelay);
 
 /* ---------- room codes ---------- */
 const rand = n => {
@@ -4041,7 +4054,7 @@ Net.ALPHA = ALPHA;
 /* ---------- one room at a time ---------- */
 let X = null, serial = 0;
 Net.onState = null; Net.onMsg = null;
-const info = () => X ? { role: X.role, code: X.code, state: X.state, err: X.err, linked: X.linked, tries: X.tries, guestName: X.guestName, token: X.token, guestToken: X.guestToken, everLinked: X.everLinked, brokerUp: X.brokerUp, why: X.why } : { state: 'closed', linked: false };
+const info = () => X ? { role: X.role, code: X.code, state: X.state, err: X.err, linked: X.linked, tries: X.tries, guestName: X.guestName, token: X.token, guestToken: X.guestToken, everLinked: X.everLinked, brokerUp: X.brokerUp, why: X.why, knock: X.knock || '', via: X.via || '' } : { state: 'closed', linked: false };
 Net.info = info;
 function set(state, extra) {
   if (!X) return;
@@ -4049,9 +4062,9 @@ function set(state, extra) {
   if (state !== 'error') X.err = null;
   try { if (Net.onState) Net.onState(info()); } catch (e) { /* the screen's problem */ }
 }
-function fail(kind, text) {
+function fail(kind, text, diag) {
   if (!X) return;
-  X.err = { kind, text: text || '' }; clearTimers(); X.linked = false;
+  X.err = { kind, text: text || '', diag: diag || '' }; clearTimers(); X.linked = false; letSleep();
   const peer = X.peer; X.peer = null; X.conn = null; try { if (peer) peer.destroy(); } catch (e) { /* ignore */ }
   X.state = 'error'; try { if (Net.onState) Net.onState(info()); } catch (e) { /* ignore */ }
 }
@@ -4064,7 +4077,7 @@ const bytes = s => { try { return new TextEncoder().encode(s).length; } catch (e
 function raw(c, m) { try { if (c && c.open) { c.send(m); return true; } } catch (e) { /* the line is going down; the heartbeat will notice */ } return false; }
 function send(c, m) {
   let s; try { s = JSON.stringify(m); } catch (e) { return false; }
-  if (bytes(s) <= DIRECT) return raw(c, m);
+  if (bytes(s) <= (c && c.relay ? LINE_BYTES : DIRECT)) return raw(c, m);
   const id = Math.floor(Math.random() * 1e9), n = Math.ceil(s.length / PIECE);
   for (let i = 0; i < n; i++) if (!raw(c, { t: '~', id, i, n, d: s.slice(i * PIECE, (i + 1) * PIECE) })) return false;
   return true;
@@ -4112,6 +4125,120 @@ function redial(k) {
   }, RETRY[Math.min(k, RETRY.length - 1)]);
 }
 
+/* ---------- why a line did not open, and keeping the screen awake ---------- */
+/* Watches the guest's connection attempt, so a failure can say what really happened: the host answered but the two sides could not find a path
+   (the ICE state left 'new'), or the host never answered (it stayed 'new'). Only used for the error message. */
+function watchIce(c) {
+  const d = X.diag = { ice: '', cand: {}, opened: false, rel: (X.diag && X.diag.rel) || '' };
+  const hook = () => {
+    const pc = c && c.peerConnection; if (!pc) return false;
+    d.ice = pc.iceConnectionState;
+    pc.addEventListener('iceconnectionstatechange', () => { if (pc.iceConnectionState !== 'closed') d.ice = pc.iceConnectionState; });
+    pc.addEventListener('icecandidate', e => { const m = e.candidate && / typ (\w+)/.exec(e.candidate.candidate || ''); if (m) d.cand[m[1]] = (d.cand[m[1]] || 0) + 1; });
+    return true;
+  };
+  try { if (!hook()) setTimeout(() => { try { hook(); } catch (e) { /* only for the report */ } }, 0); } catch (e) { /* only for the report */ }
+}
+const noLine = () => { const d = X && X.diag; return !!d && !d.opened && d.ice !== '' && d.ice !== 'new'; };
+const diagText = () => { const d = X && X.diag; if (!d) return ''; return 'Details: ice ' + (d.ice || 'not started') + ', found ' + (Object.keys(d.cand).join(' + ') || 'nothing') + ', relay server ' + (Net.relayed() ? 'set up' : 'not set up') + ', backup route ' + (d.rel === 'ack' ? 'answered' : d.rel === 'asked' ? 'no answer' : 'not used'); };
+
+/* A phone that goes to sleep while it is hosting drops off the matchmaker, and nobody can find the room. Keep the screen on while a room is open. */
+let lock = null;
+function keepAwake() {
+  try {
+    const wl = g.navigator && g.navigator.wakeLock; if (!wl || lock) return;
+    lock = 'asking';
+    wl.request('screen').then(l => { if (lock !== 'asking') { try { l.release(); } catch (e) { /* ignore */ } return; } lock = l; l.addEventListener('release', () => { if (lock === l) lock = null; }); }).catch(() => { lock = null; });
+  } catch (e) { lock = null; }
+}
+function letSleep() { const l = lock; lock = null; try { if (l && l.release) l.release(); } catch (e) { /* ignore */ } }
+
+/* ---------- a line through the broker ---------- */
+/* Two browsers on different networks often cannot open a WebRTC line at all (one on mobile data, a strict school or office network), and PeerJS's own relay servers
+   are gone. Both of them are already talking to the broker, and the broker passes messages between registered peers, so when the direct line does not open, the game's
+   messages go through the broker instead. To the rest of this file such a line looks like a DataConnection: open, send, close, and the 'open', 'data' and 'close' events.
+   The public broker only forwards what looks like connection set-up. Tried against 0.peerjs.com on 8 November 2026: a CANDIDATE message goes through when its payload is
+   { type: 'data', connectionId: <text>, candidate: { candidate: <text> } } (anything else beside those is passed along untouched), up to about 16 kB, in order, at
+   ten a second. For any other shape, or 32 kB and over, the broker closes the sender's connection. So a frame is a CANDIDATE message with that envelope (a candidate that
+   says nothing) and our own fields beside it: tl, k, cid, d. The browser's PeerJS is kept from filing them, because it keeps what it cannot match for good, and the
+   broker answers a frame for a room nobody holds with the same 'expired' it gives a call, which the game already understands.
+   Frames: open (guest asks), ack (host agrees), msg (one game message), close (either side hangs up). ?link=direct turns this off, ?link=broker uses it from the start. */
+const SWITCH_MS = 7000, LINE_MS = 12000, MAX_LINES = 16;      /* how long the direct line gets to open before the broker is tried; how long the broker line gets to answer */
+const TAG = 'tl-line', FRAME_MAX = 12000, LINE_BYTES = 6000;      /* the connection id every frame carries; the most a frame may weigh; the most a game message may weigh to go in one frame (send() cuts anything bigger into pieces of 2400) */
+const LINES = new WeakMap();      /* peer -> its open broker lines, by 'who|cid' */
+const lineMode = () => { try { return String(new URLSearchParams(g.location.search).get('link') || g.TL_LINK || ''); } catch (e) { return String(g.TL_LINK || ''); } };
+const canLine = peer => !!peer && LINES.has(peer) && lineMode() !== 'direct';
+const isFrame = m => !!m && m.type === 'CANDIDATE' && !!m.payload && m.payload.tl === 1 && m.payload.connectionId === TAG;
+const frame = (peer, dst, p) => {
+  try {
+    if (!peer || peer.disconnected || peer.destroyed) return false;
+    const m = { type: 'CANDIDATE', dst, payload: Object.assign({ type: 'data', connectionId: TAG, candidate: { candidate: '', sdpMid: '0', sdpMLineIndex: 0 } }, p, { tl: 1 }) };
+    if (JSON.stringify(m).length > FRAME_MAX) return false;      /* the broker closes the connection of anyone who sends it more than it carries */
+    peer.socket.send(m); return true;
+  } catch (e) { return false; }
+};
+function makeLine(peer, lines, remote, cid) {
+  const on = { open: [], data: [], close: [], error: [] }, key = remote + '|' + cid;
+  const c = {
+    relay: true, open: false, dead: false, peer: remote, cid,
+    on(ev, fn) { (on[ev] || (on[ev] = [])).push(fn); return c; },
+    emit(ev, a) { (on[ev] || []).slice().forEach(fn => { try { fn(a); } catch (e) { /* the listener's problem */ } }); },
+    send(m) { if (c.open && !c.dead) frame(peer, remote, { k: 'msg', cid, d: m }); },
+    end() { if (c.dead) return; const was = c.open; c.dead = true; c.open = false; if (lines.get(key) === c) lines.delete(key); if (was) c.emit('close'); },      /* like a DataConnection, a line that never opened says nothing */
+    close() { if (c.dead) return; if (c.open) frame(peer, remote, { k: 'close', cid }); c.end(); }
+  };
+  lines.set(key, c);
+  return c;
+}
+/* listen for frames on this peer's broker socket (both roles), and take every line down when the broker is lost: there the broker is the line */
+function lineHook(peer) {
+  try {
+    const s = peer && peer.socket; if (!s || typeof s.send !== 'function' || typeof s.on !== 'function' || typeof peer.on !== 'function') return;
+    const lines = new Map(); LINES.set(peer, lines);
+    const drop = () => { Array.from(lines.values()).forEach(c => c.end()); lines.clear(); };
+    try {      /* PeerJS never sees our frames. Where it cannot be told so, what it filed is thrown away after each message instead */
+      const inner = peer._handleMessage;
+      if (typeof inner === 'function') peer._handleMessage = function (m) { return isFrame(m) ? undefined : inner.apply(this, arguments); };
+    } catch (e) { /* the clean-up below covers it */ }
+    s.on('message', m => {
+      try { lineFrame(peer, lines, m); } catch (e) { /* one bad frame must not take the room down */ }
+      try { if (peer._lostMessages) peer._lostMessages.delete(TAG); } catch (e) { /* ignore */ }
+    });
+    peer.on('disconnected', drop); peer.on('close', drop);
+  } catch (e) { /* no broker line: the direct line is all there is */ }
+}
+function lineFrame(peer, lines, m) {
+  if (!isFrame(m)) return;
+  const p = m.payload;
+  if (typeof m.src !== 'string' || typeof p.cid !== 'string' || p.cid.length > 24) return;
+  let c = lines.get(m.src + '|' + p.cid);
+  if (p.k === 'open') {
+    if (!X || X.role !== 'host' || X.peer !== peer || c || lines.size >= MAX_LINES) return;
+    c = makeLine(peer, lines, m.src, p.cid); c.open = true;
+    frame(peer, m.src, { k: 'ack', cid: p.cid });
+    hostConn(c); c.emit('open');
+    return;
+  }
+  if (!c) { if (p.k === 'msg') frame(peer, m.src, { k: 'close', cid: p.cid }); return; }      /* a line this side no longer knows: say so, so the other side stops waiting */
+  if (p.k === 'ack') { if (!c.open && !c.dead) { if (X && X.diag) X.diag.rel = 'ack'; c.open = true; c.emit('open'); } }
+  else if (p.k === 'msg') { if (c.open) c.emit('data', p.d); }
+  else if (p.k === 'close') c.end();
+}
+/* guest: ask the host for a line through the broker */
+function lineVia(peer) {
+  const lines = LINES.get(peer); if (!lines) return null;
+  const c = makeLine(peer, lines, PREFIX + X.code, rand(2).map(x => x.toString(36)).join('').slice(0, 10));
+  X.diag = X.diag || { ice: '', cand: {}, opened: false }; X.diag.rel = 'asked';
+  frame(peer, c.peer, { k: 'open', cid: c.cid });
+  return c;
+}
+/* guest: the direct line is not opening, so try the broker */
+function switchToLine(peer, c) {
+  if (!X || X.peer !== peer || X.conn !== c) return;
+  X.conn = null; try { c.close(); } catch (e) { /* ignore */ }
+  dial(peer, 'broker');
+}
+
 /* ---------- host ---------- */
 Net.host = function (o) {
   o = o || {};
@@ -4119,6 +4246,7 @@ Net.host = function (o) {
   X = fresh('host', o.code && Net.validCode(o.code) ? o.code : Net.makeCode());
   X.fixed = !!(o.code && Net.validCode(o.code));      /* a code that is being resumed cannot change */
   X.guestToken = o.guestToken || null; X.guestName = o.guestName || '';
+  keepAwake();
   hostPeer();
   return X.code;
 };
@@ -4128,6 +4256,7 @@ function hostPeer() {
   let peer;
   try { peer = new g.Peer(PREFIX + X.code, opts()); } catch (e) { fail('browser', String(e && e.message || e)); return; }
   X.peer = peer;
+  lineHook(peer);
   peer.on('open', () => {
     if (!X || X.id !== me || X.peer !== peer) return;
     X.brokerUp = true; X.opened = true; X.tries = 0;
@@ -4163,18 +4292,22 @@ function hostError(me, peer, e) {
 }
 function hostConn(c) {
   let said = false;
-  const me = X.id, timer = setTimeout(() => { if (!said) { try { c.close(); } catch (e) { /* ignore */ } } }, HELLO_MS);
+  const me = X.id, miss = () => { if (X && X.id === me && !X.linked && X.knockConn === c && X.knock !== 'failed') set(X.state, { knock: 'failed' }); };
+  const bye = () => { if (said) return; try { c.close(); } catch (e) { /* ignore */ } miss(); };      /* a line that never opened gives no close event, so giving up has to say so itself */
+  let timer = setTimeout(bye, OPEN_MS);      /* a line can be slow to open on a poor network: the hello is only waited for once it has */
+  if (!X.linked) set(X.state, { knock: 'connecting', knockConn: c });
+  c.on('open', () => { if (!said) { clearTimeout(timer); timer = setTimeout(bye, HELLO_MS); } });
   c.on('data', d => {
     if (!X || X.id !== me) return;
     const m = unwrap(d); if (!m) return;
-    if (!said) { if (m.t !== 'hello') return; said = true; clearTimeout(timer); hostHello(c, m); return; }
+    if (!said) { if (m.t !== 'hello') return; said = true; clearTimeout(timer); if (X.knock) set(X.state, { knock: '', knockConn: null }); hostHello(c, m); return; }
     if (c !== X.conn) return;
     X.rx = now();
     if (m.t === 'hb') return;
     if (m.t === 'bye') { X.guestToken = null; X.guestName = ''; lost('left'); return; }      /* they meant to go: their seat is free */
     if (Net.onMsg) { try { Net.onMsg(m); } catch (e) { /* the screen's problem */ } }
   });
-  c.on('close', () => { clearTimeout(timer); if (X && X.id === me && c === X.conn) lost('closed'); });
+  c.on('close', () => { clearTimeout(timer); if (!said) miss(); if (X && X.id === me && c === X.conn) lost('closed'); });
   c.on('error', () => { /* the heartbeat decides whether the line is still any good */ });
 }
 function hostHello(c, m) {
@@ -4185,7 +4318,7 @@ function hostHello(c, m) {
   if (X.linked && !same) { deny('full'); return; }
   if (X.guestToken && !same) { deny('taken'); return; }      /* the seat is being held for the player who left */
   if (X.conn && X.conn !== c) { const old = X.conn; X.conn = null; try { old.close(); } catch (e) { /* ignore */ } }
-  X.conn = c; X.guestToken = tok || ('t' + Math.floor(Math.random() * 1e9)); X.guestName = String(m.name || '').slice(0, 14);
+  X.conn = c; X.guestToken = tok || ('t' + Math.floor(Math.random() * 1e9)); X.guestName = String(m.name || '').slice(0, 14); X.via = c.relay ? 'broker' : 'direct';
   X.linked = true; X.everLinked = true; X.rx = now();
   raw(c, { t: 'welcome', v: Net.V, code: X.code });
   startBeat();
@@ -4202,6 +4335,7 @@ Net.join = function (code, o) {
   code = Net.cleanCode(code);
   if (!Net.validCode(code)) { X = fresh('guest', code); fail('code'); return false; }
   X = fresh('guest', code); X.token = o.token || Net.makeToken(); X.name = String(o.name || '').slice(0, 14);
+  keepAwake();
   guestPeer(0);
   return true;
 };
@@ -4211,6 +4345,7 @@ function guestPeer(k) {
   let peer;
   try { peer = new g.Peer(PREFIX + 'g-' + rand(2).map(x => x.toString(36)).join('').slice(0, 12), opts()); } catch (e) { fail('browser', String(e && e.message || e)); return; }
   X.peer = peer;
+  lineHook(peer);
   peer.on('open', () => { if (X && X.id === me && X.peer === peer) { X.brokerUp = true; dial(peer); } });
   peer.on('error', e => guestError(me, peer, e, k));
   peer.on('disconnected', () => { /* the broker is only needed to place the call */ if (X && X.id === me && X.peer === peer) X.brokerUp = false; });
@@ -4229,26 +4364,39 @@ function guestError(me, peer, e, k) {
     fail('broker', t); return;
   }
   if (t === 'webrtc') {
+    if (!X.linked && X.conn && !X.conn.relay && canLine(peer)) { switchToLine(peer, X.conn); return; }
     if (X.everLinked || X.tries < 2) { X.tries += 1; redial(k); return; }
-    fail('webrtc', String(e && e.message || '')); return;
+    fail('webrtc', String(e && e.message || ''), diagText()); return;
   }
   if (t === 'unavailable-id') { redial(k); return; }
 }
-function dial(peer) {
+function dial(peer, via) {
   if (!X || X.peer !== peer) return; const me = X.id;
   set(X.everLinked ? 'away' : 'dialing');
   let c;
-  try { c = peer.connect(PREFIX + X.code, { reliable: true, serialization: 'json' }); } catch (e) { fail('browser'); return; }
+  if (via === undefined) X.diag = null;      /* a fresh try: forget what the last one saw */
+  const onLine = via === 'broker' || (via === undefined && canLine(peer) && (X.relayFirst || lineMode() === 'broker'));
+  try { c = onLine ? lineVia(peer) : peer.connect(PREFIX + X.code, { reliable: true, serialization: 'json' }); } catch (e) { fail('browser'); return; }
   if (!c) { redial(X.tries); return; }
-  X.conn = c; clearTimeout(X.dial);
-  X.dial = setTimeout(() => { if (X && X.id === me && !X.linked && X.conn === c) { if (X.everLinked) { try { c.close(); } catch (e) { /* ignore */ } redial(X.tries); } else fail('timeout'); } }, DIAL_MS);
-  c.on('open', () => { if (X && X.id === me && X.conn === c) raw(c, { t: 'hello', v: Net.V, token: X.token, name: X.name }); });
+  X.conn = c; clearTimeout(X.dial); if (!c.relay) watchIce(c);
+  let late = false;
+  const check = () => {
+    if (!(X && X.id === me && !X.linked && X.conn === c)) return;
+    if (!late && !c.relay && canLine(peer)) {      /* the direct line has had its time: ask for a line through the broker, unless the direct one has only just opened */
+      if (c.open) { late = true; X.dial = setTimeout(check, DIAL_MS - SWITCH_MS); return; }
+      switchToLine(peer, c); return;
+    }
+    if (c.relay && lineMode() !== 'broker') X.relayFirst = false;      /* the broker did not answer: the next try starts with the direct line again */
+    if (X.everLinked) { try { c.close(); } catch (e) { /* ignore */ } redial(X.tries); } else fail(noLine() ? 'webrtc' : 'timeout', '', diagText());
+  };
+  X.dial = setTimeout(check, c.relay ? LINE_MS : canLine(peer) ? SWITCH_MS : DIAL_MS);
+  c.on('open', () => { if (X && X.id === me && X.conn === c) { if (X.diag) X.diag.opened = true; raw(c, { t: 'hello', v: Net.V, token: X.token, name: X.name }); } });
   c.on('data', d => {
     if (!X || X.id !== me || c !== X.conn) return;
     const m = unwrap(d); if (!m) return;
     X.rx = now();
     if (m.t === 'welcome') {
-      clearTimeout(X.dial); X.linked = true; X.everLinked = true; X.tries = 0; X.guestToken = X.token; startBeat(); set('linked', { why: '' });
+      clearTimeout(X.dial); X.linked = true; X.everLinked = true; X.tries = 0; X.via = c.relay ? 'broker' : 'direct'; X.relayFirst = !!c.relay; X.guestToken = X.token; startBeat(); set('linked', { why: '' });
       if (Net.onMsg) { try { Net.onMsg({ t: 'welcome', code: m.code }); } catch (e) { /* ignore */ } }
       return;
     }
@@ -4258,8 +4406,8 @@ function dial(peer) {
     if (!X.linked) return;
     if (Net.onMsg) { try { Net.onMsg(m); } catch (e) { /* ignore */ } }
   });
-  c.on('close', () => { if (X && X.id === me && c === X.conn) { if (X.linked) lost('closed'); else if (X.everLinked) redial(X.tries); else if (X.state !== 'error') fail('closed'); } });
-  c.on('error', () => { /* the close that follows decides */ });
+  c.on('close', () => { if (X && X.id === me && c === X.conn) { if (X.linked) lost('closed'); else if (!c.relay && canLine(peer)) switchToLine(peer, c); else if (X.everLinked) redial(X.tries); else if (X.state !== 'error') fail(X.diag && !X.diag.opened && X.diag.ice === 'failed' ? 'webrtc' : 'closed', '', diagText()); } });
+  c.on('error', () => { if (X && X.id === me && X.conn === c && !c.relay && !c.open && !X.linked && canLine(peer)) switchToLine(peer, c); /* otherwise the close that follows decides */ });
 }
 
 /* ---------- leaving, and waking up ---------- */
@@ -4267,12 +4415,14 @@ Net.leave = function (tell) {
   const x = X; if (!x) return;
   if (tell !== false && x.linked) raw(x.conn, { t: 'bye' });
   X = null; serial += 1;      /* every callback that is still in flight now sees a stranger and stops */
+  letSleep();
   const peer = x.peer, conn = x.conn;
   ['beat', 'dial', 'retry', 'recon'].forEach(k => { if (x[k]) { clearTimeout(x[k]); clearInterval(x[k]); } });
   setTimeout(() => { try { if (conn) conn.close(); } catch (e) { /* ignore */ } try { if (peer) peer.destroy(); } catch (e) { /* ignore */ } }, tell !== false ? 120 : 0);
 };
 /* a tab that was asleep or offline: look at the line now rather than waiting for the next beat */
 Net.wake = function () {
+  if (X && X.state !== 'error') keepAwake();
   if (!X) return;
   if (X.linked) { if (now() - X.rx > DEAD) lost('silent'); else raw(X.conn, { t: 'hb' }); return; }
   if (X.role === 'guest' && X.everLinked && X.state !== 'error') redial(0);
@@ -4469,7 +4619,7 @@ const ERR = {
   browser: 'This browser cannot open direct connections (it needs WebRTC). A current Chrome, Edge, Firefox or Safari can.',
   config: 'The connection settings in this copy of the game are not valid.',
   broker: 'Could not reach the matchmaking service. It only introduces the two browsers to each other, so it has to be reachable once, at the start. Check the connection and try again.',
-  webrtc: 'The room was found, but the two browsers could not open a direct line. Some office, school and mobile networks block that. Try another network, or another browser.',
+  webrtc: 'The room was found, but the two devices could not open a direct line. That usually means they are on different networks, say one on Wi-Fi and one on mobile data, and a direct connection is not allowed between them. Put both devices on the same Wi-Fi and try again.',
   timeout: 'The room did not answer. Its host may have closed the page.',
   full: 'That room already has two players.',
   version: 'The two copies of the game are different versions. You both need the same file.',
@@ -4519,8 +4669,8 @@ function lobby() {
   const info = NT.info(), host = S.net.me === 0, code = S.net.code || info.code || '', bad = info.state === 'error';
   let status, cls = 'wait';
   if (bad) { status = errText(info); cls = 'err'; }
-  else if (host) status = info.linked ? 'Connected. Setting up the room…' : info.state === 'connecting' ? 'Opening the room…' : 'Waiting for your partner to join…';
-  else status = info.state === 'connecting' ? 'Contacting the matchmaker…' : info.state === 'dialing' ? 'Found the room. Opening a direct line…' : 'In the room. Waiting for the host…';
+  else if (host) status = info.linked ? 'Connected. Setting up the room…' : info.state === 'connecting' ? 'Opening the room…' : info.knock === 'connecting' ? 'Your partner found the room. Opening a direct line…' : info.knock === 'failed' ? 'Someone found the room, but the direct line would not open. They are probably on a different network. Both of you on the same Wi-Fi works best. They can try again.' : 'Waiting for your partner to join…';
+  else status = info.state === 'connecting' ? 'Contacting the matchmaker…' : info.state === 'dialing' ? 'Found the room. Opening the line…' : 'In the room. Waiting for the host…';
   const retry = bad && RETRY_OK.indexOf(info.err.kind) >= 0 ? `<button type="button" class="btn primary" data-act="retry">Try again</button>` : '';
   const copy = host && !bad ? `<button type="button" class="btn ghost" data-act="copycode">${ui.lcopied === 'code' ? 'Copied' : 'Copy code'}</button>${canLink() ? `<button type="button" class="btn ghost" data-act="copylink">${ui.lcopied === 'link' ? 'Copied' : 'Copy link'}</button>` : ''}` : '';
   const fb = ui.lfallback ? `<textarea class="copybox" readonly rows="2">${esc(ui.lfallback)}</textarea>` : '';
@@ -4532,6 +4682,7 @@ function lobby() {
     ${host && !bad ? codeTiles(code) : ''}
     ${host && !bad ? '<p class="lead center">They open the game, choose <b>Play on two devices</b>, then <b>Join a room</b>, and type it in.</p>' : ''}
     ${pstatLine(cls, status)}
+    ${bad && info.err.diag ? `<p class="fine center ldiag">${esc(info.err.diag)}</p>` : ''}
     <div class="bar static">${retry}${copy}</div>
     ${fb}
     <div class="subnav"><button type="button" class="linkbtn" data-act="lobbyback">‹ ${gone ? 'Back' : host ? 'Close the room' : 'Cancel'}</button></div>

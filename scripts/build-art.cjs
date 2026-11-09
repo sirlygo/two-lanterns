@@ -19,6 +19,7 @@ let html=base.slice(0,start)+runtime+'\n\n'+base.slice(end);
 html=html.replace('</head>','<style id="undertoll-theme">\n'+fs.readFileSync(path.join(root,'art/theme.css'),'utf8')+'\n</style>\n</head>');
 html=html.replace(/function blankDie\(\) \{ return `<svg[^\n]+\n/,'function blankDie() { return A.die(0); }\n');
 html=require('./ui-edits.cjs')(html);
+html=require('./net-edits.cjs')(html,root);
 html=html.replace(/ · art drawn in code/g,' · Undertoll art edition');
 html=html.replace("label: 'Two lanterns, one ember and one verdigris, hanging over a stair that leads down into the dark'","label: 'Two shadowy travelers holding amber and mint lamps beneath a colossal cracked bell'");
 html=html.replace("Object.assign({ label: 'The Bellheart, after: the last scene of your descent' }, e.art)","Object.assign({ label: 'The Bellheart, after: the last scene of your descent', picks: S.p.map(c => c.picks) }, e.art)");

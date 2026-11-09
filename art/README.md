@@ -26,8 +26,11 @@ node scripts/build-art.cjs
 node scripts/build-art-review.cjs
 node scripts/verify-art.cjs
 node scripts/browser-art-qa.cjs
+node scripts/net-test.cjs
 ```
 
-The build replaces only the art renderer, art-facing interface styling, blank-die rendering, and scene labels, and applies the wording and layout edits listed in `scripts/ui-edits.cjs` (play buttons, title blurb, online screens, footers, Back buttons). Each of those edits must match the original page exactly once, or the build stops. The ending view passes character picks to its renderer so its fate figures use the right calling and lamp. Game rules, story data, saved-game keys, room draws, and networking remain the original code.
+`net-test.cjs` hosts and joins a room in two browsers and needs two extra packages: `npm install --no-save peer node-turn` (see `net/README.md`).
+
+The build replaces only the art renderer, art-facing interface styling, blank-die rendering, and scene labels, and applies the wording and layout edits listed in `scripts/ui-edits.cjs` (play buttons, title blurb, online screens, footers, Back buttons) and the online-play fixes listed in `scripts/net-edits.cjs` (relay list, line through the matchmaker, clearer messages; see `net/README.md`). Each of those edits must match the original page exactly once, or the build stops. The ending view passes character picks to its renderer so its fate figures use the right calling and lamp. Game rules, story data, saved-game keys, and room draws remain the original code, and so does what the two players send each other; the online-play fixes change only how the two devices find a way to connect.
 
 Both `index.html` and `art-review.html` embed their image data. No asset server is required to play or review them. Source images are separately retained here for future editing.
