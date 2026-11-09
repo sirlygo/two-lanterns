@@ -2,6 +2,7 @@ const fs=require('node:fs');
 const path=require('node:path');
 const root=path.resolve(__dirname,'..');
 const inv=JSON.parse(fs.readFileSync(path.join(root,'art/inventory.json'),'utf8'));
+for(const r of require('./rooms-pack.cjs').ready(root).rooms)inv.rooms.push({id:r.id,title:r.title});
 const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
 const start=html.indexOf('/* Two Lanterns :: the Undertoll art edition.');
 const end=html.indexOf('/* Two Lanterns :: story data.');
@@ -25,5 +26,5 @@ if(group==='symbols')items=Art.icons.map(id=>({title:id.replace(/_/g,' '),id,art
 items=items.filter(i=>(i.title+' '+i.id).toLowerCase().includes(q));document.body.className=group;document.querySelectorAll('[data-group]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.group===group));document.getElementById('count').textContent=items.length+' illustrations';document.getElementById('gallery').innerHTML=items.map(i=>'<article class="tile"><div class="frame">'+i.art()+'</div><h2>'+esc(i.title)+'</h2><small>'+esc(i.id)+'</small></article>').join('');}
 document.querySelector('nav').addEventListener('click',e=>{const b=e.target.closest('[data-group]');if(b){group=b.dataset.group;history.replaceState(null,'','?group='+group);draw();}});document.getElementById('search').addEventListener('input',draw);draw();
 </script></body></html>`;
-fs.writeFileSync(path.join(root,'art-review.html'),template);
+fs.writeFileSync(path.join(root,'art-review.html'),template.replace('>38 rooms</button>', '>'+inv.rooms.length+' rooms</button>'));
 console.log('Built art-review.html');

@@ -1,0 +1,19 @@
+Painting prompts for room pack 1. Each describes the composition only: use it with the usual Undertoll style wording and reference image (art/README.md), then save the result as art/scenes/<id>.webp.
+
+lamps.webp  (The Lamplighters' Rest)
+Long barrel-vaulted dormitory in one-point perspective, two rows of narrow iron cots receding, a dark hanging lantern above every cot, one small steady amber flame far at the end, tall lighting-poles stacked by the doorway in the foreground. Dry stone floor. No bell.
+
+sluice.webp  (The Sluice Gate)
+A colossal riveted iron sluice gate fills the back wall, low camera looking up, thin bright threads of water jetting through its seams, heavy toothed wheels and chains climbing the left wall to a small railed platform with an empty chair. Wet flagstones only near the gate. Industrial, not ecclesiastical. No bell.
+
+wake.webp  (The Wake Table)
+Side-on view of a very long banquet table under a low beamed ceiling, black cloth, covered dishes and unlit candlesticks, tall-backed chairs each draped with a dark coat and topped with a hat so they read as seated figures with no bodies, one bare empty chair at the near head of the table with a folded black veil on its plate. Dry stone floor. No bell.
+
+maps.webp  (The Map Floor)
+High three-quarter view down onto a huge hall whose whole floor is a miniature mosaic town seen from above, tiny warm points of light in its windows with dark patches where lights have gone out, a ribbon of blue glass river, an oversized pair of brass dividers standing on one roof. The two travelers stand at the edge, small. No bell.
+
+ropewalk.webp  (The Rope Walk)
+Extremely long, low, narrow gallery in deep one-point perspective, several thick ropes stretched its full length at waist height and visibly twisted, large coils hanging from the rafters like sleeping shapes, a workbench in the foreground with a single knotted length of rope. Dry plank floor. No bell.
+
+confess.webp  (The Confessional Row)
+Narrow corridor in one-point perspective lined on both sides with tall dark wooden confessional booths, heavy curtains drawn, a faint cold light leaking under each door, the last booth at the end standing open with a small brass grille resting on its step. Dry stone floor. No bell.

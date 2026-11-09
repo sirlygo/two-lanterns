@@ -5,6 +5,7 @@ const dependency=name=>require(process.env.TWO_LANTERNS_NODE_MODULES?path.join(p
 const {chromium}=dependency('playwright');
 const sharp=dependency('sharp');
 const root=path.resolve(__dirname,'..'),out=path.join(root,'art','qa');
+const packRooms=process.env.TWO_LANTERNS_QA_PACK?require('./rooms-pack.cjs').ready(root).rooms.map(r=>r.id):[];
 fs.mkdirSync(out,{recursive:true});
 let qaBrowser;
 (async()=>{
@@ -39,6 +40,10 @@ let qaBrowser;
   await page.locator('[data-act="next"]').click();created++;
  }
  await check('meet');await page.screenshot({path:path.join(out,'desktop-characters.png'),fullPage:true});
+ if(packRooms.length){
+  if(packRooms.length!==6)throw Error('The pack playthrough requires exactly six painted rooms');
+  await page.evaluate(ids=>{__tl.S.order=['stair',...ids,'bellheart'];__tl.S.sets=__tl.S.order.map((_,i)=>i%2);},packRooms);
+ }
  for(let k=0;k<30;k++){if(await page.evaluate(()=>__tl.S.lead!==null))break;await page.locator('[data-act="first"]').click();await page.waitForFunction(()=>!__tl.ui.rolling);}
  await page.locator('[data-act="descend"]').click();
  for(let step=0;step<120;step++){
@@ -47,6 +52,14 @@ let qaBrowser;
   if(state.screen==='ending'){await page.screenshot({path:path.join(out,'desktop-ending.png'),fullPage:true});break;}
   if(state.screen==='intro'){
     if(state.room===0)await page.screenshot({path:path.join(out,'desktop-room.png'),fullPage:true});
+    const roomId=await page.evaluate(()=>__tl.E.room(__tl.S).id);
+    if(packRooms.includes(roomId)){
+      await page.locator('.screen>.plate').screenshot({path:path.join(out,'pack-'+roomId+'-desktop.png')});
+      await page.setViewportSize({width:390,height:844});
+      await check('mobile-pack-'+roomId);
+      await page.locator('.screen>.plate').screenshot({path:path.join(out,'pack-'+roomId+'-mobile.png')});
+      await page.setViewportSize({width:1280,height:1000});
+    }
     await page.locator('[data-act="begin"]').click();
   }else if(state.screen==='choose'){
     const opts=await page.evaluate(()=>__tl.E.optsFor(__tl.S,__tl.S.turn).map((o,i)=>({i,k:o.k,a:o.a,score:__tl.S.p[__tl.S.turn].stats[o.k]+(o.a==='team'?1:0)})).sort((a,b)=>b.score-a.score));
@@ -77,7 +90,7 @@ let qaBrowser;
  await page.evaluate(()=>{__tl.ACT['reset-yes']();});await page.locator('[data-act="online"]').click();await check('mobile-lobby');await page.screenshot({path:path.join(out,'mobile-lobby.png'),fullPage:true});
  const alpha=[];
  for(const name of ['guard','thief','witch','cantor']){const meta=await sharp(path.join(root,'art/portraits',name+'.webp')).metadata();if(!meta.hasAlpha)errors.push('Portrait lacks alpha: '+name);alpha.push({name,alpha:meta.hasAlpha,width:meta.width,height:meta.height});}
- const report={ok:errors.length===0,createdChoices:created,checks,alpha,errors};
+ const report={ok:errors.length===0,createdChoices:created,packRooms,checks,alpha,errors};
  fs.writeFileSync(path.join(out,'browser-report.json'),JSON.stringify(report,null,2));
  console.log(JSON.stringify(report));await browser.close();if(errors.length)process.exitCode=1;
 })().catch(async e=>{console.error(e);if(qaBrowser)await qaBrowser.close();process.exitCode=1;});

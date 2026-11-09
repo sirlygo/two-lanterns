@@ -1,6 +1,14 @@
 {
   "ok": true,
   "createdChoices": 10,
+  "packRooms": [
+    "lamps",
+    "sluice",
+    "wake",
+    "maps",
+    "ropewalk",
+    "confess"
+  ],
   "checks": [
     {
       "label": "desktop-title",
@@ -188,7 +196,17 @@
       "screen": "intro",
       "overflow": false,
       "scenes": [
-        "greenhouse"
+        "lamps"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "mobile-pack-lamps",
+      "screen": "intro",
+      "overflow": false,
+      "scenes": [
+        "lamps"
       ],
       "portraits": 2,
       "assets": true
@@ -198,7 +216,7 @@
       "screen": "choose",
       "overflow": false,
       "scenes": [
-        "greenhouse"
+        "lamps"
       ],
       "portraits": 1,
       "assets": true
@@ -208,7 +226,7 @@
       "screen": "handoff",
       "overflow": false,
       "scenes": [
-        "greenhouse"
+        "lamps"
       ],
       "portraits": 0,
       "assets": true
@@ -218,7 +236,7 @@
       "screen": "choose",
       "overflow": false,
       "scenes": [
-        "greenhouse"
+        "lamps"
       ],
       "portraits": 1,
       "assets": true
@@ -228,7 +246,7 @@
       "screen": "roll",
       "overflow": false,
       "scenes": [
-        "greenhouse"
+        "lamps"
       ],
       "portraits": 0,
       "assets": true
@@ -238,8 +256,8 @@
       "screen": "roll",
       "overflow": false,
       "scenes": [
-        "greenhouse",
-        "greenhouse"
+        "lamps",
+        "lamps"
       ],
       "portraits": 2,
       "assets": true
@@ -249,7 +267,17 @@
       "screen": "intro",
       "overflow": false,
       "scenes": [
-        "weaver"
+        "sluice"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "mobile-pack-sluice",
+      "screen": "intro",
+      "overflow": false,
+      "scenes": [
+        "sluice"
       ],
       "portraits": 2,
       "assets": true
@@ -259,7 +287,7 @@
       "screen": "choose",
       "overflow": false,
       "scenes": [
-        "weaver"
+        "sluice"
       ],
       "portraits": 1,
       "assets": true
@@ -269,7 +297,7 @@
       "screen": "handoff",
       "overflow": false,
       "scenes": [
-        "weaver"
+        "sluice"
       ],
       "portraits": 0,
       "assets": true
@@ -279,7 +307,7 @@
       "screen": "choose",
       "overflow": false,
       "scenes": [
-        "weaver"
+        "sluice"
       ],
       "portraits": 1,
       "assets": true
@@ -289,7 +317,7 @@
       "screen": "roll",
       "overflow": false,
       "scenes": [
-        "weaver"
+        "sluice"
       ],
       "portraits": 0,
       "assets": true
@@ -299,8 +327,8 @@
       "screen": "roll",
       "overflow": false,
       "scenes": [
-        "weaver",
-        "weaver"
+        "sluice",
+        "sluice"
       ],
       "portraits": 2,
       "assets": true
@@ -310,7 +338,17 @@
       "screen": "intro",
       "overflow": false,
       "scenes": [
-        "market"
+        "wake"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "mobile-pack-wake",
+      "screen": "intro",
+      "overflow": false,
+      "scenes": [
+        "wake"
       ],
       "portraits": 2,
       "assets": true
@@ -320,7 +358,7 @@
       "screen": "choose",
       "overflow": false,
       "scenes": [
-        "market"
+        "wake"
       ],
       "portraits": 1,
       "assets": true
@@ -330,7 +368,7 @@
       "screen": "handoff",
       "overflow": false,
       "scenes": [
-        "market"
+        "wake"
       ],
       "portraits": 0,
       "assets": true
@@ -340,7 +378,7 @@
       "screen": "choose",
       "overflow": false,
       "scenes": [
-        "market"
+        "wake"
       ],
       "portraits": 1,
       "assets": true
@@ -350,7 +388,7 @@
       "screen": "roll",
       "overflow": false,
       "scenes": [
-        "market"
+        "wake"
       ],
       "portraits": 0,
       "assets": true
@@ -360,8 +398,8 @@
       "screen": "roll",
       "overflow": false,
       "scenes": [
-        "market",
-        "market"
+        "wake",
+        "wake"
       ],
       "portraits": 2,
       "assets": true
@@ -381,7 +419,17 @@
       "screen": "intro",
       "overflow": false,
       "scenes": [
-        "gallery"
+        "maps"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "mobile-pack-maps",
+      "screen": "intro",
+      "overflow": false,
+      "scenes": [
+        "maps"
       ],
       "portraits": 2,
       "assets": true
@@ -391,7 +439,7 @@
       "screen": "choose",
       "overflow": false,
       "scenes": [
-        "gallery"
+        "maps"
       ],
       "portraits": 1,
       "assets": true
@@ -401,7 +449,7 @@
       "screen": "handoff",
       "overflow": false,
       "scenes": [
-        "gallery"
+        "maps"
       ],
       "portraits": 0,
       "assets": true
@@ -411,7 +459,7 @@
       "screen": "choose",
       "overflow": false,
       "scenes": [
-        "gallery"
+        "maps"
       ],
       "portraits": 1,
       "assets": true
@@ -421,7 +469,7 @@
       "screen": "roll",
       "overflow": false,
       "scenes": [
-        "gallery"
+        "maps"
       ],
       "portraits": 0,
       "assets": true
@@ -431,8 +479,8 @@
       "screen": "roll",
       "overflow": false,
       "scenes": [
-        "gallery",
-        "gallery"
+        "maps",
+        "maps"
       ],
       "portraits": 2,
       "assets": true
@@ -442,7 +490,17 @@
       "screen": "intro",
       "overflow": false,
       "scenes": [
-        "moths"
+        "ropewalk"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "mobile-pack-ropewalk",
+      "screen": "intro",
+      "overflow": false,
+      "scenes": [
+        "ropewalk"
       ],
       "portraits": 2,
       "assets": true
@@ -452,7 +510,7 @@
       "screen": "choose",
       "overflow": false,
       "scenes": [
-        "moths"
+        "ropewalk"
       ],
       "portraits": 1,
       "assets": true
@@ -462,7 +520,7 @@
       "screen": "handoff",
       "overflow": false,
       "scenes": [
-        "moths"
+        "ropewalk"
       ],
       "portraits": 0,
       "assets": true
@@ -472,7 +530,7 @@
       "screen": "choose",
       "overflow": false,
       "scenes": [
-        "moths"
+        "ropewalk"
       ],
       "portraits": 1,
       "assets": true
@@ -482,7 +540,7 @@
       "screen": "roll",
       "overflow": false,
       "scenes": [
-        "moths"
+        "ropewalk"
       ],
       "portraits": 0,
       "assets": true
@@ -492,8 +550,8 @@
       "screen": "roll",
       "overflow": false,
       "scenes": [
-        "moths",
-        "moths"
+        "ropewalk",
+        "ropewalk"
       ],
       "portraits": 2,
       "assets": true
@@ -503,7 +561,17 @@
       "screen": "intro",
       "overflow": false,
       "scenes": [
-        "armoury"
+        "confess"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "mobile-pack-confess",
+      "screen": "intro",
+      "overflow": false,
+      "scenes": [
+        "confess"
       ],
       "portraits": 2,
       "assets": true
@@ -513,7 +581,7 @@
       "screen": "choose",
       "overflow": false,
       "scenes": [
-        "armoury"
+        "confess"
       ],
       "portraits": 1,
       "assets": true
@@ -523,7 +591,7 @@
       "screen": "handoff",
       "overflow": false,
       "scenes": [
-        "armoury"
+        "confess"
       ],
       "portraits": 0,
       "assets": true
@@ -533,7 +601,7 @@
       "screen": "choose",
       "overflow": false,
       "scenes": [
-        "armoury"
+        "confess"
       ],
       "portraits": 1,
       "assets": true
@@ -543,7 +611,7 @@
       "screen": "roll",
       "overflow": false,
       "scenes": [
-        "armoury"
+        "confess"
       ],
       "portraits": 0,
       "assets": true
@@ -553,8 +621,8 @@
       "screen": "roll",
       "overflow": false,
       "scenes": [
-        "armoury",
-        "armoury"
+        "confess",
+        "confess"
       ],
       "portraits": 2,
       "assets": true
@@ -691,7 +759,13 @@
         "stable",
         "windows",
         "tomb",
-        "pennywell"
+        "pennywell",
+        "lamps",
+        "sluice",
+        "wake",
+        "maps",
+        "ropewalk",
+        "confess"
       ],
       "portraits": 0,
       "assets": true

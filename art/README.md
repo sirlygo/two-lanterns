@@ -6,7 +6,7 @@ The visual language uses crisp 2D shadow silhouettes, ragged tapering cloaks, ne
 
 ## Sources
 
-- `scenes/`: 51 regular scene illustrations and six Bell-outcome backgrounds, optimized as WebP.
+- `scenes/`: 57 regular scene illustrations and six Bell-outcome backgrounds, optimized as WebP. This includes all six rooms in `rooms/pack1.cjs`: Lamplighters’ Rest, Sluice Gate, Wake Table, Map Floor, Rope Walk, and Confessional Row.
 - `portraits/`: four original calling illustrations with real alpha transparency.
 - `prompts/`: exact built-in image-generator prompts, including the final dice cleanup. The title uses the approved reference; its exact prompt is in `concepts/bellheart-shadow-lanterns-v2-eerie-prompt.txt`.
 - `runtime.js`: custom vector symbols and dice; generated-image scene renderer; origin and keepsake portrait details; four dynamic lantern types; two player identities; nine character fate compositions.
