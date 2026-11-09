@@ -28,6 +28,6 @@ node scripts/verify-art.cjs
 node scripts/browser-art-qa.cjs
 ```
 
-The build replaces only the art renderer, art-facing interface styling, blank-die rendering, scene labels, and art credit. The ending view passes character picks to its renderer so its fate figures use the right calling and lamp. Game rules, story data, saved-game keys, room draws, and networking remain the original code.
+The build replaces only the art renderer, art-facing interface styling, blank-die rendering, and scene labels, and applies the wording and layout edits listed in `scripts/ui-edits.cjs` (play buttons, title blurb, online screens, footers, Back buttons). Each of those edits must match the original page exactly once, or the build stops. The ending view passes character picks to its renderer so its fate figures use the right calling and lamp. Game rules, story data, saved-game keys, room draws, and networking remain the original code.
 
 Both `index.html` and `art-review.html` embed their image data. No asset server is required to play or review them. Source images are separately retained here for future editing.

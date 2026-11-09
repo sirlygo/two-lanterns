@@ -42,4 +42,6 @@ for(const calling of ['guard','thief','witch','cantor'])for(const origin of ['ri
 assert(current.html.includes('function blankDie() { return A.die(0); }'),'Old die remains');
 assert(!current.html.includes('art drawn in code'),'Stale art credit');
 assert(!current.html.includes('/* Two Lanterns :: art core'),'Placeholder renderer remains');
+for(const gone of ['Light the lanterns','PeerJS matchmaker','Pass-and-play for two','Online play ·','Play online'])assert(!current.html.includes(gone),'Stale UI text: '+gone);
+for(const here of ['Play on one device','Play on two devices','About twenty-five minutes.<br>'])assert(current.html.includes(here),'Missing UI text: '+here);
 console.log(JSON.stringify({ok:true,scenes:Art.names.length,assets:Art.assetCount,icons:Art.icons.length,portraitCombinations:512,endingCombinations:variants,unchangedRules:true,unchangedStory:true,bytes:Buffer.byteLength(current.html)}));

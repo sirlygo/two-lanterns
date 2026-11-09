@@ -759,6 +759,17 @@ h1{letter-spacing:.09em}h1 em{background:none;-webkit-text-fill-color:var(--verd
 .rplate .undertoll-scene{height:100%}
 @media (max-width:600px){.plate,.plate.hero,.plate.tall{aspect-ratio:8/5;max-height:none}.plate.short{aspect-ratio:16/8;max-height:none}.cport{width:104px;height:130px}.rplate{aspect-ratio:16/9;max-height:none}}
 @media(prefers-reduced-motion:reduce){.plate svg,.scene-motes,.shadow-portrait,.held-lamp{animation:none!important;transition:none!important}}
+/* Online screens: one centred column, like the title. */
+.lobby>h2,.lobby>.eyebrow,.lobby>.lead,.lobby>.fine{text-align:center}
+.lobby>.lead{margin-left:auto;margin-right:auto;text-wrap:balance}
+.lobby form{margin-left:auto;margin-right:auto}
+.lobby .field>span{justify-content:center}
+.lobby .lcard{text-align:center}
+.lobby .lcard .btn{justify-self:center}
+/* Back and other way-back links read as buttons, not small print. */
+.subnav{margin-top:18px;min-height:44px}
+.subnav .linkbtn{display:inline-flex;align-items:center;gap:.5em;min-height:44px;padding:.6rem 1.3rem;border:1px solid var(--line2);border-radius:5px;background:rgba(13,24,31,.6);color:var(--fg);font:600 .78rem/1 var(--disp);letter-spacing:.14em;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:border-color .15s,background .15s}
+.subnav .linkbtn:hover{border-color:var(--who,var(--ember));background:rgba(228,174,96,.08)}
 
 </style>
 <style id="narrator-css">
@@ -4406,12 +4417,12 @@ function chrome(inner, where, bare) {
   const reset = bare || S.screen === 'title' || S.screen === 'lobby' ? '' : ui.confirm
     ? `<span class="confirm">${ask} <button class="linkbtn warn" data-act="reset-yes">${net ? 'Yes, leave' : 'Yes, start over'}</button> <button class="linkbtn" data-act="reset-no">Keep playing</button></span>`
     : `<button class="linkbtn" data-act="reset">${net ? 'Leave room' : 'Start over'}</button>`;
-  const fine = net ? `Online · room ${esc(S.net.code)} · Undertoll art edition` : S.screen === 'lobby' ? 'Online play · Undertoll art edition' : 'Pass-and-play for two · Undertoll art edition';
+  const fine = net ? `Online · room ${esc(S.net.code)}` : '';
   return `<div class="wrap">
     <header class="top"><span class="brand"><span class="lp"><span class="l0">${ico('lantern')}</span><span class="l1">${ico('lantern')}</span></span><span>Two Lanterns</span></span><span class="where">${where || ''}</span></header>
     ${presenceBox()}
     ${inner}
-    <footer class="foot">${reset}<span class="fine">${fine}</span></footer>
+    ${reset || fine ? `<footer class="foot">${reset}${fine ? `<span class="fine">${fine}</span>` : ''}</footer>` : ''}
   </div>`;
 }
 const handoffBar = (act, label, dis, cls) => `<div class="bar"><button type="button" class="btn ${cls || 'primary'}" data-act="${act}" ${dis ? 'disabled' : ''}>${label}</button></div>`;
@@ -4419,7 +4430,7 @@ const handoffBar = (act, label, dis, cls) => `<div class="bar"><button type="but
 /* ---------- screens ---------- */
 function title() {
   const resume = ui.saved ? `<button type="button" class="btn ghost" data-act="resume">Continue your descent</button>` : '';
-  const onlineBtn = `<button type="button" class="btn ghost" data-act="online">${ico('lantern')}Play online</button>`;
+  const onlineBtn = `<button type="button" class="btn ghost" data-act="online">${ico('lantern')}Play on two devices</button>`;
   const rejoin = ui.online ? `<button type="button" class="btn ghost" data-act="rejoin">Rejoin room ${esc(ui.online.code)}</button>` : '';
   const nb = BK.count(), bookBtn = `<button type="button" class="btn ghost" data-act="book">${ico('book')}${D.book.open}${nb ? ' · ' + num(nb) : ''}</button>`;
   return chrome(`<section class="screen title">
@@ -4433,9 +4444,9 @@ function title() {
       <li>${ico('coins')}<span><b>Spend what you find.</b> Twice on the way down a chandler sets out her stall. Gold buys health, a reroll, a quieter Bell or a relic, or a blind draw from a sealed jar, and one lantern can pay for the other.</span></li>
       <li>${ico('bell')}<span><b>One bell at the bottom.</b> What you did on the way down decides how it ends, and every kind of ending you find is written in the Book of Endings. Somewhere in the dark, the Sexton’s day-book explains why the bells stopped, if your Lore can find the pages.</span></li>
     </ol>
-    <div class="bar static"><button type="button" class="btn primary" data-act="start">Light the lanterns</button>${onlineBtn}${rejoin}${resume}${bookBtn}</div>
+    <div class="bar static"><button type="button" class="btn primary" data-act="start">Play on one device</button>${onlineBtn}${rejoin}${resume}${bookBtn}</div>
     ${ui.online ? `<p class="fine center">Your last online room, ${esc(ui.online.code)}, is still saved in this browser. <button type="button" class="linkbtn" data-act="forget">Forget it</button></p>` : ''}
-    <p class="fine center">About twenty-five minutes. On one device, a hand-off screen hides each pick from your partner. Online, each pick stays on your own screen until you are both locked in.</p>
+    <p class="fine center">About twenty-five minutes.<br>On one device, you pass it back and forth and a hand-off screen hides each pick from your partner.<br>On two devices, each pick stays on your own screen until you are both locked in.</p>
   </section>`, '');
 }
 
@@ -4483,14 +4494,14 @@ function lobby() {
     if (!NT.available()) return chrome(`<section class="screen lobby">
       ${plate('lobby', { label: LOBBY_ALT })}
       <h2 data-focus tabindex="-1">Online rooms need the downloaded copy</h2>
-      <p class="lead">This preview runs inside a sandbox that blocks direct browser-to-browser connections, so a room cannot open from here. Open the downloaded <b>two-lanterns.html</b> in two browsers, or put that one file on any web host, and <b>Play online</b> works there: one of you hosts a room, and the other joins with its four-letter code.</p>
+      <p class="lead">This preview runs inside a sandbox that blocks direct browser-to-browser connections, so a room cannot open from here. Open the downloaded <b>two-lanterns.html</b> in two browsers, or put that one file on any web host, and <b>Play on two devices</b> works there: one of you hosts a room, and the other joins with its four-letter code.</p>
       <p class="fine">Playing on one device works everywhere, including here.</p>
       <div class="subnav"><button type="button" class="linkbtn" data-act="lobbyback">‹ Back</button></div>
     </section>`, 'Online');
     return chrome(`<section class="screen lobby">
       ${plate('lobby', { label: LOBBY_ALT })}
-      <h2 data-focus tabindex="-1">Play online</h2>
-      <p class="lead">One lantern each, on two devices. One of you hosts a room and gives its four-letter code to the other. Your moves stay on your own screen until you are both locked in.</p>
+      <h2 data-focus tabindex="-1">Play on two devices</h2>
+      <p class="lead center">One lantern each. One of you hosts a room and gives its four-letter code to the other. Your moves stay on your own screen until you are both locked in.</p>
       <form data-form="lobby" autocomplete="off">
         <label class="field p0"><span>${ico('lantern')} Your name</span><input name="n" maxlength="14" placeholder="Name your lantern-bearer" value="${esc(L.name)}" autocapitalize="words" spellcheck="false"></label>
         <div class="lgrid">
@@ -4501,7 +4512,7 @@ function lobby() {
         </div>
         ${L.err ? `<p class="lerr" role="alert">${esc(L.err)}</p>` : ''}
       </form>
-      <p class="fine center lfine">${NT.custom() ? 'Rooms are set up through ' + esc(NT.broker()) + '.' : 'Rooms are set up through the free PeerJS matchmaker, which only introduces the two browsers. After that, every move goes straight between you.'}</p>
+      ${NT.custom() ? '<p class="fine center lfine">Rooms are set up through ' + esc(NT.broker()) + '.</p>' : ''}
       <div class="subnav"><button type="button" class="linkbtn" data-act="lobbyback">‹ Back</button></div>
     </section>`, 'Online');
   }
@@ -4519,7 +4530,7 @@ function lobby() {
     <p class="eyebrow">${gone ? 'Room closed' : host ? 'Your room' : 'Joining'}</p>
     <h2 data-focus tabindex="-1">${host ? (bad ? 'The room did not open' : 'Give your partner this code') : 'Room ' + esc(code)}</h2>
     ${host && !bad ? codeTiles(code) : ''}
-    ${host && !bad ? '<p class="lead center">They open the game, choose <b>Play online</b>, then <b>Join a room</b>, and type it in.</p>' : ''}
+    ${host && !bad ? '<p class="lead center">They open the game, choose <b>Play on two devices</b>, then <b>Join a room</b>, and type it in.</p>' : ''}
     ${pstatLine(cls, status)}
     <div class="bar static">${retry}${copy}</div>
     ${fb}
