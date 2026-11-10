@@ -7,7 +7,8 @@
     "build": "node scripts/build-art.cjs && node scripts/build-art-review.cjs && node scripts/build-narrator.cjs && node scripts/build-extras.cjs",
     "verify": "node scripts/verify-art.cjs && node scripts/verify-narration.cjs && node scripts/verify-extras.cjs",
     "qa": "node scripts/browser-art-qa.cjs",
-    "narrate": "node scripts/narrate.cjs"
+    "narrate": "node scripts/narrate.cjs",
+    "music": "node scripts/music.cjs"
   },
   "devDependencies": {
     "playwright": "1.62.1",

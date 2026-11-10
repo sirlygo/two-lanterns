@@ -1038,14 +1038,17 @@ if (typeof module !== 'undefined' && module.exports) module.exports = narrationK
 </style>
 <script id="sound-runtime">
 /* Two Lanterns :: sound and touch.
-   Every sound is made in the browser as it is needed: there are no audio files. A low bed for the Undertoll that tightens as the Bell
-   grows restless, a toll at each new room, dice, a short phrase for each outcome, coin at the stall, and a small buzz on phones that
-   can. One button in the header steps through All sound, Effects only and Off, and the choice is saved on this device.
+   The effects are made in the browser as they are needed: a toll at each new room, dice, a short phrase for each outcome, coin at
+   the stall, and a small buzz on phones that can. Under them plays the score in audio/music (made by scripts/music.cjs): a title
+   theme, three moods for the descent that follow the Bell, the chandler's landing and the ending, cross-faded and looped. Where a
+   track has not been made the next nearest is used, and with no tracks at all a low drone made in the browser stands in. One button in the header steps through All sound, Effects only and Off, and the choice is saved on this device.
    It watches the page and never touches the game: with this file left out, the game plays exactly as before.
    scripts/build-extras.cjs injects it into <head>. */
 (function () {
   'use strict';
   var STORE = 'twolanterns.sound', MODES = ['all', 'fx', 'off'];
+  var MUSIC = {"base":"audio/music/","tracks":{"title":{"f":"title.109kkim.mp3","from":21,"to":88},"calm":{"f":"calm.1pqvcft.mp3","from":10},"restless":{"f":"restless.1ci9th5.mp3","from":10,"to":112},"awake":{"f":"awake.r3toqu.mp3","to":108,"gain":0.65},"stall":{"f":"stall.1hsgjcc.mp3","from":10,"to":72},"end":{"f":"end.uo66gv.mp3"}}};      /* { base, tracks: { id: { f } } } or null, written in by the build */
+  var hasMusic = !!(MUSIC && MUSIC.tracks && Object.keys(MUSIC.tracks).length);
   var LABEL = { all: 'Sound: all', fx: 'Sound: effects only', off: 'Sound: off' };
   var ICON = {
     all: '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z" fill="currentColor"/><path d="M15 9a4.2 4.2 0 0 1 0 6M17.6 6.6a7.6 7.6 0 0 1 0 10.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>',
@@ -1090,7 +1093,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = narrationK
     if (mode === 'off') return;
     if (!boot()) return;
     if (ctx.state === 'suspended' && !document.hidden) { try { ctx.resume(); } catch (e) {} }
-    if (mode === 'all') bedOn();
+    if (mode === 'all') { if (hasMusic) musicOn(); else bedOn(); }
   }
   function env(g, t, peak, a, dur) { g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(Math.max(0.0002, peak), t + a); g.gain.exponentialRampToValueAtTime(0.0001, t + dur); }
   function tone(type, f0, f1, dur, peak, when, dest) {
@@ -1168,6 +1171,81 @@ if (typeof module !== 'undefined' && module.exports) module.exports = narrationK
     }, 5000 + Math.random() * 9000);
   }
 
+  /* ---------- the score ----------
+     Two players that take turns: one fades out as the other fades in, both for a change of track and for a track coming round again.
+     Both are started once inside the first tap, which is what lets a phone start them later without one. */
+  var NEAR = { title: ['title', 'calm'], calm: ['calm', 'title'], restless: ['restless', 'calm', 'awake'], awake: ['awake', 'restless', 'calm'], stall: ['stall', 'calm', 'title'], end: ['end', 'title', 'calm'] };
+  var mus = { on: false, decks: null, cur: -1, id: '', want: 'title', t: null, hush: null };
+  var LOUD = 0.5, UNDER = 0.14, FADE = 2600, TAIL = 3.2;
+  function pick(id) { var c = NEAR[id] || [id]; for (var i = 0; i < c.length; i++) if (MUSIC.tracks[c[i]]) return c[i]; return Object.keys(MUSIC.tracks)[0]; }
+  function wanted() {
+    var t = T(); if (!t || !t.S) return 'title';
+    var S = t.S, s = S.screen;
+    if (t.ui && t.ui.book) return s === 'ending' && S.end ? 'end' : 'title';
+    if (s === 'ending' && S.end) return 'end';
+    if (s === 'stall') return 'stall';
+    if (S.p && (s === 'intro' || s === 'choose' || s === 'roll')) return ['calm', 'restless', 'awake'][mood()] || 'calm';
+    if (S.p && S.order && s === 'handoff' && mus.want !== 'title' && mus.want !== 'end') return mus.want;      /* passing the device mid-descent changes nothing */
+    return 'title';
+  }
+  function silence() {
+    var n = 400, b = new Uint8Array(44 + n), v = new DataView(b.buffer), i;
+    function put(o, t) { for (var k = 0; k < t.length; k++) b[o + k] = t.charCodeAt(k); }
+    put(0, 'RIFF'); v.setUint32(4, 36 + n, true); put(8, 'WAVEfmt '); v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+    v.setUint32(24, 8000, true); v.setUint32(28, 8000, true); v.setUint16(32, 1, true); v.setUint16(34, 8, true); put(36, 'data'); v.setUint32(40, n, true);
+    for (i = 44; i < b.length; i++) b[i] = 128;
+    return URL.createObjectURL(new Blob([b], { type: 'audio/wav' }));
+  }
+  function deck() {
+    var a = new Audio(), d = { a: a, g: null, v: 0, to: 0, id: '', live: false, from: 0, end: 0 };
+    a.preload = 'auto';
+    try { if (ctx && /^https?:$/.test(location.protocol)) { var src = ctx.createMediaElementSource(a); d.g = ctx.createGain(); d.g.gain.value = 0; src.connect(d.g); d.g.connect(master); } } catch (e) { d.g = null; }      /* a phone ignores an element's own volume, so the level is set after it */
+    if (!d.g) a.volume = 0;
+    a.addEventListener('timeupdate', function () { if (!(mus.on && mus.decks && mus.decks[mus.cur] === d && d.live && a.duration && isFinite(a.duration))) return; var end = d.end > 0 && d.end < a.duration ? d.end : a.duration; if (end - a.currentTime < TAIL) turn(d.id, true); });
+    a.addEventListener('loadedmetadata', function () { if (d.live && d.from > 0 && a.currentTime < d.from) { try { a.currentTime = d.from; } catch (e) {} } });      /* a track may be told to skip a slow opening, and to come round before its fade */
+    a.addEventListener('ended', function () { if (mus.on && mus.decks && mus.decks[mus.cur] === d && d.live) turn(d.id, true); });
+    a.addEventListener('error', function () { if (d.live) { d.live = false; note('music-error:' + d.id); } });
+    try { if (!mus.hush) mus.hush = silence(); a.src = mus.hush; var p = a.play(); if (p && p.then) p.then(function () { if (!d.live) a.pause(); }, function () {}); } catch (e) {}
+    return d;
+  }
+  function setv(d) { try { if (d.g) d.g.gain.value = d.v; else d.a.volume = Math.max(0, Math.min(1, d.v)); } catch (e) {} }
+  function turn(id, again) {
+    if (!mus.on || !mus.decks) return;
+    if (!again && id === mus.id) return;
+    var old = mus.cur >= 0 ? mus.decks[mus.cur] : null, nx = (mus.cur + 1) % 2, d = mus.decks[nx];
+    if (old) { old.to = 0; old.live = false; }
+    mus.cur = nx; mus.id = id; d.id = id; d.live = true; d.v = 0; setv(d); d.to = 1;
+    note('music:' + id + (again ? ':again' : ''));
+    var tr = MUSIC.tracks[id]; d.from = +tr.from || 0; d.end = +tr.to || 0; d.gain = +tr.gain > 0 ? +tr.gain : 1;
+    try { d.a.src = MUSIC.base + tr.f; d.a.currentTime = d.from; } catch (e) {}
+    try { var p = d.a.play(); if (p && p.catch) p.catch(function () { note('music-blocked:' + id); }); } catch (e) {}
+  }
+  function musicTick() {
+    if (!mus.on || !mus.decks) return;
+    mus.want = wanted();
+    var id = pick(mus.want); if (id !== mus.id) turn(id, false);
+    var talk = false; try { talk = !!(window.__narrator && window.__narrator.state().playing); } catch (e) {}
+    var top = talk ? UNDER : LOUD, step = 120 / FADE;
+    for (var i = 0; i < 2; i++) {
+      var d = mus.decks[i], goal = d.to * top * (d.gain || 1);
+      if (d.v !== goal) { d.v = d.v < goal ? Math.min(goal, d.v + step * LOUD) : Math.max(goal, d.v - step * LOUD); setv(d); }
+      else if (!d.live && d.v === 0 && !d.a.paused) { try { d.a.pause(); } catch (e) {} }
+    }
+  }
+  function musicOn() {
+    if (!hasMusic || mus.on || !ctx) return;
+    mus.on = true;
+    if (!mus.decks) mus.decks = [deck(), deck()];
+    mus.id = ''; musicTick();
+    if (!mus.t) mus.t = setInterval(musicTick, 120);
+  }
+  function musicOff() {
+    if (!mus.on) return;
+    mus.on = false; clearInterval(mus.t); mus.t = null; mus.id = '';
+    if (mus.decks) mus.decks.forEach(function (d) { d.live = false; d.to = 0; d.v = 0; setv(d); try { d.a.pause(); } catch (e) {} });
+  }
+  function musicHide(hidden) { if (!mus.on || !mus.decks) return; var d = mus.decks[mus.cur]; if (!d || !d.live) return; try { if (hidden) d.a.pause(); else { var p = d.a.play(); if (p && p.catch) p.catch(function () {}); } } catch (e) {} }
+
   /* ---------- reading the page ---------- */
   function scan() {
     queued = false;
@@ -1221,15 +1299,15 @@ if (typeof module !== 'undefined' && module.exports) module.exports = narrationK
       mode = MODES[(MODES.indexOf(mode) + 1) % MODES.length];
       try { localStorage.setItem(STORE, mode); } catch (err) {}
       paint(b);
-      if (mode === 'off') { bedOff(); if (ctx) { try { ctx.suspend(); } catch (err) {} } }
-      else { wake(); if (mode === 'fx') bedOff(); play('tick'); }
+      if (mode === 'off') { bedOff(); musicOff(); if (ctx) { try { ctx.suspend(); } catch (err) {} } }
+      else { wake(); if (mode === 'fx') { bedOff(); musicOff(); } play('tick'); }
       return;
     }
     if (t.closest('button, .opt, .rcard, summary, [data-act]')) play('tick');
   }
   function first() { if (!touched) { touched = true; } wake(); }
 
-  window.__sound = { state: function () { return { mode: mode, ctx: ctx ? ctx.state : 'none', bed: !!bed, touched: touched }; }, log: log, cues: Object.keys(CUE) };
+  window.__sound = { state: function () { return { mode: mode, ctx: ctx ? ctx.state : 'none', bed: !!bed, touched: touched, music: hasMusic ? (mus.on ? mus.id : '') : null, tracks: hasMusic ? Object.keys(MUSIC.tracks) : [], decks: mus.decks ? mus.decks.map(function (d) { return { id: d.id, v: Math.round(d.v * 100) / 100, playing: !d.a.paused, at: Math.round(d.a.currentTime * 10) / 10, routed: !!d.g }; }) : [] }; }, log: log, cues: Object.keys(CUE) };
 
   function init() {
     host = document.getElementById('app'); if (!host) return;
@@ -1238,7 +1316,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = narrationK
   }
   document.addEventListener('click', onClick);
   ['pointerdown', 'keydown', 'touchstart'].forEach(function (t) { document.addEventListener(t, first, { capture: true, passive: true }); });
-  document.addEventListener('visibilitychange', function () { if (!ctx) return; try { if (document.hidden) ctx.suspend(); else if (mode !== 'off') ctx.resume(); } catch (e) {} });
+  document.addEventListener('visibilitychange', function () { if (!ctx) return; musicHide(document.hidden); try { if (document.hidden) ctx.suspend(); else if (mode !== 'off') ctx.resume(); } catch (e) {} });
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
 </script>

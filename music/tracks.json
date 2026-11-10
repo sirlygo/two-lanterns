@@ -1,0 +1,13 @@
+{
+  "modelId": "music_v2",
+  "outputFormat": "mp3_44100_128",
+  "style": "Instrumental only, no vocals, no lyrics, no spoken words. Dark gothic ambient score for a slow two-player dungeon crawler set in a drowned bell-crypt far under a town. Sparse and patient, plenty of space, natural stone reverb. Low bowed strings, felt piano, distant bronze bells and bowed metal. No drum kit, no electric guitar, no bright synth leads. Steady level from start to finish, with no big intro and no hard ending, so it can loop.",
+  "tracks": [
+    { "id": "title", "seconds": 90, "from": 21, "to": 88, "prompt": "Main theme. A slow, solemn melody on felt piano over a low cello drone, one far-off church bell tolling now and then. Mournful but inviting, like standing at the top of a stair with a lantern. Around 60 bpm, D minor." },
+    { "id": "calm", "seconds": 120, "from": 10, "prompt": "Exploration underscore, calm. Very quiet and still: a soft sustained low string drone, occasional single piano notes, faint dripping water and air moving in a tunnel. No melody that demands attention. Watchful, not frightening." },
+    { "id": "restless", "seconds": 120, "from": 10, "to": 112, "prompt": "Exploration underscore, uneasy. The same low drone with a slow heartbeat-like pulse on a muffled frame drum, tremolo violas creeping in and out, a detuned bell overtone that does not quite belong. Tension that never resolves." },
+    { "id": "awake", "seconds": 120, "to": 108, "gain": 0.65, "prompt": "Exploration underscore, dread. Something enormous is awake below. Deep sub drone, slow heavy bronze bell strokes, dissonant bowed metal, low brass swells and urgent string ostinato underneath. Oppressive and close, still slow." },
+    { "id": "stall", "seconds": 75, "from": 10, "to": 72, "prompt": "A brief warm rest on a stair landing at a candle-seller's stall. Gentle plucked lute or harp figure with a soft hurdy-gurdy drone, a little wry, a little crooked, small and intimate. A moment of safety in a cold place." },
+    { "id": "end", "seconds": 100, "prompt": "Ending and epilogue. One great bell fading into a slow elegy for string quartet and piano, bittersweet, neither victory nor defeat, the sound of climbing back up into morning. Calm and final." }
+  ]
+}

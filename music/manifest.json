@@ -1,0 +1,47 @@
+{
+  "base": "audio/music/",
+  "tracks": {
+    "title": {
+      "f": "title.109kkim.mp3",
+      "k": "109kkim",
+      "seconds": 90,
+      "model": "music_v2",
+      "bytes": 1440749
+    },
+    "calm": {
+      "f": "calm.1pqvcft.mp3",
+      "k": "1pqvcft",
+      "seconds": 120,
+      "model": "music_v2",
+      "bytes": 1920566
+    },
+    "restless": {
+      "f": "restless.1ci9th5.mp3",
+      "k": "1ci9th5",
+      "seconds": 120,
+      "model": "music_v2",
+      "bytes": 1920566
+    },
+    "awake": {
+      "f": "awake.r3toqu.mp3",
+      "k": "r3toqu",
+      "seconds": 120,
+      "model": "music_v2",
+      "bytes": 1920566
+    },
+    "stall": {
+      "f": "stall.1hsgjcc.mp3",
+      "k": "1hsgjcc",
+      "seconds": 75,
+      "model": "music_v2",
+      "bytes": 1200840
+    },
+    "end": {
+      "f": "end.uo66gv.mp3",
+      "k": "uo66gv",
+      "seconds": 100,
+      "model": "music_v2",
+      "bytes": 1600827
+    }
+  }
+}

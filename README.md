@@ -26,3 +26,18 @@ Three extras are baked into `index.html` by `scripts/build-extras.cjs`, the last
 - `manifest.webmanifest`, `sw.js`, `pwa/`: lets a phone add the game to its home screen and open it with no signal (one device; online rooms need the network). These files must be published beside `index.html`. The network is always tried first, so a new version shows up on the next load with a connection.
 
 `npm run verify` now also runs `scripts/verify-extras.cjs`, which tests every feat against a descent that should earn it.
+
+## Music
+
+The score is made with the ElevenLabs Music API, from the prompts in `music/tracks.json`: a title theme, three moods for the descent (`calm`, `restless`, `awake`, chosen by how restless the Bell is), the chandler's landing and the ending.
+
+```
+npm run music -- --list          what exists (free)
+npm run music -- --only title    make one first and listen to it
+npm run music                    make the rest
+npm run build && npm run verify
+```
+
+It uses the same key as the narrator (`.env.local`) and is billed by length against the ElevenLabs plan: the six tracks come to about ten and a half minutes. Tracks land in `audio/music/` and are listed in `music/manifest.json`; publish that folder beside `index.html`. To skip a slow opening or a fade at the end without paying for a new take, give the track `"from"` and `"to"` (seconds) in `music/tracks.json` and build again: the game starts it there and brings it round there. `"gain"` (for example 0.65) turns one track down against the others. To change a track, edit its prompt (or the shared `style`) and run `npm run music` again; `--force` makes a new take of the same prompt.
+
+In the game the tracks cross-fade, loop, drop under the narrator, and follow the sound button (all sound plays them, effects only and off do not). Until a track exists the nearest one is used, and with none at all the browser-made drone plays as before.
