@@ -72,6 +72,16 @@
       "format": "mp3_44100_96",
       "at": "2026-11-09T00:06:49.778Z"
     },
+    "21huye4b2b5": {
+      "id": "room-confess",
+      "f": "room-confess.29afs0.mp3",
+      "spec": "29afs06izyy",
+      "chars": 366,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T00:05:55.992Z"
+    },
     "1uvrl95pbsw": {
       "id": "room-dice",
       "f": "room-dice.1mvgsk.mp3",
@@ -142,6 +152,16 @@
       "format": "mp3_44100_96",
       "at": "2026-11-09T00:06:56.043Z"
     },
+    "2sly97e77k": {
+      "id": "room-lamps",
+      "f": "room-lamps.2ezall.mp3",
+      "spec": "2ezalldbsve",
+      "chars": 330,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T00:05:44.317Z"
+    },
     "13p4py6q1sb": {
       "id": "room-ledger",
       "f": "room-ledger.22da5u.mp3",
@@ -161,6 +181,16 @@
       "model": "eleven_v4",
       "format": "mp3_44100_96",
       "at": "2026-11-09T00:07:08.178Z"
+    },
+    "4f1ngib6kn": {
+      "id": "room-maps",
+      "f": "room-maps.svf2ep.mp3",
+      "spec": "svf2eppj10",
+      "chars": 335,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T00:05:50.569Z"
     },
     "ve9cqzuujz": {
       "id": "room-market",
@@ -272,6 +302,16 @@
       "format": "mp3_44100_96",
       "at": "2026-11-09T00:06:53.554Z"
     },
+    "hh9med3vls": {
+      "id": "room-ropewalk",
+      "f": "room-ropewalk.25cs2s.mp3",
+      "spec": "25cs2sukq0z",
+      "chars": 367,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T00:05:54.223Z"
+    },
     "1321vshhdvk": {
       "id": "room-salt",
       "f": "room-salt.1n0zc9.mp3",
@@ -301,6 +341,16 @@
       "model": "eleven_v4",
       "format": "mp3_44100_96",
       "at": "2026-11-09T00:07:35.268Z"
+    },
+    "2euz1td2cjc": {
+      "id": "room-sluice",
+      "f": "room-sluice.2y7exm.mp3",
+      "spec": "2y7exm8c74",
+      "chars": 376,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T00:05:45.365Z"
     },
     "16z4f1d4eze": {
       "id": "room-stable",
@@ -341,6 +391,16 @@
       "model": "eleven_v4",
       "format": "mp3_44100_96",
       "at": "2026-11-09T00:06:41.403Z"
+    },
+    "24trqgrev15": {
+      "id": "room-wake",
+      "f": "room-wake.735dh3.mp3",
+      "spec": "735dh3ayya",
+      "chars": 328,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T00:05:49.108Z"
     },
     "1zqvlxc53zx": {
       "id": "room-weaver",
