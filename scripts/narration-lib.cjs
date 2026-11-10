@@ -58,6 +58,13 @@ function buildItems(game, cfg) {
   for (const r of game.rooms) items.push({ id: 'room-' + r.id, label: r.title, display: r.intro, spoken: lead(r.title) + r.intro });
   for (const s of game.stops) items.push({ id: 'stall-' + s.plate, label: s.title, display: s.intro, spoken: lead(s.title) + s.intro });
   if (game.tag) items.push({ id: 'title-tag', label: 'Title line', display: game.tag, spoken: game.tag });
+  const story = require('../story/descent.cjs');
+  story.chapters.forEach((text, i) => items.push({ id: 'journey-' + i, label: 'Descent chapter ' + (i + 1), display: text, spoken: text }));
+  for (const [id, text] of Object.entries(story.bridges)) items.push({ id: 'bridge-' + id, label: 'On the way: ' + id, display: text, spoken: text });
+  for (const r of game.rooms.filter(r => r.combat)) for (const result of ['good', 'mixed', 'bad']) {
+    const text = story.encounters[r.id][result];
+    items.push({ id: 'encounter-' + r.id + '-' + result, label: r.title + ': ' + result, display: text, spoken: text });
+  }
   const swaps = Object.entries(cfg.pronounce || {}).map(([from, to]) => [new RegExp('\\b' + from.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'g'), String(to)]);
   const keys = new Set(), ids = new Set();
   for (const it of items) {

@@ -21,4 +21,10 @@ A room joins the game only when its painting exists, so they can be painted one 
 4. Optional: `npm run narrate` records the new room's opening in the narrator's voice (uses the ElevenLabs key in `.env.local`), then `npm run build` again.
 5. Publish `index.html` (and any new `audio/narration` clips).
 
-Saved games are not affected: a descent in progress keeps the rooms it drew. The rules are untouched; danger belongs to the slot a room lands in, not to the room.
+Saved games keep the rooms they drew. Danger belongs to the slot a room lands in, not to the room.
+
+## Wandering encounters
+
+`pack2.cjs` adds the Toll Collectors (`collectors`), Hush Hounds (`hounds`) and Wick Thief (`wickthief`). Each is marked `combat: true`, has its painting in `art/scenes/`, and its full generation prompt in `art/prompts/`. New descents include one or two of them within the six middle slots, spaced apart when there are two. They use the existing four stats, secret choices, assistance, health and relic rules, with ways to fight, deceive, bargain or protect your companion.
+
+The draw is in `story/draw-rooms.js`, inserted inside the engine so `Engine.setRng` still controls every random choice. Encounter aftermaths and extra banter are in `story/descent.cjs`. `npm run verify` checks both the new draw and every combination of enemy, hand, slot, pair of moves and dice results.

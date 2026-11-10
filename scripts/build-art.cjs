@@ -21,6 +21,7 @@ let html=base.slice(0,start)+runtime+'\n\n'+base.slice(end);
 html=html.replace('</head>','<style id="undertoll-theme">\n'+fs.readFileSync(path.join(root,'art/theme.css'),'utf8')+'\n</style>\n</head>');
 html=html.replace(/function blankDie\(\) \{ return `<svg[^\n]+\n/,'function blankDie() { return A.die(0); }\n');
 html=pack.inject(html,added);
+html=require('./story-edits.cjs')(html,root);
 html=require('./ui-edits.cjs')(html);
 html=require('./net-edits.cjs')(html,root);
 html=html.replace(/ · art drawn in code/g,' · Undertoll art edition');

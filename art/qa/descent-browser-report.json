@@ -1,0 +1,83 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "label": "collectors-intro-0",
+      "journey": 1,
+      "scene": "collectors"
+    },
+    {
+      "label": "collectors-mobile",
+      "journey": 1,
+      "scene": "collectors"
+    },
+    {
+      "label": "collectors-results-0",
+      "journey": 0
+    },
+    {
+      "label": "collectors-intro-1",
+      "journey": 1,
+      "scene": "collectors"
+    },
+    {
+      "label": "collectors-results-1",
+      "journey": 0
+    },
+    {
+      "label": "hounds-intro-0",
+      "journey": 1,
+      "scene": "hounds"
+    },
+    {
+      "label": "hounds-mobile",
+      "journey": 1,
+      "scene": "hounds"
+    },
+    {
+      "label": "hounds-results-0",
+      "journey": 0
+    },
+    {
+      "label": "hounds-intro-1",
+      "journey": 1,
+      "scene": "hounds"
+    },
+    {
+      "label": "hounds-results-1",
+      "journey": 0
+    },
+    {
+      "label": "wickthief-intro-0",
+      "journey": 1,
+      "scene": "wickthief"
+    },
+    {
+      "label": "wickthief-mobile",
+      "journey": 1,
+      "scene": "wickthief"
+    },
+    {
+      "label": "wickthief-results-0",
+      "journey": 0
+    },
+    {
+      "label": "wickthief-intro-1",
+      "journey": 1,
+      "scene": "wickthief"
+    },
+    {
+      "label": "wickthief-results-1",
+      "journey": 0
+    },
+    {
+      "label": "three-clip-sequence-stop-replay-redraw-save",
+      "clips": 3
+    },
+    {
+      "label": "native-mp3-decode-and-playlist-transition",
+      "ok": true
+    }
+  ],
+  "errors": []
+}

@@ -765,7 +765,10 @@
         "wake",
         "maps",
         "ropewalk",
-        "confess"
+        "confess",
+        "collectors",
+        "hounds",
+        "wickthief"
       ],
       "portraits": 0,
       "assets": true

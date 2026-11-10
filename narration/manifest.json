@@ -2,6 +2,216 @@
   "version": 1,
   "base": "audio/narration/",
   "clips": {
+    "1gjejn4kutm": {
+      "id": "bridge-cold",
+      "f": "bridge-cold.35cf7o.mp3",
+      "spec": "35cf7opypf",
+      "chars": 180,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T22:36:26.656Z"
+    },
+    "257upsgpsgj": {
+      "id": "bridge-fight",
+      "f": "bridge-fight.1y80jb.mp3",
+      "spec": "1y80jb1yo6n",
+      "chars": 154,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T22:36:29.687Z"
+    },
+    "17jxczjwe9": {
+      "id": "bridge-hurt",
+      "f": "bridge-hurt.27asqp.mp3",
+      "spec": "27asqpz2pfb",
+      "chars": 189,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T22:36:24.308Z"
+    },
+    "yc4gmlhx31": {
+      "id": "bridge-warm",
+      "f": "bridge-warm.1f5t3d.mp3",
+      "spec": "1f5t3d0l72v",
+      "chars": 181,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T22:36:27.401Z"
+    },
+    "1brse1uhvto": {
+      "id": "encounter-collectors-bad",
+      "f": "encounter-collectors-bad.1a8dhd.mp3",
+      "spec": "1a8dhd2sfh8",
+      "chars": 178,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T22:36:33.839Z"
+    },
+    "27yd444c301": {
+      "id": "encounter-collectors-good",
+      "f": "encounter-collectors-good.zvr1oa.mp3",
+      "spec": "zvr1oa7odj",
+      "chars": 169,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T22:36:30.231Z"
+    },
+    "xy9cjg14zd": {
+      "id": "encounter-collectors-mixed",
+      "f": "encounter-collectors-mixed.8xzlw7.mp3",
+      "spec": "8xzlw7yvr2",
+      "chars": 181,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T22:36:33.001Z"
+    },
+    "1xkx9538rru": {
+      "id": "encounter-hounds-bad",
+      "f": "encounter-hounds-bad.yojq5k.mp3",
+      "spec": "yojq5k3m0c",
+      "chars": 178,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T22:36:39.643Z"
+    },
+    "17vwixzsvn2": {
+      "id": "encounter-hounds-good",
+      "f": "encounter-hounds-good.1kpdj4.mp3",
+      "spec": "1kpdj4vhu6j",
+      "chars": 183,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T22:36:36.537Z"
+    },
+    "9ikm34ph1v": {
+      "id": "encounter-hounds-mixed",
+      "f": "encounter-hounds-mixed.2er5lt.mp3",
+      "spec": "2er5ltle3lw",
+      "chars": 183,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T22:36:37.176Z"
+    },
+    "cgzvr9rifq": {
+      "id": "encounter-wickthief-bad",
+      "f": "encounter-wickthief-bad.2ayo13.mp3",
+      "spec": "2ayo13saljg",
+      "chars": 181,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T22:36:43.320Z"
+    },
+    "1n63o4mzqi8": {
+      "id": "encounter-wickthief-good",
+      "f": "encounter-wickthief-good.1n7dy6.mp3",
+      "spec": "1n7dy6w9und",
+      "chars": 205,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T22:36:40.594Z"
+    },
+    "jvga2ynn65": {
+      "id": "encounter-wickthief-mixed",
+      "f": "encounter-wickthief-mixed.28kdme.mp3",
+      "spec": "28kdmepycr8",
+      "chars": 174,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T22:36:42.600Z"
+    },
+    "12yr3wee8tz": {
+      "id": "journey-0",
+      "f": "journey-0.28k47v.mp3",
+      "spec": "28k47vxau3u",
+      "chars": 240,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T22:36:07.320Z"
+    },
+    "kk63oo8e0r": {
+      "id": "journey-1",
+      "f": "journey-1.smk8b4.mp3",
+      "spec": "smk8b481eg",
+      "chars": 224,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T22:36:11.652Z"
+    },
+    "14g81mhpecl": {
+      "id": "journey-2",
+      "f": "journey-2.11lil7.mp3",
+      "spec": "11lil7shvu6",
+      "chars": 226,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T22:36:12.939Z"
+    },
+    "163o1xx1gy8": {
+      "id": "journey-3",
+      "f": "journey-3.17vgdn.mp3",
+      "spec": "17vgdnigal1",
+      "chars": 200,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T22:36:15.078Z"
+    },
+    "ffipc74py": {
+      "id": "journey-4",
+      "f": "journey-4.1sriu2.mp3",
+      "spec": "1sriu2zp4k9",
+      "chars": 237,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T22:36:16.632Z"
+    },
+    "2b7pw7t8kbt": {
+      "id": "journey-5",
+      "f": "journey-5.loe08f.mp3",
+      "spec": "loe08fqs1e",
+      "chars": 206,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T22:36:18.607Z"
+    },
+    "12jriry4uel": {
+      "id": "journey-6",
+      "f": "journey-6.1ry0a9.mp3",
+      "spec": "1ry0a9h6ec9",
+      "chars": 226,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T22:36:20.762Z"
+    },
+    "1c7spb171ca": {
+      "id": "journey-7",
+      "f": "journey-7.1zjp4k.mp3",
+      "spec": "1zjp4koj8a9",
+      "chars": 254,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T22:36:23.039Z"
+    },
     "2e7q4gkjk4e": {
       "id": "room-armoury",
       "f": "room-armoury.1kdb97.mp3",
@@ -72,6 +282,16 @@
       "format": "mp3_44100_96",
       "at": "2026-11-09T00:06:49.778Z"
     },
+    "3krj6ess2d": {
+      "id": "room-collectors",
+      "f": "room-collectors.g7pazc.mp3",
+      "spec": "g7pazczwzb",
+      "chars": 381,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T22:36:02.584Z"
+    },
     "21huye4b2b5": {
       "id": "room-confess",
       "f": "room-confess.29afs0.mp3",
@@ -141,6 +361,16 @@
       "model": "eleven_v4",
       "format": "mp3_44100_96",
       "at": "2026-11-09T00:07:29.278Z"
+    },
+    "26hadaxh0na": {
+      "id": "room-hounds",
+      "f": "room-hounds.13qi6k.mp3",
+      "spec": "13qi6kzas2l",
+      "chars": 381,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T22:36:03.035Z"
     },
     "7uv9aac9xf": {
       "id": "room-kitchen",
@@ -431,6 +661,16 @@
       "model": "eleven_v4",
       "format": "mp3_44100_96",
       "at": "2026-11-09T00:07:13.984Z"
+    },
+    "4w6orus0ah": {
+      "id": "room-wickthief",
+      "f": "room-wickthief.564w6e.mp3",
+      "spec": "564w6e5uiv",
+      "chars": 345,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T22:36:08.896Z"
     },
     "21xem0p8jwp": {
       "id": "room-windows",

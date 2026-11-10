@@ -1,0 +1,4 @@
+.journey { color: var(--soft, #b6b9b2); font-size: .96rem; line-height: 1.75; }
+.intro h2 + .journey { border-left: 2px solid #79998c66; padding-left: 1rem; }
+.encounter-note { color: #c7b990; font-size: .82rem; line-height: 1.6; }
+.encounter-story { max-width: 48rem; margin: 1.5rem auto; padding: 1rem 1.2rem; border-left: 2px solid #83ad9b77; background: #83ad9b09; line-height: 1.75; }

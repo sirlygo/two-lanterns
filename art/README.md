@@ -6,7 +6,7 @@ The visual language uses crisp 2D shadow silhouettes, ragged tapering cloaks, ne
 
 ## Sources
 
-- `scenes/`: 57 regular scene illustrations and six Bell-outcome backgrounds, optimized as WebP. This includes all six rooms in `rooms/pack1.cjs`: Lamplighters’ Rest, Sluice Gate, Wake Table, Map Floor, Rope Walk, and Confessional Row.
+- `scenes/`: 60 regular scene illustrations and six Bell-outcome backgrounds, optimized as WebP. This includes the six rooms in `rooms/pack1.cjs` and three wandering encounters in `rooms/pack2.cjs`: Toll Collectors (`collectors.webp`), Hush Hounds (`hounds.webp`), and Wick Thief (`wickthief.webp`). Their complete prompts are `prompts/collectors.txt`, `prompts/hounds.txt`, and `prompts/wickthief.txt`; all three were generated with the built-in image tool and the approved reference.
 - `portraits/`: four original calling illustrations with real alpha transparency.
 - `prompts/`: exact built-in image-generator prompts, including the final dice cleanup. The title uses the approved reference; its exact prompt is in `concepts/bellheart-shadow-lanterns-v2-eerie-prompt.txt`.
 - `runtime.js`: custom vector symbols and dice; generated-image scene renderer; origin and keepsake portrait details; four dynamic lantern types; two player identities; nine character fate compositions.
@@ -31,6 +31,6 @@ node scripts/net-test.cjs
 
 `net-test.cjs` hosts and joins a room in two browsers and needs two extra packages: `npm install --no-save peer node-turn` (see `net/README.md`).
 
-The build replaces only the art renderer, art-facing interface styling, blank-die rendering, and scene labels, and applies the wording and layout edits listed in `scripts/ui-edits.cjs` (play buttons, title blurb, online screens, footers, Back buttons) and the online-play fixes listed in `scripts/net-edits.cjs` (relay list, line through the matchmaker, clearer messages; see `net/README.md`). Each of those edits must match the original page exactly once, or the build stops. The ending view passes character picks to its renderer so its fate figures use the right calling and lamp. Game rules, story data, saved-game keys, and room draws remain the original code, and so does what the two players send each other; the online-play fixes change only how the two devices find a way to connect.
+The build replaces the art renderer, art-facing interface styling, blank-die rendering, and scene labels. It also applies `scripts/ui-edits.cjs` (play buttons and online screens), `scripts/net-edits.cjs` (connection fixes; see `net/README.md`), and `scripts/story-edits.cjs` (wandering encounters, connective passages, and banter). Each edit must match its source marker or the build stops. The ending view passes character picks to its renderer so its fate figures use the right calling and lamp. Original story data, resolution rules and saved-game keys are preserved. Fresh room draws now include one or two wandering encounters; existing saves keep their route. The full build also adds the narrator, music, sound, feats and phone support, so use `npm run build` for the playable release.
 
 Both `index.html` and `art-review.html` embed their image data. No asset server is required to play or review them. Source images are separately retained here for future editing.

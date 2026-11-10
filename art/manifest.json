@@ -58,7 +58,10 @@
     "wake",
     "maps",
     "ropewalk",
-    "confess"
+    "confess",
+    "collectors",
+    "hounds",
+    "wickthief"
   ],
   "rooms": [
     "stair",
@@ -104,7 +107,10 @@
     "wake",
     "maps",
     "ropewalk",
-    "confess"
+    "confess",
+    "collectors",
+    "hounds",
+    "wickthief"
   ],
   "labels": {
     "stair": "A spiral stair seen from above, a bell-rope hanging into the dark",
@@ -151,6 +157,9 @@
     "maps": "A vast floor mosaic of a town seen from above, tiny lights in its windows, some of them going dark",
     "ropewalk": "A very long low gallery strung with thick ropes twisting by themselves, coils hanging from the rafters",
     "confess": "A narrow corridor lined with dark wooden confessional booths, curtains drawn, a faint light behind each",
+    "collectors": "Two hollow officials with crossed hooked pikes block an underground checkpoint as two lantern-bearers approach",
+    "hounds": "Three silent hounds made of ragged mourning-cloth stalk two lantern-bearers in a narrow gothic passage",
+    "wickthief": "A thin wraith with stolen flames in its ribcage and a long brass snuffer reaches towards two small lanterns",
     "title": "Two shadowy travelers holding amber and mint lamps beneath a colossal cracked bell",
     "end": "The Bellheart after the final choice",
     "names": "Two travelers lighting their lamps at the threshold of the Undertoll"
@@ -164,6 +173,7 @@
     "scenes/chapter",
     "scenes/cistern",
     "scenes/clock",
+    "scenes/collectors",
     "scenes/confess",
     "scenes/dice",
     "scenes/doors",
@@ -177,6 +187,7 @@
     "scenes/forge",
     "scenes/gallery",
     "scenes/greenhouse",
+    "scenes/hounds",
     "scenes/kitchen",
     "scenes/lamps",
     "scenes/ledger",
@@ -218,6 +229,7 @@
     "scenes/weaver",
     "scenes/weeping",
     "scenes/well",
+    "scenes/wickthief",
     "scenes/windows",
     "portraits/cantor",
     "portraits/guard",

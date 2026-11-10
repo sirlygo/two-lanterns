@@ -5,7 +5,7 @@ const dependency=name=>require(process.env.TWO_LANTERNS_NODE_MODULES?path.join(p
 const {chromium}=dependency('playwright');
 const sharp=dependency('sharp');
 const root=path.resolve(__dirname,'..'),out=path.join(root,'art','qa');
-const packRooms=process.env.TWO_LANTERNS_QA_PACK?require('./rooms-pack.cjs').ready(root).rooms.map(r=>r.id):[];
+const packRooms=process.env.TWO_LANTERNS_QA_PACK?require('./rooms-pack.cjs').ready(root).rooms.filter(r=>!r.combat).map(r=>r.id):[];
 fs.mkdirSync(out,{recursive:true});
 let qaBrowser;
 (async()=>{

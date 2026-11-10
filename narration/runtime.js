@@ -8,12 +8,13 @@
   if (!M || !M.clips) return;
 /*__NARRATION_KEY__*/
   var STORE = 'twolanterns.narrator';
-  var SPOTS = ['.screen.intro p.story', '.screen.stall p.story', '.screen.title p.tag'];
-  var TITLE = 2;
+  var SPOTS = ['.screen.intro [data-narrate]', '.screen.results [data-narrate]', '.screen.stall p.story', '.screen.title p.tag'];
+  var TITLE = 3;
   var PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5.5v13l11-6.5z" fill="currentColor"></path></svg>';
   var STOP = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="6.5" y="6.5" width="11" height="11" rx="1.5" fill="currentColor"></rect></svg>';
   var on = false, activated = false, audio = null, loaded = null, shown = null, auto = null, hush = null;
   var queued = false, host = null;
+  var passages = [], position = 0, running = false;
   try { on = localStorage.getItem(STORE) === 'on'; } catch (e) {}
 
   function node(tag, cls, html) {
@@ -23,14 +24,20 @@
     return n;
   }
 
-  function live() { return !!(audio && shown && loaded === shown && !audio.paused && !audio.ended); }
-  function broken() { return !!(audio && shown && loaded === shown && audio.error); }
+  function current() { return !!(shown && loaded === passages[position]); }
+  function live() { return !!(audio && current() && !audio.paused && !audio.ended); }
+  function broken() { return !!(audio && current() && audio.error); }
 
   function player() {
     if (audio) return audio;
     audio = new Audio();
     audio.preload = 'none';
     ['play', 'pause', 'ended', 'error', 'loadedmetadata', 'timeupdate'].forEach(function (t) { audio.addEventListener(t, sync); });
+    audio.addEventListener('ended', function () {
+      if (!running || !current()) return;
+      if (position + 1 < passages.length) { position++; play(passages[position]); }
+      else { running = false; sync(); }
+    });
     return audio;
   }
 
@@ -61,11 +68,20 @@
     if (loaded !== key || a.error) { loaded = key; a.src = M.base + clip.f; }
     else { try { a.currentTime = 0; } catch (e) {} }
     var p = a.play();
-    if (p && p.catch) p.catch(function () { sync(); });
+    var token = shown;
+    if (p && p.catch) p.catch(function () { if (shown === token && loaded === key) { running = false; sync(); } });
     sync();
   }
 
+  function start() {
+    if (!passages.length) return;
+    position = 0;
+    running = true;
+    play(passages[0]);
+  }
+
   function halt() {
+    running = false;
     if (!audio) return;
     audio.pause();
     try { audio.currentTime = 0; } catch (e) {}
@@ -108,7 +124,7 @@
     var s = node('button', 'nv-switch', '<span class="nv-knob" aria-hidden="true"></span><span>Narrator</span>');
     s.type = 'button';
     s.setAttribute('role', 'switch');
-    s.setAttribute('title', 'Read each room aloud as it appears. Saved on this device only.');
+    s.setAttribute('title', 'Read the journey, rooms and encounter aftermath aloud. Saved on this device only.');
     row.appendChild(s);
     return row;
   }
@@ -122,24 +138,28 @@
   }
 
   function leave() {
+    running = false;
     shown = null;
+    passages = [];
     auto = null;
     if (audio && !audio.paused) audio.pause();
   }
 
   function scan() {
     queued = false;
-    var spot = null, i;
-    for (i = 0; i < SPOTS.length; i++) { spot = host.querySelector(SPOTS[i]); if (spot) break; }
-    var key = spot ? narrationKey(spot.textContent) : '';
-    var has = !!(key && M.clips[key]);
-    if (!spot || (!has && i !== TITLE)) { leave(); return; }
-    var want = has ? key : '';
-    mount(spot, want);
+    var spots = [], i;
+    for (i = 0; i < SPOTS.length; i++) { spots = host.querySelectorAll(SPOTS[i]); if (spots.length) break; }
+    var keys = [].slice.call(spots).map(function (spot) { return narrationKey(spot.textContent); }).filter(function (key) { return !!M.clips[key]; });
+    if (!spots.length || (!keys.length && i !== TITLE)) { leave(); return; }
+    var want = keys.join('|');
+    mount(spots[spots.length - 1], want);
     if (want !== shown) {
-      if (audio && loaded && loaded !== want && !audio.paused) audio.pause();
+      running = false;
+      if (audio && !audio.paused) audio.pause();
+      passages = keys;
+      position = 0;
       shown = want;
-      if (want && on && activated && want !== auto) { auto = want; play(want); }
+      if (want && on && activated && want !== auto) { auto = want; start(); }
     }
     sync();
   }
@@ -170,12 +190,12 @@
     var key = shown || '';
     if (t.classList.contains('nv-play')) {
       if (live()) halt();
-      else if (key) { auto = key; play(key); }
+      else if (key) { auto = key; start(); }
     } else {
       on = !on;
       try { localStorage.setItem(STORE, on ? 'on' : 'off'); } catch (err) {}
       if (!on) halt();
-      else if (key) { auto = key; play(key); }
+      else if (key) { auto = key; start(); }
       else prime();
       sync();
     }
@@ -192,7 +212,7 @@
     key: narrationKey,
     clips: M.clips,
     state: function () {
-      return { on: on, shown: shown, loaded: loaded, activated: activated, playing: live(), time: audio ? audio.currentTime : 0, length: audio ? audio.duration : 0, src: audio ? (audio.currentSrc || audio.src) : '' };
+      return { on: on, shown: shown, loaded: loaded, queue: passages.slice(), position: position, activated: activated, playing: live(), time: audio ? audio.currentTime : 0, length: audio ? audio.duration : 0, src: audio ? (audio.currentSrc || audio.src) : '' };
     }
   };
 
