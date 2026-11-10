@@ -37,7 +37,7 @@ const checks = [], errors = []; let browser;
   }
   for (const id of ['collectors', 'hounds', 'wickthief']) for (const set of [0, 1]) {
     await seed(id, 1, set); const intro = await check(id + '-intro-' + set);
-    assert.equal(intro.narrator.queue.length, 2); assert.equal(intro.scene, id);
+    assert.equal(intro.narrator.queue.length, 3); assert.equal(intro.scene, id);
     if (set === 0) {
       await page.screenshot({ path: path.join(out, 'encounter-' + id + '-desktop.png'), fullPage: true });
       await page.setViewportSize({ width: 390, height: 844 }); await check(id + '-mobile');
@@ -66,20 +66,20 @@ const checks = [], errors = []; let browser;
     await page.locator('[data-act="roll"]').click(); await page.waitForFunction(() => !__tl.ui.rolling);
     await page.waitForFunction(() => !!document.querySelector('.encounter-story + .nv'));
     assert.equal(await page.locator('.encounter-story').count(), 1);
-    assert.equal(await page.evaluate(() => __narrator.state().queue.length), 1);
+    assert.equal(await page.evaluate(() => __narrator.state().queue.length), 2);
     await check(id + '-results-' + set);
     await page.locator('[data-act="onward"]').click();
     assert.equal(await page.evaluate(() => __tl.S.log.at(-1).rid), id);
     assert.equal(await page.evaluate(() => __tl.S.room), 2);
   }
-  /* Three clips (chapter, contextual bridge, room) play in DOM order, once per screen. */
+  /* Chapter, contextual bridge, original room and expanded arrival play in DOM order. */
   await seed('lamps', 2);
   await page.evaluate(() => { __tl.S.p[0].hp = 1; __tl.ui.saved = __tl.S; __tl.ACT.resume(); });
-  await page.waitForFunction(() => __narrator.state().queue.length === 3);
+  await page.waitForFunction(() => __narrator.state().queue.length === 4);
   await page.locator('.nv-switch').click();
   assert(await page.evaluate(() => __narrator.state().on && __narrator.state().playing));
   const queued = await page.evaluate(() => __narrator.state().queue);
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < queued.length; i++) {
     assert.equal(await page.evaluate(() => __narrator.state().loaded), queued[i]);
     await page.evaluate(() => window.__speechPlayers.at(-1).finish());
   }
@@ -92,7 +92,7 @@ const checks = [], errors = []; let browser;
   await page.reload(); await page.locator('[data-act="resume"]').click();
   assert.equal(await page.evaluate(() => __tl.S.order.join(',')), route);
   await page.waitForFunction(() => !!document.querySelector('.nv'));
-  checks.push({ label: 'three-clip-sequence-stop-replay-redraw-save', clips: queued.length });
+  checks.push({ label: 'four-clip-sequence-stop-replay-redraw-save', clips: queued.length });
   await context.close();
   /* Exercise actual MP3 decoding and transition with the browser's native Audio, too. */
   const real = await browser.newContext({ reducedMotion: 'reduce' });
@@ -106,7 +106,10 @@ const checks = [], errors = []; let browser;
   await p.waitForFunction(() => __narrator.state().time > .1 && __narrator.state().length > 1);
   await p.evaluate(() => { const a = __nativeAudio.at(-1); a.currentTime = a.duration - .15; });
   await p.waitForFunction(() => __narrator.state().position === 1 && __narrator.state().time > .1);
-  checks.push({ label: 'native-mp3-decode-and-playlist-transition', ok: true });
+  await p.evaluate(() => { const a = __nativeAudio.at(-1); a.currentTime = a.duration - .15; });
+  await p.waitForFunction(() => __narrator.state().position === 2 && __narrator.state().time > .1);
+  assert((await p.evaluate(() => __narrator.state().src)).includes('page-room-collectors-arrival'));
+  checks.push({ label: 'native-mp3-original-and-expanded-story-transition', ok: true });
   await real.close();
   assert.deepEqual(errors, []);
   fs.mkdirSync(out, { recursive: true }); fs.writeFileSync(path.join(out, 'descent-browser-report.json'), JSON.stringify({ ok: true, checks, errors }, null, 2));

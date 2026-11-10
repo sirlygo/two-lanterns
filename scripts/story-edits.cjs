@@ -10,9 +10,12 @@ module.exports = function (html, root) {
   const draw = /E\.drawRooms = function \(\) \{[\s\S]*?\n\};/;
   if (!draw.test(html)) throw Error('Cannot find the descent draw');
   html = html.replace(draw, () => read('story/draw-rooms.js').trim());
-  const code = read('story/runtime.js').replace('__DESCENT_STORY__', () => JSON.stringify(require('../story/descent.cjs')).replace(/</g, '\\u003c'));
+  const js = value => JSON.stringify(value).replace(/</g, '\\u003c');
+  const code = read('story/runtime.js').replace('__DESCENT_STORY__', () => js(require('../story/descent.cjs'))) + '\n' +
+    read('story/pages-runtime.js').replace('__PAGE_SCENES__', () => js(require('../story/page-scenes.cjs'))).replace('__ROOM_PAGES__', () => js(require('../story/room-pages.cjs')));
   once('/* Two Lanterns :: saved characters.', code + '\n\n/* Two Lanterns :: saved characters.');
   once('</head>', '<style id="descent-story-css">\n' + read('story/story.css') + '\n</style>\n</head>');
+  once('function chrome(inner, where, bare) {', read('story/page-interface.js') + '\n\nfunction chrome(inner, where, bare) {\n  inner = enrichStory(inner);');
   once('    <p class="story">${esc(r.intro)}</p>\n    ${storyBits(r)}',
     '    ${ST.journey(S).map(t => `<p class="journey" data-narrate>${esc(t)}</p>`).join(\'\')}\n' +
     '    <p class="story" data-narrate>${esc(r.intro)}</p>\n' +

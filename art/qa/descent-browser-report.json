@@ -71,11 +71,11 @@
       "journey": 0
     },
     {
-      "label": "three-clip-sequence-stop-replay-redraw-save",
-      "clips": 3
+      "label": "four-clip-sequence-stop-replay-redraw-save",
+      "clips": 4
     },
     {
-      "label": "native-mp3-decode-and-playlist-transition",
+      "label": "native-mp3-original-and-expanded-story-transition",
       "ok": true
     }
   ],

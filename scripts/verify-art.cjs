@@ -46,7 +46,7 @@ assert(current.html.includes('function blankDie() { return A.die(0); }'),'Old di
 assert(!current.html.includes('art drawn in code'),'Stale art credit');
 assert(!current.html.includes('/* Two Lanterns :: art core'),'Placeholder renderer remains');
 for(const gone of ['Light the lanterns','PeerJS matchmaker','Pass-and-play for two','Online play ·','Play online'])assert(!current.html.includes(gone),'Stale UI text: '+gone);
-for(const here of ['Play on one device','Play on two devices','About twenty-five minutes.<br>'].concat(added.rooms.length?[]:['at random from thirty-six']))assert(current.html.includes(here),'Missing UI text: '+here);
+for(const here of ['Play on one device','Play on two devices','Take the story at your own pace.<br>'].concat(added.rooms.length?[]:['at random from thirty-six']))assert(current.html.includes(here),'Missing UI text: '+here);
 for(const here of ['window.TL_ICE=','Net.ice = ','function watchIce(','function lineHook(','function switchToLine(','OPEN_MS = 30000','c && c.relay ? LINE_BYTES : DIRECT'])assert(current.html.includes(here),'Missing online-play fix: '+here);
 const onlinePlay=require('./verify-net.cjs')(current.html);
 console.log(JSON.stringify({ok:true,packRooms:added.rooms.length,onlinePlay,scenes:Art.names.length,assets:Art.assetCount,icons:Art.icons.length,portraitCombinations:512,endingCombinations:variants,unchangedResolutionRules:true,unchangedOriginalStory:true,bytes:Buffer.byteLength(current.html)}));

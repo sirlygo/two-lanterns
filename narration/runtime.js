@@ -8,8 +8,7 @@
   if (!M || !M.clips) return;
 /*__NARRATION_KEY__*/
   var STORE = 'twolanterns.narrator';
-  var SPOTS = ['.screen.intro [data-narrate]', '.screen.results [data-narrate]', '.screen.stall p.story', '.screen.title p.tag'];
-  var TITLE = 3;
+  var SPOTS = '.screen [data-narrate], .screen.stall p.story, .screen.title p.tag';
   var PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5.5v13l11-6.5z" fill="currentColor"></path></svg>';
   var STOP = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="6.5" y="6.5" width="11" height="11" rx="1.5" fill="currentColor"></rect></svg>';
   var on = false, activated = false, audio = null, loaded = null, shown = null, auto = null, hush = null;
@@ -124,7 +123,7 @@
     var s = node('button', 'nv-switch', '<span class="nv-knob" aria-hidden="true"></span><span>Narrator</span>');
     s.type = 'button';
     s.setAttribute('role', 'switch');
-    s.setAttribute('title', 'Read the journey, rooms and encounter aftermath aloud. Saved on this device only.');
+    s.setAttribute('title', 'Read the story on every screen aloud. Saved on this device only.');
     row.appendChild(s);
     return row;
   }
@@ -147,10 +146,9 @@
 
   function scan() {
     queued = false;
-    var spots = [], i;
-    for (i = 0; i < SPOTS.length; i++) { spots = host.querySelectorAll(SPOTS[i]); if (spots.length) break; }
+    var spots = host.querySelectorAll(SPOTS);
     var keys = [].slice.call(spots).map(function (spot) { return narrationKey(spot.textContent); }).filter(function (key) { return !!M.clips[key]; });
-    if (!spots.length || (!keys.length && i !== TITLE)) { leave(); return; }
+    if (!spots.length || (!keys.length && !host.querySelector('.screen.title'))) { leave(); return; }
     var want = keys.join('|');
     mount(spots[spots.length - 1], want);
     if (want !== shown) {

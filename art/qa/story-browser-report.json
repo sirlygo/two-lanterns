@@ -1,0 +1,877 @@
+{
+  "ok": true,
+  "textOnly": false,
+  "checks": [
+    {
+      "label": "title",
+      "words": 76,
+      "narration": true
+    },
+    {
+      "label": "names",
+      "words": 77,
+      "narration": true
+    },
+    {
+      "label": "roster",
+      "words": 72,
+      "narration": true
+    },
+    {
+      "label": "origin",
+      "words": 71,
+      "narration": true
+    },
+    {
+      "label": "calling",
+      "words": 74,
+      "narration": true
+    },
+    {
+      "label": "lantern",
+      "words": 78,
+      "narration": true
+    },
+    {
+      "label": "keepsake",
+      "words": 74,
+      "narration": true
+    },
+    {
+      "label": "motive",
+      "words": 76,
+      "narration": true
+    },
+    {
+      "label": "meet",
+      "words": 72,
+      "narration": true
+    },
+    {
+      "label": "handoff",
+      "words": 67,
+      "narration": true
+    },
+    {
+      "label": "lobby",
+      "words": 76,
+      "narration": true
+    },
+    {
+      "label": "book",
+      "words": 78,
+      "narration": true
+    },
+    {
+      "label": "waiting",
+      "words": 74,
+      "narration": true
+    },
+    {
+      "label": "locked",
+      "words": 68,
+      "narration": true
+    },
+    {
+      "label": "lobby",
+      "words": 76,
+      "narration": true
+    },
+    {
+      "label": "stall",
+      "words": 79,
+      "narration": true
+    },
+    {
+      "label": "stall2",
+      "words": 79,
+      "narration": true
+    },
+    {
+      "label": "reveal",
+      "words": 69,
+      "narration": true
+    },
+    {
+      "label": "stair:arrival",
+      "words": 156,
+      "narration": true
+    },
+    {
+      "label": "stair:choice",
+      "words": 56,
+      "narration": true
+    },
+    {
+      "label": "stair:aftermath",
+      "words": 94,
+      "narration": true
+    },
+    {
+      "label": "nave:arrival",
+      "words": 145,
+      "narration": true
+    },
+    {
+      "label": "nave:choice",
+      "words": 51,
+      "narration": true
+    },
+    {
+      "label": "nave:aftermath",
+      "words": 93,
+      "narration": true
+    },
+    {
+      "label": "gallery:arrival",
+      "words": 148,
+      "narration": true
+    },
+    {
+      "label": "gallery:choice",
+      "words": 48,
+      "narration": true
+    },
+    {
+      "label": "gallery:aftermath",
+      "words": 91,
+      "narration": true
+    },
+    {
+      "label": "ledger:arrival",
+      "words": 171,
+      "narration": true
+    },
+    {
+      "label": "ledger:choice",
+      "words": 51,
+      "narration": true
+    },
+    {
+      "label": "ledger:aftermath",
+      "words": 93,
+      "narration": true
+    },
+    {
+      "label": "weaver:arrival",
+      "words": 159,
+      "narration": true
+    },
+    {
+      "label": "weaver:choice",
+      "words": 49,
+      "narration": true
+    },
+    {
+      "label": "weaver:aftermath",
+      "words": 94,
+      "narration": true
+    },
+    {
+      "label": "mirror:arrival",
+      "words": 161,
+      "narration": true
+    },
+    {
+      "label": "mirror:choice",
+      "words": 51,
+      "narration": true
+    },
+    {
+      "label": "mirror:aftermath",
+      "words": 90,
+      "narration": true
+    },
+    {
+      "label": "treasury:arrival",
+      "words": 155,
+      "narration": true
+    },
+    {
+      "label": "treasury:choice",
+      "words": 53,
+      "narration": true
+    },
+    {
+      "label": "treasury:aftermath",
+      "words": 91,
+      "narration": true
+    },
+    {
+      "label": "bellheart:arrival",
+      "words": 196,
+      "narration": true
+    },
+    {
+      "label": "bellheart:choice",
+      "words": 59,
+      "narration": true
+    },
+    {
+      "label": "bellheart:aftermath",
+      "words": 100,
+      "narration": true
+    },
+    {
+      "label": "ossuary:arrival",
+      "words": 145,
+      "narration": true
+    },
+    {
+      "label": "ossuary:choice",
+      "words": 49,
+      "narration": true
+    },
+    {
+      "label": "ossuary:aftermath",
+      "words": 96,
+      "narration": true
+    },
+    {
+      "label": "salt:arrival",
+      "words": 146,
+      "narration": true
+    },
+    {
+      "label": "salt:choice",
+      "words": 50,
+      "narration": true
+    },
+    {
+      "label": "salt:aftermath",
+      "words": 94,
+      "narration": true
+    },
+    {
+      "label": "clock:arrival",
+      "words": 146,
+      "narration": true
+    },
+    {
+      "label": "clock:choice",
+      "words": 54,
+      "narration": true
+    },
+    {
+      "label": "clock:aftermath",
+      "words": 91,
+      "narration": true
+    },
+    {
+      "label": "candle:arrival",
+      "words": 144,
+      "narration": true
+    },
+    {
+      "label": "candle:choice",
+      "words": 51,
+      "narration": true
+    },
+    {
+      "label": "candle:aftermath",
+      "words": 90,
+      "narration": true
+    },
+    {
+      "label": "roots:arrival",
+      "words": 160,
+      "narration": true
+    },
+    {
+      "label": "roots:choice",
+      "words": 50,
+      "narration": true
+    },
+    {
+      "label": "roots:aftermath",
+      "words": 89,
+      "narration": true
+    },
+    {
+      "label": "kitchen:arrival",
+      "words": 152,
+      "narration": true
+    },
+    {
+      "label": "kitchen:choice",
+      "words": 45,
+      "narration": true
+    },
+    {
+      "label": "kitchen:aftermath",
+      "words": 95,
+      "narration": true
+    },
+    {
+      "label": "ferry:arrival",
+      "words": 164,
+      "narration": true
+    },
+    {
+      "label": "ferry:choice",
+      "words": 51,
+      "narration": true
+    },
+    {
+      "label": "ferry:aftermath",
+      "words": 96,
+      "narration": true
+    },
+    {
+      "label": "orchard:arrival",
+      "words": 148,
+      "narration": true
+    },
+    {
+      "label": "orchard:choice",
+      "words": 54,
+      "narration": true
+    },
+    {
+      "label": "orchard:aftermath",
+      "words": 92,
+      "narration": true
+    },
+    {
+      "label": "forge:arrival",
+      "words": 159,
+      "narration": true
+    },
+    {
+      "label": "forge:choice",
+      "words": 51,
+      "narration": true
+    },
+    {
+      "label": "forge:aftermath",
+      "words": 89,
+      "narration": true
+    },
+    {
+      "label": "weeping:arrival",
+      "words": 156,
+      "narration": true
+    },
+    {
+      "label": "weeping:choice",
+      "words": 53,
+      "narration": true
+    },
+    {
+      "label": "weeping:aftermath",
+      "words": 95,
+      "narration": true
+    },
+    {
+      "label": "moths:arrival",
+      "words": 156,
+      "narration": true
+    },
+    {
+      "label": "moths:choice",
+      "words": 55,
+      "narration": true
+    },
+    {
+      "label": "moths:aftermath",
+      "words": 92,
+      "narration": true
+    },
+    {
+      "label": "library:arrival",
+      "words": 163,
+      "narration": true
+    },
+    {
+      "label": "library:choice",
+      "words": 53,
+      "narration": true
+    },
+    {
+      "label": "library:aftermath",
+      "words": 95,
+      "narration": true
+    },
+    {
+      "label": "market:arrival",
+      "words": 149,
+      "narration": true
+    },
+    {
+      "label": "market:choice",
+      "words": 55,
+      "narration": true
+    },
+    {
+      "label": "market:aftermath",
+      "words": 93,
+      "narration": true
+    },
+    {
+      "label": "dice:arrival",
+      "words": 147,
+      "narration": true
+    },
+    {
+      "label": "dice:choice",
+      "words": 52,
+      "narration": true
+    },
+    {
+      "label": "dice:aftermath",
+      "words": 91,
+      "narration": true
+    },
+    {
+      "label": "well:arrival",
+      "words": 152,
+      "narration": true
+    },
+    {
+      "label": "well:choice",
+      "words": 54,
+      "narration": true
+    },
+    {
+      "label": "well:aftermath",
+      "words": 91,
+      "narration": true
+    },
+    {
+      "label": "armoury:arrival",
+      "words": 146,
+      "narration": true
+    },
+    {
+      "label": "armoury:choice",
+      "words": 52,
+      "narration": true
+    },
+    {
+      "label": "armoury:aftermath",
+      "words": 87,
+      "narration": true
+    },
+    {
+      "label": "rookery:arrival",
+      "words": 156,
+      "narration": true
+    },
+    {
+      "label": "rookery:choice",
+      "words": 52,
+      "narration": true
+    },
+    {
+      "label": "rookery:aftermath",
+      "words": 92,
+      "narration": true
+    },
+    {
+      "label": "cistern:arrival",
+      "words": 148,
+      "narration": true
+    },
+    {
+      "label": "cistern:choice",
+      "words": 53,
+      "narration": true
+    },
+    {
+      "label": "cistern:aftermath",
+      "words": 92,
+      "narration": true
+    },
+    {
+      "label": "chapter:arrival",
+      "words": 159,
+      "narration": true
+    },
+    {
+      "label": "chapter:choice",
+      "words": 52,
+      "narration": true
+    },
+    {
+      "label": "chapter:aftermath",
+      "words": 93,
+      "narration": true
+    },
+    {
+      "label": "bridge:arrival",
+      "words": 154,
+      "narration": true
+    },
+    {
+      "label": "bridge:choice",
+      "words": 48,
+      "narration": true
+    },
+    {
+      "label": "bridge:aftermath",
+      "words": 91,
+      "narration": true
+    },
+    {
+      "label": "organ:arrival",
+      "words": 148,
+      "narration": true
+    },
+    {
+      "label": "organ:choice",
+      "words": 54,
+      "narration": true
+    },
+    {
+      "label": "organ:aftermath",
+      "words": 93,
+      "narration": true
+    },
+    {
+      "label": "greenhouse:arrival",
+      "words": 152,
+      "narration": true
+    },
+    {
+      "label": "greenhouse:choice",
+      "words": 51,
+      "narration": true
+    },
+    {
+      "label": "greenhouse:aftermath",
+      "words": 92,
+      "narration": true
+    },
+    {
+      "label": "doors:arrival",
+      "words": 154,
+      "narration": true
+    },
+    {
+      "label": "doors:choice",
+      "words": 54,
+      "narration": true
+    },
+    {
+      "label": "doors:aftermath",
+      "words": 90,
+      "narration": true
+    },
+    {
+      "label": "scales:arrival",
+      "words": 155,
+      "narration": true
+    },
+    {
+      "label": "scales:choice",
+      "words": 49,
+      "narration": true
+    },
+    {
+      "label": "scales:aftermath",
+      "words": 93,
+      "narration": true
+    },
+    {
+      "label": "scriptorium:arrival",
+      "words": 153,
+      "narration": true
+    },
+    {
+      "label": "scriptorium:choice",
+      "words": 55,
+      "narration": true
+    },
+    {
+      "label": "scriptorium:aftermath",
+      "words": 92,
+      "narration": true
+    },
+    {
+      "label": "quarry:arrival",
+      "words": 154,
+      "narration": true
+    },
+    {
+      "label": "quarry:choice",
+      "words": 48,
+      "narration": true
+    },
+    {
+      "label": "quarry:aftermath",
+      "words": 94,
+      "narration": true
+    },
+    {
+      "label": "stable:arrival",
+      "words": 153,
+      "narration": true
+    },
+    {
+      "label": "stable:choice",
+      "words": 48,
+      "narration": true
+    },
+    {
+      "label": "stable:aftermath",
+      "words": 89,
+      "narration": true
+    },
+    {
+      "label": "windows:arrival",
+      "words": 171,
+      "narration": true
+    },
+    {
+      "label": "windows:choice",
+      "words": 51,
+      "narration": true
+    },
+    {
+      "label": "windows:aftermath",
+      "words": 88,
+      "narration": true
+    },
+    {
+      "label": "tomb:arrival",
+      "words": 156,
+      "narration": true
+    },
+    {
+      "label": "tomb:choice",
+      "words": 53,
+      "narration": true
+    },
+    {
+      "label": "tomb:aftermath",
+      "words": 92,
+      "narration": true
+    },
+    {
+      "label": "pennywell:arrival",
+      "words": 155,
+      "narration": true
+    },
+    {
+      "label": "pennywell:choice",
+      "words": 46,
+      "narration": true
+    },
+    {
+      "label": "pennywell:aftermath",
+      "words": 92,
+      "narration": true
+    },
+    {
+      "label": "lamps:arrival",
+      "words": 171,
+      "narration": true
+    },
+    {
+      "label": "lamps:choice",
+      "words": 48,
+      "narration": true
+    },
+    {
+      "label": "lamps:aftermath",
+      "words": 92,
+      "narration": true
+    },
+    {
+      "label": "sluice:arrival",
+      "words": 185,
+      "narration": true
+    },
+    {
+      "label": "sluice:choice",
+      "words": 50,
+      "narration": true
+    },
+    {
+      "label": "sluice:aftermath",
+      "words": 93,
+      "narration": true
+    },
+    {
+      "label": "wake:arrival",
+      "words": 179,
+      "narration": true
+    },
+    {
+      "label": "wake:choice",
+      "words": 54,
+      "narration": true
+    },
+    {
+      "label": "wake:aftermath",
+      "words": 95,
+      "narration": true
+    },
+    {
+      "label": "maps:arrival",
+      "words": 176,
+      "narration": true
+    },
+    {
+      "label": "maps:choice",
+      "words": 53,
+      "narration": true
+    },
+    {
+      "label": "maps:aftermath",
+      "words": 91,
+      "narration": true
+    },
+    {
+      "label": "ropewalk:arrival",
+      "words": 175,
+      "narration": true
+    },
+    {
+      "label": "ropewalk:choice",
+      "words": 53,
+      "narration": true
+    },
+    {
+      "label": "ropewalk:aftermath",
+      "words": 93,
+      "narration": true
+    },
+    {
+      "label": "confess:arrival",
+      "words": 172,
+      "narration": true
+    },
+    {
+      "label": "confess:choice",
+      "words": 49,
+      "narration": true
+    },
+    {
+      "label": "confess:aftermath",
+      "words": 88,
+      "narration": true
+    },
+    {
+      "label": "collectors:arrival",
+      "words": 172,
+      "narration": true
+    },
+    {
+      "label": "collectors:choice",
+      "words": 55,
+      "narration": true
+    },
+    {
+      "label": "collectors:aftermath",
+      "words": 71,
+      "narration": true
+    },
+    {
+      "label": "hounds:arrival",
+      "words": 170,
+      "narration": true
+    },
+    {
+      "label": "hounds:choice",
+      "words": 56,
+      "narration": true
+    },
+    {
+      "label": "hounds:aftermath",
+      "words": 77,
+      "narration": true
+    },
+    {
+      "label": "wickthief:arrival",
+      "words": 166,
+      "narration": true
+    },
+    {
+      "label": "wickthief:choice",
+      "words": 52,
+      "narration": true
+    },
+    {
+      "label": "wickthief:aftermath",
+      "words": 82,
+      "narration": true
+    },
+    {
+      "label": "ending:ring:strong",
+      "words": 68,
+      "narration": true
+    },
+    {
+      "label": "ending:ring:fair",
+      "words": 66,
+      "narration": true
+    },
+    {
+      "label": "ending:ring:weak",
+      "words": 65,
+      "narration": true
+    },
+    {
+      "label": "ending:break:strong",
+      "words": 68,
+      "narration": true
+    },
+    {
+      "label": "ending:break:fair",
+      "words": 64,
+      "narration": true
+    },
+    {
+      "label": "ending:break:weak",
+      "words": 62,
+      "narration": true
+    },
+    {
+      "label": "ending:steal:strong",
+      "words": 66,
+      "narration": true
+    },
+    {
+      "label": "ending:steal:fair",
+      "words": 68,
+      "narration": true
+    },
+    {
+      "label": "ending:steal:weak",
+      "words": 64,
+      "narration": true
+    },
+    {
+      "label": "ending:keep:strong",
+      "words": 66,
+      "narration": true
+    },
+    {
+      "label": "ending:keep:fair",
+      "words": 66,
+      "narration": true
+    },
+    {
+      "label": "ending:keep:weak",
+      "words": 63,
+      "narration": true
+    },
+    {
+      "label": "ending:collapse",
+      "words": 64,
+      "narration": true
+    },
+    {
+      "label": "ending:deadlock",
+      "words": 68,
+      "narration": true
+    },
+    {
+      "label": "nave:desktop-arrival",
+      "words": 145,
+      "narration": true
+    }
+  ],
+  "errors": []
+}

@@ -2,7 +2,9 @@
 
 Optional recorded narration, spoken by an ElevenLabs voice. It is off by default and saved per device, it never blocks play, the text always stays on screen, and moving on stops the voice.
 
-**What is spoken:** the 38 room intros, the 2 chandler landings and the title line: 41 passages, about 10,700 characters. Outcomes, endings and the story-layer lines are different every run, so they stay text.
+**What is spoken:** 246 passages in the existing ElevenLabs voice: all 47 room introductions, both chandler landings, the title, descent chapters and bridges, encounter aftermaths, and 175 longer passages covering every room’s arrival, private decision and aftermath, surrounding screens, and all 14 ending epilogues. The full expansion adds 9,749 words. The move-specific result cards and other text containing changing names remain visible text alongside the recorded narrative.
+
+The narrator collects the story passages on the current screen in reading order. **Listen** replays that screen’s sequence. **Narrator** enables automatic playback on later screens after the browser has received a user gesture. Moving on stops the old sequence. Narration never locks progression or reads the other player’s secret move; each device keeps its own setting.
 
 ## One-time setup (on your PC, in this folder)
 

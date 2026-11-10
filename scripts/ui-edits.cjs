@@ -26,7 +26,7 @@ const edits = [
   {
     why: 'title: how the two ways to play differ',
     from: '<p class="fine center">About twenty-five minutes. On one device, a hand-off screen hides each pick from your partner. Online, each pick stays on your own screen until you are both locked in.</p>',
-    to: '<p class="fine center">About twenty-five minutes.<br>On one device, you pass it back and forth and a hand-off screen hides each pick from your partner.<br>On two devices, each pick stays on your own screen until you are both locked in.</p>'
+    to: '<p class="fine center">Take the story at your own pace.<br>On one device, you pass it back and forth and a hand-off screen hides each pick from your partner.<br>On two devices, each pick stays on your own screen until you are both locked in.</p>'
   },
   {
     why: 'sandbox notice: use the new name',

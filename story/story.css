@@ -2,3 +2,8 @@
 .intro h2 + .journey { border-left: 2px solid #79998c66; padding-left: 1rem; }
 .encounter-note { color: #c7b990; font-size: .82rem; line-height: 1.6; }
 .encounter-story { max-width: 48rem; margin: 1.5rem auto; padding: 1rem 1.2rem; border-left: 2px solid #83ad9b77; background: #83ad9b09; line-height: 1.75; }
+.long-story { max-width: 64ch; color: var(--text, #d4cebc); line-height: 1.85; margin: 1.15rem 0; font-size: 1.02rem; }
+.title .long-story, .book > .long-story, .ending > .long-story { margin-left: auto; margin-right: auto; text-align: left; }
+.results > .long-story { max-width: 48rem; margin-left: auto; margin-right: auto; }
+.reveal > .long-story, .handoff > .long-story { margin-left: auto; margin-right: auto; text-align: left; }
+@media (max-width: 600px) { .long-story { font-size: 1rem; line-height: 1.8; } }

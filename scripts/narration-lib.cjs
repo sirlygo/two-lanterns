@@ -65,6 +65,13 @@ function buildItems(game, cfg) {
     const text = story.encounters[r.id][result];
     items.push({ id: 'encounter-' + r.id + '-' + result, label: r.title + ': ' + result, display: text, spoken: text });
   }
+  const pages = require('../story/page-scenes.cjs'), rooms = require('../story/room-pages.cjs');
+  const passage = (id, text) => items.push({ id: 'page-' + id.replace(/:/g, '-'), label: id, display: text, spoken: text });
+  for (const r of game.rooms) {
+    if (!rooms[r.id]) throw Error('Missing expanded room story: ' + r.id);
+    for (const part of ['arrival', 'choice', 'aftermath']) passage('room-' + r.id + '-' + part, rooms[r.id][part]);
+  }
+  for (const [group, texts] of Object.entries(pages)) for (const [id, text] of Object.entries(texts)) passage(group + '-' + id, text);
   const swaps = Object.entries(cfg.pronounce || {}).map(([from, to]) => [new RegExp('\\b' + from.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'g'), String(to)]);
   const keys = new Set(), ids = new Set();
   for (const it of items) {
