@@ -565,6 +565,16 @@
       "assets": true
     },
     {
+      "label": "adventure-4",
+      "screen": "adventure",
+      "overflow": false,
+      "scenes": [
+        "q-lantern"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
       "label": "stall-4",
       "screen": "stall",
       "overflow": false,

@@ -22,6 +22,46 @@
       "format": "mp3_44100_96",
       "at": "2026-11-10T23:44:00.592Z"
     },
+    "2eep1rkq3ew": {
+      "id": "adventure-combo-bluff",
+      "f": "adventure-combo-bluff.cjegv2.mp3",
+      "spec": "cjegv24l34",
+      "chars": 228,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-11T00:29:27.871Z"
+    },
+    "q4hvi868w8": {
+      "id": "adventure-combo-cover",
+      "f": "adventure-combo-cover.j4rzb9.mp3",
+      "spec": "j4rzb9j5ni",
+      "chars": 215,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-11T00:29:24.498Z"
+    },
+    "1b1j49dy958": {
+      "id": "adventure-combo-name",
+      "f": "adventure-combo-name.10q509.mp3",
+      "spec": "10q5094dd7p",
+      "chars": 218,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-11T00:29:24.784Z"
+    },
+    "205hqfj5kz2": {
+      "id": "adventure-combo-shoulders",
+      "f": "adventure-combo-shoulders.15mhc6.mp3",
+      "spec": "15mhc6c8kf8",
+      "chars": 221,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-11T00:29:27.968Z"
+    },
     "1ksu5vksvsc": {
       "id": "adventure-confession",
       "f": "adventure-confession.2cyybz.mp3",
@@ -31,6 +71,66 @@
       "model": "eleven_v4",
       "format": "mp3_44100_96",
       "at": "2026-11-10T23:44:03.732Z"
+    },
+    "r0x55a6ze7": {
+      "id": "adventure-deal-curiosity",
+      "f": "adventure-deal-curiosity.233apk.mp3",
+      "spec": "233apkdfweh",
+      "chars": 349,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-11T00:29:21.951Z"
+    },
+    "vr6339p6ft": {
+      "id": "adventure-deal-hunger",
+      "f": "adventure-deal-hunger.iacvjk.mp3",
+      "spec": "iacvjk9rpm",
+      "chars": 354,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-11T00:29:16.252Z"
+    },
+    "2b7sknulmgs": {
+      "id": "adventure-deal-mercy",
+      "f": "adventure-deal-mercy.2dg4il.mp3",
+      "spec": "2dg4ilqqwfn",
+      "chars": 317,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-11T00:29:16.362Z"
+    },
+    "1adrr223lgt": {
+      "id": "adventure-deal-quiet",
+      "f": "adventure-deal-quiet.1kuhjl.mp3",
+      "spec": "1kuhjlb7uh7",
+      "chars": 323,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-11T00:29:21.409Z"
+    },
+    "20vytf0bqi": {
+      "id": "adventure-endingBusiness",
+      "f": "adventure-endingBusiness.1ea3ss.mp3",
+      "spec": "1ea3ss35izf",
+      "chars": 317,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-11T00:29:11.909Z"
+    },
+    "1chbkm2hqmh": {
+      "id": "adventure-endingFriend",
+      "f": "adventure-endingFriend.17ex5u.mp3",
+      "spec": "17ex5um10rn",
+      "chars": 320,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-11T00:29:11.451Z"
     },
     "233u7gdkjvw": {
       "id": "adventure-falseexit",
@@ -72,6 +172,46 @@
       "format": "mp3_44100_96",
       "at": "2026-11-10T23:44:34.289Z"
     },
+    "1jefbhe2h1b": {
+      "id": "adventure-huntAgain",
+      "f": "adventure-huntAgain.1e9a5v.mp3",
+      "spec": "1e9a5v71ido",
+      "chars": 345,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-11T00:28:54.107Z"
+    },
+    "3wc24a0uvh": {
+      "id": "adventure-huntLost",
+      "f": "adventure-huntLost.3d8x65.mp3",
+      "spec": "3d8x651j93",
+      "chars": 332,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-11T00:28:58.642Z"
+    },
+    "1c8zk40flyg": {
+      "id": "adventure-huntRetreat",
+      "f": "adventure-huntRetreat.q9f8yu.mp3",
+      "spec": "q9f8yu7tu6",
+      "chars": 290,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-11T00:29:02.301Z"
+    },
+    "1d7yor5z015": {
+      "id": "adventure-huntRound",
+      "f": "adventure-huntRound.2fk3lt.mp3",
+      "spec": "2fk3lt0kkgf",
+      "chars": 345,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-11T00:28:53.779Z"
+    },
     "1hkw2g6w48e": {
       "id": "adventure-huntsman",
       "f": "adventure-huntsman.32xwim.mp3",
@@ -81,6 +221,16 @@
       "model": "eleven_v4",
       "format": "mp3_44100_96",
       "at": "2026-11-10T23:44:44.720Z"
+    },
+    "dclb2syro8": {
+      "id": "adventure-huntWon",
+      "f": "adventure-huntWon.13tv71.mp3",
+      "spec": "13tv71nf4s1",
+      "chars": 329,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-11T00:28:58.208Z"
     },
     "21htw2u2mfe": {
       "id": "adventure-merchant",
@@ -271,6 +421,36 @@
       "model": "eleven_v4",
       "format": "mp3_44100_96",
       "at": "2026-11-10T23:44:05.628Z"
+    },
+    "1az0b3kurml": {
+      "id": "adventure-twistBackward",
+      "f": "adventure-twistBackward.15crap.mp3",
+      "spec": "15crapdb0fk",
+      "chars": 341,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-11T00:29:07.639Z"
+    },
+    "163a5d8fg0y": {
+      "id": "adventure-twistFootstep",
+      "f": "adventure-twistFootstep.1v3rvy.mp3",
+      "spec": "1v3rvyeksls",
+      "chars": 347,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-11T00:29:06.841Z"
+    },
+    "228gqoe3gh4": {
+      "id": "adventure-twistLight",
+      "f": "adventure-twistLight.yc153f.mp3",
+      "spec": "yc153f12i4",
+      "chars": 352,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-11T00:29:03.094Z"
     },
     "1gjejn4kutm": {
       "id": "bridge-cold",

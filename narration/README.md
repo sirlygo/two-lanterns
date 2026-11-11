@@ -2,7 +2,7 @@
 
 Optional recorded narration, spoken by an ElevenLabs voice. It is off by default and saved per device, it never blocks play, the text always stays on screen, and moving on stops the voice.
 
-**What is spoken:** the core story’s 246 passages remain recorded in the existing ElevenLabs voice. Adventure adds 45 written passages, of which 27 have recordings; 18 are pending because the connected account exhausted its credits. There are currently 273 recordings out of 291 collected passages. `npm run narrate -- --list` reports the exact pending clips. Move-specific result cards and other text containing changing names remain visible text alongside the recorded narrative.
+**What is spoken:** all 291 collected passages are recorded in the existing ElevenLabs voice: the core story’s 246 passages and all 45 Adventure passages, including the Huntsman, twists, Nim’s callbacks, sealed bargains and teamwork combinations. `npm run narrate -- --list` reports anything missing or outdated after future edits. Move-specific result cards and other text containing changing names remain visible text alongside the recorded narrative.
 
 The narrator collects story passages in reading order. **Listen** replays the screen’s sequence. **Narrator** enables automatic playback after a user gesture. Sealed notes are excluded from automatic reading; **Listen privately** explicitly includes them. Controls stay outside collapsed details. Moving on stops the old sequence. Narration never locks progression or reads the other player’s secret move; each device keeps its own setting.
 

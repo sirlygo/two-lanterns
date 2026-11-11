@@ -58,12 +58,12 @@ let browser; const checks = [], errors = [];
   assert.equal(await page.evaluate(() => __tl.S.adventure.phase.round), 1);
   await page.reload(); await page.locator('[data-act="resume"]').click();
   assert.equal(await page.evaluate(() => __tl.S.adventure.phase.round), 1); await vote(2); await vote(3); await check('huntsman:second-exchange');
-  /* Explicitly simulate the private recording to test autoplay protection even if credits are exhausted.
-     The Audio class above is entirely fake; this alias never becomes a shipped asset. */
+  /* The Audio class is mocked for deterministic sequence checks, but every private key must
+     reference an actual recording in the built page. No test-only clip aliases are needed. */
   await show('bargain');
   const privateKey = await page.evaluate(() => {
     const p = document.querySelector('[data-private-narration]'), key = __narrator.key(p.textContent);
-    __narrator.clips[key] = { f: 'qa-private-audio-only.mp3' }; p.appendChild(document.createTextNode('')); return key;
+    if (!__narrator.clips[key]) throw Error('Private bargain recording is missing'); return key;
   });
   await page.waitForFunction(() => document.querySelector('.nv-play')?.textContent.includes('privately'));
   await page.locator('.nv-switch').click();
@@ -122,8 +122,34 @@ let browser; const checks = [], errors = [];
   assert.equal(await guest.evaluate(() => __tl.S.adventure.phase.kind), 'festival');
   checks.push({ label: 'guest-save-resumes-interlude', ok: true });
   for (const c of contexts) await c.close();
+  /* Decode the real private MP3 with native Audio, and confirm automatic narration stops before it. */
+  const native = await browser.newContext({ reducedMotion: 'reduce' });
+  await native.addInitScript(() => {
+    const NativeAudio = window.Audio; window.__nativeSpeech = [];
+    window.Audio = function (...args) { const a = new NativeAudio(...args); window.__nativeSpeech.push(a); return a; };
+  });
+  const spoken = await native.newPage(); spoken.on('pageerror', e => errors.push(e.message)); await spoken.goto(url);
+  await spoken.evaluate(() => {
+    const S = __tl.E.fresh(); S.names = ['Ember', 'Mint']; S.picks = [0, 1].map(() => Object.fromEntries(__tl.D.create.map(q => [q.id, q.opts[0].id])));
+    __tl.E.begin(S); S.lead = 0; S.room = 3; Adventure.enqueue(S, 'bargain'); Adventure.open(S, 'intro'); __tl.ui.saved = S; __tl.ACT.resume();
+  });
+  const sealedKey = await spoken.locator('[data-private-narration]').evaluate(n => __narrator.key(n.textContent));
+  await spoken.locator('.nv-switch').click();
+  await spoken.waitForFunction(() => __narrator.state().playing && __narrator.state().time > .1);
+  assert(!(await spoken.evaluate(() => __narrator.state().queue)).includes(sealedKey));
+  const finishPublic = () => spoken.evaluate(() => { const a = __nativeSpeech.find(a => a.src.includes('audio/narration/')); a.currentTime = a.duration - .1; });
+  await finishPublic();
+  await spoken.waitForFunction(() => !__narrator.state().playing && __narrator.state().time > 1);
+  assert.notEqual(await spoken.evaluate(() => __narrator.state().loaded), sealedKey, 'Automatic reading started the sealed note');
+  await spoken.locator('.nv-play').click();
+  await spoken.waitForFunction(() => __narrator.state().playing && __narrator.state().time > .1);
+  await finishPublic();
+  await spoken.waitForFunction(key => __narrator.state().position === 1 && __narrator.state().loaded === key && __narrator.state().time > .1, sealedKey);
+  assert((await spoken.evaluate(() => __narrator.state().src)).includes('adventure-deal-'));
+  checks.push({ label: 'native-private-mp3-plays-only-after-explicit-listen', ok: true });
+  await native.close();
   assert.deepEqual(errors, []);
-  const report = { ok: true, checks, errors, privateAudioSimulated: true, onlineWire: 'real UI handlers; simulated transport' };
+  const report = { ok: true, checks, errors, privateAudioSimulated: true, nativePrivateAudio: true, onlineWire: 'real UI handlers; simulated transport' };
   fs.writeFileSync(path.join(root, 'art/qa/adventure-browser-report.json'), JSON.stringify(report, null, 2));
   console.log(JSON.stringify({ ok: true, checks: checks.length, online: true, privateAudio: true, errors })); await browser.close();
 })().catch(async e => { console.error(e); if (browser) await browser.close(); process.exitCode = 1; });
