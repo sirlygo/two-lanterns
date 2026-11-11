@@ -30,15 +30,15 @@
       "bytes": 81127
     },
     "disaster": {
-      "f": "disaster.1j3zv1q.mp3",
-      "k": "1j3zv1q",
+      "f": "disaster.1qcn867.mp3",
+      "k": "1qcn867",
       "seconds": 2,
       "model": "eleven_text_to_sound_v2",
       "bytes": 33061
     },
     "scrape": {
-      "f": "scrape.1c2seyn.mp3",
-      "k": "1c2seyn",
+      "f": "scrape.109hdju.mp3",
+      "k": "109hdju",
       "seconds": 1.5,
       "model": "eleven_text_to_sound_v2",
       "bytes": 24702
