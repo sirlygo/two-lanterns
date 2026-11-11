@@ -1208,6 +1208,9 @@ if (typeof module !== 'undefined' && module.exports) module.exports = narrationK
           for (i = 0; i < n; i++) { var v = ch[i] < 0 ? -ch[i] : ch[i]; if (v > peak) peak = v; }
           if (peak < 0.002) return;      /* a silent take is no use: the browser-made sound stays */
           for (i = 0; i < n; i++) { if ((ch[i] < 0 ? -ch[i] : ch[i]) > peak * 0.06) { at = i; break; } }
+          var end = n - 1, turns = 0; while (end > at && (ch[end] < 0 ? -ch[end] : ch[end]) <= peak * 0.06) end--;
+          for (i = at + 1; i <= end; i++) if ((ch[i - 1] < 0) !== (ch[i] < 0)) turns++;
+          if (end > at && turns / ((end - at) / buf.sampleRate) < 300) { note('sfx-low:' + id); return; }      /* a take that is all deep bass cannot be heard on a phone or a laptop: the browser-made sound stays */
           shots[id] = { buf: buf, at: Math.max(0, at / buf.sampleRate - 0.004), gain: Math.min(30, 0.8 / peak) * (+e.gain > 0 ? +e.gain : 1) };      /* some takes come back very quiet */
           note('sfx-ready:' + id);
         };
