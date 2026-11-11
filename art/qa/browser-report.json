@@ -263,6 +263,86 @@
       "assets": true
     },
     {
+      "label": "adventure-2",
+      "screen": "adventure",
+      "overflow": false,
+      "scenes": [
+        "lamps"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "handoff-2",
+      "screen": "handoff",
+      "overflow": false,
+      "scenes": [
+        "lamps"
+      ],
+      "portraits": 0,
+      "assets": true
+    },
+    {
+      "label": "adventure-2",
+      "screen": "adventure",
+      "overflow": false,
+      "scenes": [
+        "lamps"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "adventure-2",
+      "screen": "adventure",
+      "overflow": false,
+      "scenes": [
+        "lamps"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "adventure-2",
+      "screen": "adventure",
+      "overflow": false,
+      "scenes": [
+        "nim"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "handoff-2",
+      "screen": "handoff",
+      "overflow": false,
+      "scenes": [
+        "nim"
+      ],
+      "portraits": 0,
+      "assets": true
+    },
+    {
+      "label": "adventure-2",
+      "screen": "adventure",
+      "overflow": false,
+      "scenes": [
+        "nim"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "adventure-2",
+      "screen": "adventure",
+      "overflow": false,
+      "scenes": [
+        "nim"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
       "label": "intro-2",
       "screen": "intro",
       "overflow": false,
@@ -328,6 +408,46 @@
       "overflow": false,
       "scenes": [
         "sluice",
+        "sluice"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "adventure-3",
+      "screen": "adventure",
+      "overflow": false,
+      "scenes": [
+        "sluice"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "handoff-3",
+      "screen": "handoff",
+      "overflow": false,
+      "scenes": [
+        "sluice"
+      ],
+      "portraits": 0,
+      "assets": true
+    },
+    {
+      "label": "adventure-3",
+      "screen": "adventure",
+      "overflow": false,
+      "scenes": [
+        "sluice"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "adventure-3",
+      "screen": "adventure",
+      "overflow": false,
+      "scenes": [
         "sluice"
       ],
       "portraits": 2,
@@ -405,8 +525,88 @@
       "assets": true
     },
     {
+      "label": "adventure-4",
+      "screen": "adventure",
+      "overflow": false,
+      "scenes": [
+        "wake"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "handoff-4",
+      "screen": "handoff",
+      "overflow": false,
+      "scenes": [
+        "wake"
+      ],
+      "portraits": 0,
+      "assets": true
+    },
+    {
+      "label": "adventure-4",
+      "screen": "adventure",
+      "overflow": false,
+      "scenes": [
+        "wake"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "adventure-4",
+      "screen": "adventure",
+      "overflow": false,
+      "scenes": [
+        "wake"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
       "label": "stall-4",
       "screen": "stall",
+      "overflow": false,
+      "scenes": [
+        "stall"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "adventure-4",
+      "screen": "adventure",
+      "overflow": false,
+      "scenes": [
+        "stall"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "handoff-4",
+      "screen": "handoff",
+      "overflow": false,
+      "scenes": [
+        "stall"
+      ],
+      "portraits": 0,
+      "assets": true
+    },
+    {
+      "label": "adventure-4",
+      "screen": "adventure",
+      "overflow": false,
+      "scenes": [
+        "stall"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "adventure-4",
+      "screen": "adventure",
       "overflow": false,
       "scenes": [
         "stall"
@@ -486,6 +686,86 @@
       "assets": true
     },
     {
+      "label": "adventure-5",
+      "screen": "adventure",
+      "overflow": false,
+      "scenes": [
+        "maps"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "handoff-5",
+      "screen": "handoff",
+      "overflow": false,
+      "scenes": [
+        "maps"
+      ],
+      "portraits": 0,
+      "assets": true
+    },
+    {
+      "label": "adventure-5",
+      "screen": "adventure",
+      "overflow": false,
+      "scenes": [
+        "maps"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "adventure-5",
+      "screen": "adventure",
+      "overflow": false,
+      "scenes": [
+        "maps"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "adventure-5",
+      "screen": "adventure",
+      "overflow": false,
+      "scenes": [
+        "nim-return"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "handoff-5",
+      "screen": "handoff",
+      "overflow": false,
+      "scenes": [
+        "nim-return"
+      ],
+      "portraits": 0,
+      "assets": true
+    },
+    {
+      "label": "adventure-5",
+      "screen": "adventure",
+      "overflow": false,
+      "scenes": [
+        "nim-return"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "adventure-5",
+      "screen": "adventure",
+      "overflow": false,
+      "scenes": [
+        "nim-return"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
       "label": "intro-5",
       "screen": "intro",
       "overflow": false,
@@ -551,6 +831,46 @@
       "overflow": false,
       "scenes": [
         "ropewalk",
+        "ropewalk"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "adventure-6",
+      "screen": "adventure",
+      "overflow": false,
+      "scenes": [
+        "ropewalk"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "handoff-6",
+      "screen": "handoff",
+      "overflow": false,
+      "scenes": [
+        "ropewalk"
+      ],
+      "portraits": 0,
+      "assets": true
+    },
+    {
+      "label": "adventure-6",
+      "screen": "adventure",
+      "overflow": false,
+      "scenes": [
+        "ropewalk"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "adventure-6",
+      "screen": "adventure",
+      "overflow": false,
+      "scenes": [
         "ropewalk"
       ],
       "portraits": 2,
@@ -628,8 +948,58 @@
       "assets": true
     },
     {
+      "label": "adventure-7",
+      "screen": "adventure",
+      "overflow": false,
+      "scenes": [
+        "confess"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "handoff-7",
+      "screen": "handoff",
+      "overflow": false,
+      "scenes": [
+        "confess"
+      ],
+      "portraits": 0,
+      "assets": true
+    },
+    {
+      "label": "adventure-7",
+      "screen": "adventure",
+      "overflow": false,
+      "scenes": [
+        "confess"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "adventure-7",
+      "screen": "adventure",
+      "overflow": false,
+      "scenes": [
+        "confess"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
       "label": "stall-7",
       "screen": "stall",
+      "overflow": false,
+      "scenes": [
+        "stall2"
+      ],
+      "portraits": 2,
+      "assets": true
+    },
+    {
+      "label": "adventure-7",
+      "screen": "adventure",
       "overflow": false,
       "scenes": [
         "stall2"
@@ -789,7 +1159,12 @@
         "stall",
         "stall2",
         "book",
-        "lobby"
+        "lobby",
+        "nim",
+        "festival",
+        "falseexit",
+        "huntsman",
+        "nim-return"
       ],
       "portraits": 0,
       "assets": true

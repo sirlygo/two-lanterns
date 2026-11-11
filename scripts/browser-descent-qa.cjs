@@ -64,9 +64,9 @@ const checks = [], errors = []; let browser;
     }
     if (await page.locator('[data-act="ho"]').count()) await page.locator('[data-act="ho"]').click();
     await page.locator('[data-act="roll"]').click(); await page.waitForFunction(() => !__tl.ui.rolling);
-    await page.waitForFunction(() => !!document.querySelector('.encounter-story + .nv'));
+    await page.waitForFunction(() => !!document.querySelector('.screen.results .nv'));
     assert.equal(await page.locator('.encounter-story').count(), 1);
-    assert.equal(await page.evaluate(() => __narrator.state().queue.length), 2);
+    assert.equal(await page.evaluate(() => __narrator.state().queue.length), await page.locator('.screen.results [data-narrate]').count() - await page.evaluate(() => [...document.querySelectorAll('.screen.results [data-narrate]')].filter(n => !__narrator.clips[__narrator.key(n.textContent)]).length));
     await check(id + '-results-' + set);
     await page.locator('[data-act="onward"]').click();
     assert.equal(await page.evaluate(() => __tl.S.log.at(-1).rid), id);

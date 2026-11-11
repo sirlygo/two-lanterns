@@ -1,0 +1,28 @@
+'use strict';
+const fs = require('node:fs'), path = require('node:path');
+module.exports = function (html, root) {
+  const read = f => fs.readFileSync(path.join(root, f), 'utf8');
+  const once = (from, to) => { if (html.split(from).length !== 2) throw Error('Adventure marker must occur once: ' + from.slice(0, 95)); html = html.replace(from, () => to); };
+  const code = read('adventure/runtime.js').replace('__ADVENTURE_CONTENT__', () => JSON.stringify(require('../adventure/content.cjs')).replace(/</g, '\\u003c'));
+  once('/* Two Lanterns :: saved characters.', code + '\n\n/* Two Lanterns :: saved characters.');
+  once('/* Two Lanterns :: net.js.', read('adventure/online.js') + '\n\n/* Two Lanterns :: net.js.');
+  once('const Net = { V: 1 };', 'const Net = { V: 2 };');
+  once("['lobby', 'create', 'meet', 'choose', 'roll', 'stall', 'ending'].indexOf(s.screen)", "['lobby', 'create', 'meet', 'choose', 'roll', 'stall', 'ending', 'adventure'].indexOf(s.screen)");
+  once('function chrome(inner, where, bare) {', read('adventure/interface.js') + '\n\nfunction chrome(inner, where, bare) {');
+  once('const o = { screen: S.screen, room: S.room, hp:', 'const o = { screen: S.screen, room: S.room, adventure: ADV.key(S), hp:');
+  once('const moved = p.screen !== S.screen || p.room !== S.room || p.round !== N.round || p.made !== !!N.made[N.me];', 'const moved = p.screen !== S.screen || p.room !== S.room || p.round !== N.round || p.made !== !!N.made[N.me] || p.adventure !== ADV.key(S);');
+  once('</head>', '<style id="adventure-css">\n' + read('adventure/theme.css') + '\n</style>\n</head>');
+  once('const SCREENS = { title, names, lobby, create, handoff, meet, intro, stall, choose, roll, ending };', 'const SCREENS = { title, names, lobby, create, handoff, meet, intro, stall, choose, roll, ending, adventure: adventureScreen };');
+  once('function boot(data) {', "Object.assign(ACT, { 'adventure-vote': t => adventureAct('vote', t), 'adventure-ready': t => adventureAct('ready', t), 'adventure-confess': t => adventureAct('confess', t) });\n\nfunction boot(data) {");
+  once("go({ screen: r.finale ? 'ending' : (E.stopDue(S) >= 0 ? 'stall' : 'intro'), sel: -1 });", "go({ screen: ADV.route(S, r.finale ? 'ending' : (E.stopDue(S) >= 0 ? 'stall' : 'intro')), sel: -1 });");
+  once("leave() { E.leave(S); ui.said = ''; go({ screen: 'intro', sel: -1 }); },", "leave() { E.leave(S); ui.said = ''; go({ screen: ADV.route(S, 'intro'), sel: -1 }); },");
+  once("if (S.screen === 'stall') { E.leave(S); O.open(S); return; }", "if (S.screen === 'stall') { E.leave(S); if (!g.Adventure.open(S, 'choose')) O.open(S); return; }");
+  once("if (r.finale) { S.screen = 'ending'; S.sel = -1; return; }", "if (r.finale) { S.screen = 'ending'; S.sel = -1; return; }\n    if (g.Adventure.open(S, E.stopDue(S) >= 0 ? 'stall' : 'choose')) return;");
+  once('    ${moodLine}\n    <div class="meta">', '    ${moodLine}${advTwist()}\n    <div class="meta">');
+  once('    ${whisper}${mirror}${edgeBox}', '    ${whisper}${mirror}${edgeBox}${advTwist()}${advDeal()}\n    ${S.adventure ? `<details class="adv-hints"><summary>Ways to work together</summary><ul>${Object.values(ADV.content.combos).map(c => `<li>${esc(c.hint)}</li>`).join(\'\')}</ul><p class="fine">A combination is discovered after both moves are revealed. Your partner’s choice stays hidden.</p></details>` : \'\'}');
+  once('    ${pg ? pageHtml(pg) : \'\'}\n    ${pair}', '    ${advCombo(ev)}${pg ? pageHtml(pg) : \'\'}\n    ${pair}');
+  once("parts.filter(p => p.kind === 'motive').forEach(p => bits.push(`<span class=\"n\">${p.v}</span> ${esc(p.l.split(':')[0])}`));", "parts.filter(p => p.kind === 'motive' || p.kind === 'adventure').forEach(p => bits.push(`<span class=\"n\">${p.v}</span> ${esc(p.l.split(':')[0])}`));");
+  once("parts.filter(p => p.kind === 'motive').forEach(p => bits.push(`<span class=\"n\">${p.v}</span><small>${esc(p.l.split(':')[0])}</small>`));", "parts.filter(p => ['motive', 'adventure', 'combo'].includes(p.kind)).forEach(p => bits.push(`<span class=\"n\">${p.v}</span><small>${esc(p.l.split(':')[0])}</small>`));");
+  once('    <div class="chapter"><h3>The descent</h3>', '    ${adventureSummary()}\n    <div class="chapter"><h3>The descent</h3>');
+  return html;
+};

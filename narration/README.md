@@ -2,9 +2,9 @@
 
 Optional recorded narration, spoken by an ElevenLabs voice. It is off by default and saved per device, it never blocks play, the text always stays on screen, and moving on stops the voice.
 
-**What is spoken:** 246 passages in the existing ElevenLabs voice: all 47 room introductions, both chandler landings, the title, descent chapters and bridges, encounter aftermaths, and 175 longer passages covering every room’s arrival, private decision and aftermath, surrounding screens, and all 14 ending epilogues. The full expansion adds 9,749 words. The move-specific result cards and other text containing changing names remain visible text alongside the recorded narrative.
+**What is spoken:** the core story’s 246 passages remain recorded in the existing ElevenLabs voice. Adventure adds 45 written passages, of which 27 have recordings; 18 are pending because the connected account exhausted its credits. There are currently 273 recordings out of 291 collected passages. `npm run narrate -- --list` reports the exact pending clips. Move-specific result cards and other text containing changing names remain visible text alongside the recorded narrative.
 
-The narrator collects the story passages on the current screen in reading order. **Listen** replays that screen’s sequence. **Narrator** enables automatic playback on later screens after the browser has received a user gesture. Moving on stops the old sequence. Narration never locks progression or reads the other player’s secret move; each device keeps its own setting.
+The narrator collects story passages in reading order. **Listen** replays the screen’s sequence. **Narrator** enables automatic playback after a user gesture. Sealed notes are excluded from automatic reading; **Listen privately** explicitly includes them. Controls stay outside collapsed details. Moving on stops the old sequence. Narration never locks progression or reads the other player’s secret move; each device keeps its own setting.
 
 ## One-time setup (on your PC, in this folder)
 

@@ -1,0 +1,136 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "label": "risk:offer",
+      "art": "nave",
+      "screen": "adventure",
+      "stage": "offer"
+    },
+    {
+      "label": "risk:result",
+      "art": "nave",
+      "screen": "adventure",
+      "stage": "result"
+    },
+    {
+      "label": "guide:offer",
+      "art": "nim",
+      "screen": "adventure",
+      "stage": "offer"
+    },
+    {
+      "label": "guide:result",
+      "art": "nim",
+      "screen": "adventure",
+      "stage": "result"
+    },
+    {
+      "label": "guideReturn:offer",
+      "art": "nim-return",
+      "screen": "adventure",
+      "stage": "offer"
+    },
+    {
+      "label": "guideReturn:result",
+      "art": "nim-return",
+      "screen": "adventure",
+      "stage": "result"
+    },
+    {
+      "label": "merchant:offer",
+      "art": "stall",
+      "screen": "adventure",
+      "stage": "offer"
+    },
+    {
+      "label": "merchant:result",
+      "art": "stall",
+      "screen": "adventure",
+      "stage": "result"
+    },
+    {
+      "label": "festival:offer",
+      "art": "festival",
+      "screen": "adventure",
+      "stage": "offer"
+    },
+    {
+      "label": "festival:result",
+      "art": "festival",
+      "screen": "adventure",
+      "stage": "result"
+    },
+    {
+      "label": "falseexit:offer",
+      "art": "falseexit",
+      "screen": "adventure",
+      "stage": "offer"
+    },
+    {
+      "label": "falseexit:result",
+      "art": "falseexit",
+      "screen": "adventure",
+      "stage": "result"
+    },
+    {
+      "label": "huntsman:offer",
+      "art": "huntsman",
+      "screen": "adventure",
+      "stage": "offer"
+    },
+    {
+      "label": "huntsman:result",
+      "art": "huntsman",
+      "screen": "adventure",
+      "stage": "result"
+    },
+    {
+      "label": "bargain:offer",
+      "art": "stall",
+      "screen": "adventure",
+      "stage": "offer"
+    },
+    {
+      "label": "bargain:result",
+      "art": "stall",
+      "screen": "adventure",
+      "stage": "result"
+    },
+    {
+      "label": "twist:offer",
+      "art": "q-lantern",
+      "screen": "adventure",
+      "stage": "result"
+    },
+    {
+      "label": "risk:banked",
+      "art": "nave",
+      "screen": "adventure",
+      "stage": "result"
+    },
+    {
+      "label": "huntsman:second-exchange",
+      "art": "huntsman",
+      "screen": "adventure",
+      "stage": "result"
+    },
+    {
+      "label": "private-audio:manual-only",
+      "art": "stall",
+      "screen": "adventure",
+      "stage": "offer"
+    },
+    {
+      "label": "two-browser-bargain-vote-mask-ready-confession",
+      "ok": true
+    },
+    {
+      "label": "guest-save-resumes-interlude",
+      "ok": true
+    }
+  ],
+  "errors": [],
+  "privateAudioSimulated": true,
+  "onlineWire": "real UI handlers; simulated transport"
+}

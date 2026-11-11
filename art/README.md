@@ -6,7 +6,7 @@ The visual language uses crisp 2D shadow silhouettes, ragged tapering cloaks, ne
 
 ## Sources
 
-- `scenes/`: 60 regular scene illustrations and six Bell-outcome backgrounds, optimized as WebP. This includes the six rooms in `rooms/pack1.cjs` and three wandering encounters in `rooms/pack2.cjs`: Toll Collectors (`collectors.webp`), Hush Hounds (`hounds.webp`), and Wick Thief (`wickthief.webp`). Their complete prompts are `prompts/collectors.txt`, `prompts/hounds.txt`, and `prompts/wickthief.txt`; all three were generated with the built-in image tool and the approved reference.
+- `scenes/`: 65 regular scene illustrations and six Bell-outcome backgrounds, optimized as WebP. Alongside both room packs, Adventure adds `nim.webp`, `nim-return.webp`, `festival.webp`, `falseexit.webp`, and `huntsman.webp`. Their exact prompts use the same filenames under `prompts/` with `.txt` extensions. All five were made with the built-in image tool using the approved reference; Nim’s return also uses his first image for character continuity. See `adventure/README.md` for the image/prompt mapping.
 - `portraits/`: four original calling illustrations with real alpha transparency.
 - `prompts/`: exact built-in image-generator prompts, including the final dice cleanup. The title uses the approved reference; its exact prompt is in `concepts/bellheart-shadow-lanterns-v2-eerie-prompt.txt`.
 - `runtime.js`: custom vector symbols and dice; generated-image scene renderer; origin and keepsake portrait details; four dynamic lantern types; two player identities; nine character fate compositions.

@@ -1,0 +1,14 @@
+.adventure .lead { max-width: 64ch; }
+.adv-status,.adv-terms,.adv-deal,.adv-combo { border:1px solid #81cbb155; border-radius:10px; padding:1rem 1.1rem; background:#81cbb108; margin:1.2rem 0; }
+.adv-status { display:flex;flex-wrap:wrap;gap:.5rem 1rem;align-items:center;font-size:.85rem; }
+.adv-status small { color:var(--mute); }.adv-status b { color:var(--verdigris,#81cbb1); }
+.adv-deal summary { cursor:pointer;line-height:1.7; }.adv-deal[open] summary { margin-bottom:1rem; }
+.adv-terms b,.adv-combo h3 { color:#d6b674; }.adv-terms p { margin:.6rem 0; }
+.adv-combo { max-width:48rem; margin:1.5rem auto; }.adv-combo h3 { display:flex;align-items:center;gap:.6rem; }.adv-combo svg { width:24px;height:24px; }
+.adv-combo .long-story { margin-bottom:.7rem; }
+.adv-details { padding:1rem 1rem 1rem 2.2rem;border-left:2px solid #e4ae60;line-height:1.8; background:#e4ae6009; }
+.adv-details li,.adv-memory li { margin:.55rem 0; }.adv-memory ul { padding-left:1.2rem;line-height:1.65; }
+.adv-enemy,.adv-wait { padding:.8rem 1rem;border:1px solid #d6b67466;border-radius:8px;line-height:1.65; }
+.adv-disclosed { color:#c6d8ca;line-height:1.7; }.adventure .opt:disabled { opacity:.5;cursor:default; }
+.adv-hints { margin:1rem 0;line-height:1.7; }.adv-hints summary { cursor:pointer;color:#81cbb1; }.adv-hints li { margin:.6rem 0; }
+@media(max-width:600px){.adv-terms,.adv-deal,.adv-combo{padding:.85rem}.adventure .long-story{font-size:1rem}}

@@ -14,9 +14,16 @@ function load(file){
 }
 const original=load('backups/index-placeholders.html'),current=load('index.html'),{Art,Data,Engine}=current.ctx;
 const pack=require('./rooms-pack.cjs'),added=pack.ready(root);
+const adventure=require('../adventure/content.cjs');
+inventory.scenes.push(...Object.keys(adventure.scenes));
 for(const r of added.rooms){assert(Data.pool.includes(r.id)&&Data.byId[r.id].opts2&&Data.relics[r.relic],'Pack room not wired in: '+r.id);inventory.scenes.push(r.id);}
-assert.deepEqual(pack.strip(JSON.parse(JSON.stringify(Data)),added),JSON.parse(JSON.stringify(original.ctx.Data)),'Game data changed');
-for(const k of Object.keys(Engine))if(typeof Engine[k]==='function'&&k!=='drawRooms')assert.equal(Engine[k].toString(),original.ctx.Engine[k].toString(),'Rule changed: '+k);
+const baselineData=pack.strip(JSON.parse(JSON.stringify(Data)),added);
+for(const id of Object.keys(adventure.relics))delete baselineData.relics[id];
+assert.deepEqual(baselineData,JSON.parse(JSON.stringify(original.ctx.Data)),'Original game data changed');
+for(const k of Object.keys(Engine))if(typeof Engine[k]==='function'&&k!=='drawRooms'){
+ const base=current.ctx.Adventure.base[k]||Engine[k];
+ assert.equal(base.toString(),original.ctx.Engine[k].toString(),'Original rule changed: '+k);
+}
 assert.equal(Engine.drawRooms.toString().replace(/\r/g,''),fs.readFileSync(path.join(root,'story/draw-rooms.js'),'utf8').trim().replace(/^E.drawRooms = /,'').replace(/;$/,'').replace(/\r/g,''),'Unexpected room draw implementation');
 assert.equal(Art.names.length,inventory.scenes.length);
 assert.equal(Art.ROOMS.length,38+added.rooms.length);
@@ -49,4 +56,4 @@ for(const gone of ['Light the lanterns','PeerJS matchmaker','Pass-and-play for t
 for(const here of ['Play on one device','Play on two devices','Take the story at your own pace.<br>'].concat(added.rooms.length?[]:['at random from thirty-six']))assert(current.html.includes(here),'Missing UI text: '+here);
 for(const here of ['window.TL_ICE=','Net.ice = ','function watchIce(','function lineHook(','function switchToLine(','OPEN_MS = 30000','c && c.relay ? LINE_BYTES : DIRECT'])assert(current.html.includes(here),'Missing online-play fix: '+here);
 const onlinePlay=require('./verify-net.cjs')(current.html);
-console.log(JSON.stringify({ok:true,packRooms:added.rooms.length,onlinePlay,scenes:Art.names.length,assets:Art.assetCount,icons:Art.icons.length,portraitCombinations:512,endingCombinations:variants,unchangedResolutionRules:true,unchangedOriginalStory:true,bytes:Buffer.byteLength(current.html)}));
+console.log(JSON.stringify({ok:true,packRooms:added.rooms.length,onlinePlay,scenes:Art.names.length,assets:Art.assetCount,icons:Art.icons.length,portraitCombinations:512,endingCombinations:variants,baseResolutionPreserved:true,adventureRules:true,unchangedOriginalStory:true,bytes:Buffer.byteLength(current.html)}));

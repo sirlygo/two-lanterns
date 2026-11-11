@@ -3,12 +3,15 @@ const path=require('node:path');
 const root=path.resolve(__dirname,'..');
 const inventory=JSON.parse(fs.readFileSync(path.join(root,'art/inventory.json'),'utf8'));
 const pack=require('./rooms-pack.cjs'),added=pack.ready(root);
+const adventure=require('../adventure/content.cjs');
+inventory.scenes.push(...Object.keys(adventure.scenes));
 for(const r of added.rooms){inventory.scenes.push(r.id);inventory.rooms.push({id:r.id,title:r.title,intro:r.intro,alt:r.alt});}
 const assets={};
 for(const folder of ['scenes','portraits']) for(const name of fs.readdirSync(path.join(root,'art',folder)).filter(n=>n.endsWith('.webp')).sort()) assets[folder+'/'+name.slice(0,-5)]='data:image/webp;base64,'+fs.readFileSync(path.join(root,'art',folder,name)).toString('base64');
 const needed=inventory.scenes.filter(n=>n!=='end').map(n=>'scenes/'+n).concat(['ring','break','steal','keep','collapse','deadlock'].map(n=>'scenes/end-'+n),['guard','thief','witch','cantor'].map(n=>'portraits/'+n));
 for(const id of needed)if(!assets[id])throw Error('Missing art asset '+id);
 const labels=Object.fromEntries(inventory.rooms.map(r=>[r.id,r.alt]));
+Object.assign(labels,adventure.scenes);
 Object.assign(labels,{title:'Two shadowy travelers holding amber and mint lamps beneath a colossal cracked bell',end:'The Bellheart after the final choice',names:'Two travelers lighting their lamps at the threshold of the Undertoll'});
 const manifest={edition:'Undertoll',scenes:inventory.scenes,rooms:inventory.rooms.map(r=>r.id),labels,assets:Object.keys(assets)};
 fs.writeFileSync(path.join(root,'art/manifest.json'),JSON.stringify(manifest,null,2));
@@ -22,6 +25,7 @@ html=html.replace('</head>','<style id="undertoll-theme">\n'+fs.readFileSync(pat
 html=html.replace(/function blankDie\(\) \{ return `<svg[^\n]+\n/,'function blankDie() { return A.die(0); }\n');
 html=pack.inject(html,added);
 html=require('./story-edits.cjs')(html,root);
+html=require('./adventure-edits.cjs')(html,root);
 html=require('./ui-edits.cjs')(html);
 html=require('./net-edits.cjs')(html,root);
 html=html.replace(/ · art drawn in code/g,' · Undertoll art edition');

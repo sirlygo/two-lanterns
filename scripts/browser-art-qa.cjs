@@ -46,7 +46,7 @@ let qaBrowser;
  }
  for(let k=0;k<30;k++){if(await page.evaluate(()=>__tl.S.lead!==null))break;await page.locator('[data-act="first"]').click();await page.waitForFunction(()=>!__tl.ui.rolling);}
  await page.locator('[data-act="descend"]').click();
- for(let step=0;step<120;step++){
+ for(let step=0;step<240;step++){
   const state=await page.evaluate(()=>({screen:__tl.S.screen,room:__tl.S.room,rolled:!!__tl.S.rl,sel:__tl.S.sel}));
   await check(state.screen+'-'+state.room);
   if(state.screen==='ending'){await page.screenshot({path:path.join(out,'desktop-ending.png'),fullPage:true});break;}
@@ -66,6 +66,10 @@ let qaBrowser;
     await page.locator('[data-act="sel"][data-i="'+opts[0].i+'"]').click();
     if(state.room===0)await page.screenshot({path:path.join(out,'desktop-choices.png'),fullPage:true});
     await page.locator('[data-act="lock"]').click();
+  }else if(state.screen==='adventure'){
+    const p=await page.evaluate(()=>({kind:__tl.S.adventure.phase.kind,stage:__tl.S.adventure.phase.stage}));
+    if(p.stage==='result')await page.locator('[data-act="adventure-ready"]').click();
+    else {const i=({risk:0,bargain:2,guide:0,guideReturn:1,merchant:1,festival:0,falseexit:2,huntsman:4})[p.kind];await page.locator('[data-act="adventure-vote"][data-i="'+i+'"]').click();}
   }else if(state.screen==='handoff')await page.locator('[data-act="ho"]').click();
   else if(state.screen==='roll'){
     if(!state.rolled){await page.locator('[data-act="roll"]').click();await page.waitForFunction(()=>!__tl.ui.rolling);}

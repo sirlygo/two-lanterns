@@ -14,6 +14,7 @@
   var on = false, activated = false, audio = null, loaded = null, shown = null, auto = null, hush = null;
   var queued = false, host = null;
   var passages = [], position = 0, running = false;
+  var publicPassages = [], fullPassages = [];
   try { on = localStorage.getItem(STORE) === 'on'; } catch (e) {}
 
   function node(tag, cls, html) {
@@ -72,7 +73,8 @@
     sync();
   }
 
-  function start() {
+  function start(includePrivate) {
+    passages = (includePrivate ? fullPassages : publicPassages).slice();
     if (!passages.length) return;
     position = 0;
     running = true;
@@ -94,7 +96,7 @@
     var btn = row.querySelector('.nv-play');
     if (btn && btn.getAttribute('data-s') !== state) {
       btn.setAttribute('data-s', state);
-      btn.innerHTML = (state === 'live' ? STOP : PLAY) + '<span>' + (state === 'bad' ? 'Unavailable' : state === 'live' ? 'Stop' : 'Listen') + '</span>';
+      btn.innerHTML = (state === 'live' ? STOP : PLAY) + '<span>' + (state === 'bad' ? 'Unavailable' : state === 'live' ? 'Stop' : fullPassages.length > publicPassages.length ? 'Listen privately' : 'Listen') + '</span>';
       btn.disabled = state === 'bad';
     }
     var fill = row.querySelector('.nv-fill');
@@ -140,6 +142,7 @@
     running = false;
     shown = null;
     passages = [];
+    publicPassages = []; fullPassages = [];
     auto = null;
     if (audio && !audio.paused) audio.pause();
   }
@@ -147,14 +150,18 @@
   function scan() {
     queued = false;
     var spots = host.querySelectorAll(SPOTS);
-    var keys = [].slice.call(spots).map(function (spot) { return narrationKey(spot.textContent); }).filter(function (key) { return !!M.clips[key]; });
+    var list = [].slice.call(spots);
+    var keysOf = function (nodes) { return nodes.map(function (spot) { return narrationKey(spot.textContent); }).filter(function (key) { return !!M.clips[key]; }); };
+    var allKeys = keysOf(list), keys = keysOf(list.filter(function (spot) { return !spot.hasAttribute('data-private-narration'); }));
     if (!spots.length || (!keys.length && !host.querySelector('.screen.title'))) { leave(); return; }
-    var want = keys.join('|');
-    mount(spots[spots.length - 1], want);
+    var want = allKeys.join('|');
+    var visible = list.filter(function (spot) { return !spot.closest('details:not([open])'); });
+    mount(visible.length ? visible[visible.length - 1] : spots[0], want);
     if (want !== shown) {
       running = false;
       if (audio && !audio.paused) audio.pause();
       passages = keys;
+      publicPassages = keys; fullPassages = allKeys;
       position = 0;
       shown = want;
       if (want && on && activated && want !== auto) { auto = want; start(); }
@@ -188,7 +195,7 @@
     var key = shown || '';
     if (t.classList.contains('nv-play')) {
       if (live()) halt();
-      else if (key) { auto = key; start(); }
+      else if (key) { auto = key; start(true); }
     } else {
       on = !on;
       try { localStorage.setItem(STORE, on ? 'on' : 'off'); } catch (err) {}

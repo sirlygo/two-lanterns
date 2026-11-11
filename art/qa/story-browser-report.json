@@ -1,6 +1,8 @@
 {
   "ok": true,
   "textOnly": false,
+  "pendingVoiceAllowed": true,
+  "pendingVoiceCount": 18,
   "checks": [
     {
       "label": "title",
@@ -104,8 +106,8 @@
     },
     {
       "label": "stair:aftermath",
-      "words": 94,
-      "narration": true
+      "words": 132,
+      "narration": false
     },
     {
       "label": "nave:arrival",
@@ -134,7 +136,7 @@
     },
     {
       "label": "gallery:aftermath",
-      "words": 91,
+      "words": 92,
       "narration": true
     },
     {
@@ -164,8 +166,8 @@
     },
     {
       "label": "weaver:aftermath",
-      "words": 94,
-      "narration": true
+      "words": 131,
+      "narration": false
     },
     {
       "label": "mirror:arrival",
@@ -179,8 +181,8 @@
     },
     {
       "label": "mirror:aftermath",
-      "words": 90,
-      "narration": true
+      "words": 128,
+      "narration": false
     },
     {
       "label": "treasury:arrival",
@@ -224,8 +226,8 @@
     },
     {
       "label": "ossuary:aftermath",
-      "words": 96,
-      "narration": true
+      "words": 133,
+      "narration": false
     },
     {
       "label": "salt:arrival",
@@ -269,7 +271,7 @@
     },
     {
       "label": "candle:aftermath",
-      "words": 90,
+      "words": 91,
       "narration": true
     },
     {
@@ -314,8 +316,8 @@
     },
     {
       "label": "ferry:aftermath",
-      "words": 96,
-      "narration": true
+      "words": 134,
+      "narration": false
     },
     {
       "label": "orchard:arrival",
@@ -419,7 +421,7 @@
     },
     {
       "label": "dice:aftermath",
-      "words": 91,
+      "words": 92,
       "narration": true
     },
     {
@@ -494,8 +496,8 @@
     },
     {
       "label": "chapter:aftermath",
-      "words": 93,
-      "narration": true
+      "words": 130,
+      "narration": false
     },
     {
       "label": "bridge:arrival",
@@ -509,8 +511,8 @@
     },
     {
       "label": "bridge:aftermath",
-      "words": 91,
-      "narration": true
+      "words": 129,
+      "narration": false
     },
     {
       "label": "organ:arrival",
@@ -539,8 +541,8 @@
     },
     {
       "label": "greenhouse:aftermath",
-      "words": 92,
-      "narration": true
+      "words": 129,
+      "narration": false
     },
     {
       "label": "doors:arrival",
@@ -599,8 +601,8 @@
     },
     {
       "label": "quarry:aftermath",
-      "words": 94,
-      "narration": true
+      "words": 132,
+      "narration": false
     },
     {
       "label": "stable:arrival",
@@ -629,7 +631,7 @@
     },
     {
       "label": "windows:aftermath",
-      "words": 88,
+      "words": 89,
       "narration": true
     },
     {
@@ -674,8 +676,8 @@
     },
     {
       "label": "lamps:aftermath",
-      "words": 92,
-      "narration": true
+      "words": 130,
+      "narration": false
     },
     {
       "label": "sluice:arrival",
@@ -689,8 +691,8 @@
     },
     {
       "label": "sluice:aftermath",
-      "words": 93,
-      "narration": true
+      "words": 131,
+      "narration": false
     },
     {
       "label": "wake:arrival",
@@ -719,8 +721,8 @@
     },
     {
       "label": "maps:aftermath",
-      "words": 91,
-      "narration": true
+      "words": 129,
+      "narration": false
     },
     {
       "label": "ropewalk:arrival",
@@ -734,8 +736,8 @@
     },
     {
       "label": "ropewalk:aftermath",
-      "words": 93,
-      "narration": true
+      "words": 131,
+      "narration": false
     },
     {
       "label": "confess:arrival",
@@ -749,8 +751,8 @@
     },
     {
       "label": "confess:aftermath",
-      "words": 88,
-      "narration": true
+      "words": 125,
+      "narration": false
     },
     {
       "label": "collectors:arrival",
@@ -764,8 +766,8 @@
     },
     {
       "label": "collectors:aftermath",
-      "words": 71,
-      "narration": true
+      "words": 109,
+      "narration": false
     },
     {
       "label": "hounds:arrival",
@@ -779,8 +781,8 @@
     },
     {
       "label": "hounds:aftermath",
-      "words": 77,
-      "narration": true
+      "words": 115,
+      "narration": false
     },
     {
       "label": "wickthief:arrival",
@@ -794,8 +796,8 @@
     },
     {
       "label": "wickthief:aftermath",
-      "words": 82,
-      "narration": true
+      "words": 120,
+      "narration": false
     },
     {
       "label": "ending:ring:strong",

@@ -11,6 +11,6 @@ The original game and move-specific prose remain in `backups/index-placeholders.
 
 `scripts/story-edits.cjs` injects the layers into the preserved source. `npm run build` rebuilds the full page with art, narrator and music. `npm run verify` checks coverage and rules. `npm run qa` checks the rendered screens, mobile layouts, copied epilogues and voice sequencing.
 
-The 175 expanded passages add 9,749 words. They are all recorded using the existing ElevenLabs configuration; the game now has 246 clips in total. The narrator reads a screen’s passages in document order. Existing recordings are reused, and each new screen has a Listen control. Story can be read or skipped at the players’ own pace.
+The 175 expanded passages add 9,749 words. They are all recorded using the existing ElevenLabs configuration, giving the core story 246 clips. The Adventure layer adds further passages; see `adventure/README.md` for their current recording status. The narrator reads public passages in document order and requires explicit private listening for sealed notes. Story can be read or skipped at the players’ own pace.
 
 To edit prose, change the data files, run `npm run narrate -- --list`, record the changed passages with `npm run narrate`, then build and verify. The generator handles API credentials locally and keeps completed clips when interrupted.

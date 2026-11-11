@@ -2,6 +2,276 @@
   "version": 1,
   "base": "audio/narration/",
   "clips": {
+    "32whvzdf33": {
+      "id": "adventure-bargain",
+      "f": "adventure-bargain.h0egd9.mp3",
+      "spec": "h0egd9ednq",
+      "chars": 345,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T23:44:00.098Z"
+    },
+    "mup3jgeb60": {
+      "id": "adventure-bargainDone",
+      "f": "adventure-bargainDone.2eq5b5.mp3",
+      "spec": "2eq5b5knsm3",
+      "chars": 338,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T23:44:00.592Z"
+    },
+    "1ksu5vksvsc": {
+      "id": "adventure-confession",
+      "f": "adventure-confession.2cyybz.mp3",
+      "spec": "2cyybz89z3l",
+      "chars": 261,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T23:44:03.732Z"
+    },
+    "233u7gdkjvw": {
+      "id": "adventure-falseexit",
+      "f": "adventure-falseexit.2ndzna.mp3",
+      "spec": "2ndznae8a0",
+      "chars": 378,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T23:44:39.626Z"
+    },
+    "1h93eycxc0i": {
+      "id": "adventure-falseexitDone",
+      "f": "adventure-falseexitDone.1al173.mp3",
+      "spec": "1al173ow9br",
+      "chars": 290,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T23:44:40.741Z"
+    },
+    "1obusbqtui7": {
+      "id": "adventure-festival",
+      "f": "adventure-festival.15z3ex.mp3",
+      "spec": "15z3exuawm",
+      "chars": 414,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T23:44:36.395Z"
+    },
+    "trnn38sf6u": {
+      "id": "adventure-festivalDone",
+      "f": "adventure-festivalDone.245vab.mp3",
+      "spec": "245vabz8fpp",
+      "chars": 276,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T23:44:34.289Z"
+    },
+    "1hkw2g6w48e": {
+      "id": "adventure-huntsman",
+      "f": "adventure-huntsman.32xwim.mp3",
+      "spec": "32xwimoj9h",
+      "chars": 343,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T23:44:44.720Z"
+    },
+    "21htw2u2mfe": {
+      "id": "adventure-merchant",
+      "f": "adventure-merchant.pja384.mp3",
+      "spec": "pja384y5pp",
+      "chars": 372,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T23:44:29.782Z"
+    },
+    "1touvxyp2wv": {
+      "id": "adventure-merchantDone",
+      "f": "adventure-merchantDone.1l29dh.mp3",
+      "spec": "1l29dhupye5",
+      "chars": 314,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T23:44:29.834Z"
+    },
+    "17wzhv8zr5g": {
+      "id": "adventure-nim",
+      "f": "adventure-nim.fjx5k9.mp3",
+      "spec": "fjx5k9ccei",
+      "chars": 354,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T23:44:09.022Z"
+    },
+    "2ek9n1rb086": {
+      "id": "adventure-nimBusiness",
+      "f": "adventure-nimBusiness.1dtoer.mp3",
+      "spec": "1dtoer8w9fz",
+      "chars": 359,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T23:44:20.345Z"
+    },
+    "10rrqaleglc": {
+      "id": "adventure-nimFarewell",
+      "f": "adventure-nimFarewell.1ytxzd.mp3",
+      "spec": "1ytxzdqcnfn",
+      "chars": 294,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T23:44:24.533Z"
+    },
+    "1gnni9ywnoc": {
+      "id": "adventure-nimFreed",
+      "f": "adventure-nimFreed.28k6pw.mp3",
+      "spec": "28k6pwif4gc",
+      "chars": 326,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T23:44:10.382Z"
+    },
+    "tjwhnmgiba": {
+      "id": "adventure-nimFriend",
+      "f": "adventure-nimFriend.25wpvh.mp3",
+      "spec": "25wpvh0w2ew",
+      "chars": 333,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T23:44:20.510Z"
+    },
+    "28xi33nqbyi": {
+      "id": "adventure-nimGift",
+      "f": "adventure-nimGift.1pp9ct.mp3",
+      "spec": "1pp9ctfrnew",
+      "chars": 306,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T23:44:25.512Z"
+    },
+    "2adbsxkxyoe": {
+      "id": "adventure-nimHired",
+      "f": "adventure-nimHired.1hgk6h.mp3",
+      "spec": "1hgk6huknir",
+      "chars": 340,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T23:44:14.922Z"
+    },
+    "vos2pt1wbf": {
+      "id": "adventure-nimLeft",
+      "f": "adventure-nimLeft.srdk9u.mp3",
+      "spec": "srdk9uebyc",
+      "chars": 285,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T23:44:14.893Z"
+    },
+    "i6arvgy67q": {
+      "id": "adventure-risk",
+      "f": "adventure-risk.16cssr.mp3",
+      "spec": "16cssrt5u04",
+      "chars": 353,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T23:43:42.937Z"
+    },
+    "2edn2901t6n": {
+      "id": "adventure-riskBank",
+      "f": "adventure-riskBank.1fmwic.mp3",
+      "spec": "1fmwic3edc",
+      "chars": 240,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T23:43:55.348Z"
+    },
+    "pucm564em1": {
+      "id": "adventure-riskDeep",
+      "f": "adventure-riskDeep.1f24mv.mp3",
+      "spec": "1f24mvtnuqa",
+      "chars": 304,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T23:43:50.216Z"
+    },
+    "1tz5eoptcsz": {
+      "id": "adventure-riskDeepLose",
+      "f": "adventure-riskDeepLose.r7lky5.mp3",
+      "spec": "r7lky52020",
+      "chars": 283,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T23:43:54.591Z"
+    },
+    "91xf0rp2mg": {
+      "id": "adventure-riskDeepWin",
+      "f": "adventure-riskDeepWin.wucsf9.mp3",
+      "spec": "wucsf9824x",
+      "chars": 320,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T23:43:51.555Z"
+    },
+    "7ghdzdw9l": {
+      "id": "adventure-riskLose",
+      "f": "adventure-riskLose.s21204.mp3",
+      "spec": "s2120443i8",
+      "chars": 271,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T23:43:46.756Z"
+    },
+    "216dkzx30c9": {
+      "id": "adventure-riskSafe",
+      "f": "adventure-riskSafe.1hvp81.mp3",
+      "spec": "1hvp81v28l7",
+      "chars": 268,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T23:43:41.218Z"
+    },
+    "b2686guce8": {
+      "id": "adventure-riskWin",
+      "f": "adventure-riskWin.3205sv.mp3",
+      "spec": "3205svxkfs",
+      "chars": 316,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T23:43:46.044Z"
+    },
+    "1etkwp4ske5": {
+      "id": "adventure-settlement",
+      "f": "adventure-settlement.28af4i.mp3",
+      "spec": "28af4iw0n8c",
+      "chars": 303,
+      "voice": "gUU37agQvEpxeWrZUIMk",
+      "model": "eleven_v4",
+      "format": "mp3_44100_96",
+      "at": "2026-11-10T23:44:05.628Z"
+    },
     "1gjejn4kutm": {
       "id": "bridge-cold",
       "f": "bridge-cold.35cf7o.mp3",

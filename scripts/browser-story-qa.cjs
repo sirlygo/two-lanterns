@@ -3,6 +3,10 @@ const fs = require('node:fs'), path = require('node:path'), assert = require('no
 const dependency = name => require(process.env.TWO_LANTERNS_NODE_MODULES ? path.join(process.env.TWO_LANTERNS_NODE_MODULES, name) : name);
 const { chromium } = dependency('playwright'), root = path.resolve(__dirname, '..'), rooms = require('../story/room-pages.cjs'), scenes = require('../story/page-scenes.cjs');
 const textOnly = !!process.env.TWO_LANTERNS_TEXT_ONLY, checks = [], errors = []; let browser;
+const allowPending = !!process.env.TWO_LANTERNS_ALLOW_PENDING_VOICE;
+const narrationLib = require('./narration-lib.cjs');
+const recorded = narrationLib.readManifest().clips;
+const pending = new Set(narrationLib.buildItems(narrationLib.readGame(), narrationLib.loadConfig()).filter(it => !recorded[it.key]).map(it => it.key));
 (async () => {
   browser = await chromium.launch({ headless: true, executablePath: process.env.TWO_LANTERNS_CHROME || undefined });
   const page = await browser.newPage({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' });
@@ -37,21 +41,22 @@ const textOnly = !!process.env.TWO_LANTERNS_TEXT_ONLY, checks = [], errors = [];
   }
   async function check(label, expected) {
     if (!textOnly) await page.waitForFunction(() => {
-      const expected = [...document.querySelectorAll('.screen [data-narrate], .screen.stall p.story, .screen.title p.tag')].map(p => __narrator.key(p.textContent));
+      const expected = [...document.querySelectorAll('.screen [data-narrate]:not([data-private-narration]), .screen.stall p.story, .screen.title p.tag')].map(p => __narrator.key(p.textContent)).filter(k => __narrator.clips[k]);
       return JSON.stringify(__narrator.state().queue) === JSON.stringify(expected);
     });
     const result = await page.evaluate(() => ({
       text: document.querySelector('.screen').textContent,
       long: [...document.querySelectorAll('.long-story')].map(p => p.textContent),
       marked: [...document.querySelectorAll('[data-narrate]')].map(p => p.textContent),
-      missing: [...document.querySelectorAll('[data-narrate]')].filter(p => !__narrator.clips[__narrator.key(p.textContent)]).map(p => p.textContent.slice(0, 60)),
+      missing: [...document.querySelectorAll('[data-narrate]')].filter(p => !__narrator.clips[__narrator.key(p.textContent)]).map(p => ({ key: __narrator.key(p.textContent), text: p.textContent.slice(0, 60) })),
       overflow: document.documentElement.scrollWidth > innerWidth
     }));
     assert(!result.overflow, label + ' overflows on mobile'); assert(result.long.includes(expected), 'Missing scene: ' + label);
-    if (!textOnly) assert.deepEqual(result.missing, [], 'Unvoiced prose: ' + label);
+    if (!textOnly && !allowPending) assert.deepEqual(result.missing, [], 'Unvoiced prose: ' + label);
+    if (!textOnly && allowPending) assert(result.missing.every(p => pending.has(p.key)), 'Unexpected unrecorded text: ' + label);
     if (!textOnly) {
       const sequence = await page.evaluate(() => ({
-        expected: [...document.querySelectorAll('.screen [data-narrate], .screen.stall p.story, .screen.title p.tag')].map(p => __narrator.key(p.textContent)),
+        expected: [...document.querySelectorAll('.screen [data-narrate]:not([data-private-narration]), .screen.stall p.story, .screen.title p.tag')].map(p => __narrator.key(p.textContent)).filter(k => __narrator.clips[k]),
         actual: __narrator.state().queue
       }));
       assert.deepEqual(sequence.actual, sequence.expected, 'Narrator order differs from the visible story: ' + label);
@@ -84,7 +89,7 @@ const textOnly = !!process.env.TWO_LANTERNS_TEXT_ONLY, checks = [], errors = [];
   await page.setViewportSize({ width: 1280, height: 1000 }); await check('nave:desktop-arrival', rooms.nave.arrival);
   await page.screenshot({ path: path.join(root, 'art/qa/long-story-desktop.png'), fullPage: true });
   assert.deepEqual(errors, []);
-  const report = { ok: true, textOnly, checks, errors }; fs.writeFileSync(path.join(root, 'art/qa/story-browser-report.json'), JSON.stringify(report, null, 2));
+  const report = { ok: true, textOnly, pendingVoiceAllowed: allowPending, pendingVoiceCount: pending.size, checks, errors }; fs.writeFileSync(path.join(root, 'art/qa/story-browser-report.json'), JSON.stringify(report, null, 2));
   console.log(JSON.stringify({ ok: true, screens: checks.length, expandedRooms: Object.keys(rooms).length, endingTypes: Object.keys(scenes.endings).length, textOnly, errors }));
   await browser.close();
 })().catch(async e => { console.error(e); if (browser) await browser.close(); process.exitCode = 1; });
