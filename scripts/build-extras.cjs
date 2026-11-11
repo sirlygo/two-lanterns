@@ -32,6 +32,23 @@ for (const [id, css, js] of parts) {
     if (code.split('__MUSIC_MANIFEST__').length !== 2) throw Error('sound/runtime.js must hold the music placeholder exactly once');
     code = code.replace('__MUSIC_MANIFEST__', () => JSON.stringify(music).replace(/</g, '\\u003c'));
     extra.music = music ? Object.keys(music.tracks) : [];
+    /* the effects: carried in the page itself, so they play at once, with no signal, and from a folder */
+    let sfx = null;
+    if (fs.existsSync(path.join(root, 'sfx/manifest.json'))) {
+      const m = JSON.parse(read('sfx/manifest.json')), base = m.base || 'audio/sfx/', gains = {}, out = {};
+      if (fs.existsSync(path.join(root, 'sfx/effects.json'))) for (const e of JSON.parse(read('sfx/effects.json')).effects || []) gains[e.id] = +e.gain || 0;
+      for (const [k, e] of Object.entries(m.effects || {})) {
+        if (!e || !e.f || !fs.existsSync(path.join(root, base, e.f))) continue;
+        const buf = fs.readFileSync(path.join(root, base, e.f));
+        if (buf.length > 600000) throw Error('audio/sfx/' + e.f + ' is too big to carry in the page (' + buf.length + ' bytes)');
+        if (gains[k] < 0 || gains[k] > 3) throw Error('sfx/effects.json: "' + k + '" gain must be between 0 and 3');
+        out[k] = Object.assign({ d: buf.toString('base64') }, gains[k] ? { gain: gains[k] } : {});
+      }
+      if (Object.keys(out).length) sfx = out;
+    }
+    if (code.split('__SFX_MANIFEST__').length !== 2) throw Error('sound/runtime.js must hold the effects placeholder exactly once');
+    code = code.replace('__SFX_MANIFEST__', () => JSON.stringify(sfx));
+    extra.sfx = sfx ? Object.keys(sfx) : [];
   }
   if (/<\/script/i.test(code)) throw Error(js + ' must not contain a closing script tag');
   block += '<style id="' + id + '-css">\n' + read(css).trim() + '\n</style>\n<script id="' + id + '-runtime">\n' + code.trim() + '\n</script>\n';
@@ -43,4 +60,4 @@ const at = html.indexOf('</head>');
 if (at < 0) throw Error('index.html has no </head>');
 html = html.slice(0, at) + block + html.slice(at);
 fs.writeFileSync(path.join(root, 'index.html'), html);
-console.log(JSON.stringify({ extras: parts.map(p => p[0]).concat(['install', 'offline']), music: extra.music, bytes: Buffer.byteLength(html) }));
+console.log(JSON.stringify({ extras: parts.map(p => p[0]).concat(['install', 'offline']), music: extra.music, sfx: extra.sfx, bytes: Buffer.byteLength(html) }));

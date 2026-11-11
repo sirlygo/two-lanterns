@@ -1,0 +1,22 @@
+{
+  "modelId": "eleven_text_to_sound_v2",
+  "outputFormat": "mp3_44100_128",
+  "influence": 0.6,
+  "style": "Recorded close and clean in a quiet stone crypt, natural short reverb, no music, no voices, no background noise.",
+  "effects": [
+    { "id": "tick", "seconds": 0.5, "prompt": "A single soft wooden click, like a small latch closing. Very short and dry." },
+    { "id": "rattle", "seconds": 1, "prompt": "Two bone dice shaken and rattling together in cupped hands. Rattling only, they do not land." },
+    { "id": "land", "seconds": 0.6, "prompt": "Two bone dice thrown onto a stone table, landing and settling quickly." },
+    { "id": "toll", "seconds": 5, "prompt": "One deep bronze church bell struck once, with a long resonant decay." },
+    { "id": "disaster", "seconds": 2, "prompt": "A low ominous impact with a dissonant muffled bell and a short dark rumble. Something has gone badly wrong." },
+    { "id": "scrape", "seconds": 1.5, "prompt": "A dull muted wooden knock followed by one tense low plucked string. A narrow escape." },
+    { "id": "success", "seconds": 2, "prompt": "Two soft warm notes rising on small bronze handbells. A gentle success." },
+    { "id": "triumph", "seconds": 2.5, "prompt": "A bright rising run of four small bronze handbells ending in a soft shimmer. Triumphant but restrained." },
+    { "id": "coin", "seconds": 1, "prompt": "Three old coins dropped onto a wooden counter, clinking." },
+    { "id": "shop", "seconds": 1.5, "prompt": "A small brass shop bell above a door, jingling twice." },
+    { "id": "joined", "seconds": 1.2, "prompt": "Two soft rising notes on a glass chime. Friendly, someone has arrived." },
+    { "id": "end", "seconds": 8, "prompt": "A huge ancient bronze bell tolling once, very deep, in a vast underground chamber, with a very long decay." },
+    { "id": "crack", "seconds": 2.5, "prompt": "A great bronze bell cracking and splitting apart with a sharp metallic fracture and a dying ring." },
+    { "id": "rumble", "seconds": 4, "prompt": "A stone ceiling collapsing far underground. Deep rumble with falling rubble, fading out." }
+  ]
+}

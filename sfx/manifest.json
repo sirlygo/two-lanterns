@@ -1,0 +1,103 @@
+{
+  "base": "audio/sfx/",
+  "effects": {
+    "tick": {
+      "f": "tick.yuhb6a.mp3",
+      "k": "yuhb6a",
+      "seconds": 0.5,
+      "model": "eleven_text_to_sound_v2",
+      "bytes": 8820
+    },
+    "rattle": {
+      "f": "rattle.112ynyu.mp3",
+      "k": "112ynyu",
+      "seconds": 1,
+      "model": "eleven_text_to_sound_v2",
+      "bytes": 17179
+    },
+    "land": {
+      "f": "land.1xu0ga1.mp3",
+      "k": "1xu0ga1",
+      "seconds": 0.6,
+      "model": "eleven_text_to_sound_v2",
+      "bytes": 10492
+    },
+    "toll": {
+      "f": "toll.1ysx76n.mp3",
+      "k": "1ysx76n",
+      "seconds": 5,
+      "model": "eleven_text_to_sound_v2",
+      "bytes": 81127
+    },
+    "disaster": {
+      "f": "disaster.1j3zv1q.mp3",
+      "k": "1j3zv1q",
+      "seconds": 2,
+      "model": "eleven_text_to_sound_v2",
+      "bytes": 33061
+    },
+    "scrape": {
+      "f": "scrape.1c2seyn.mp3",
+      "k": "1c2seyn",
+      "seconds": 1.5,
+      "model": "eleven_text_to_sound_v2",
+      "bytes": 24702
+    },
+    "success": {
+      "f": "success.zsjpyi.mp3",
+      "k": "zsjpyi",
+      "seconds": 2,
+      "model": "eleven_text_to_sound_v2",
+      "bytes": 33061
+    },
+    "triumph": {
+      "f": "triumph.8nk2z2.mp3",
+      "k": "8nk2z2",
+      "seconds": 2.5,
+      "model": "eleven_text_to_sound_v2",
+      "bytes": 40585
+    },
+    "coin": {
+      "f": "coin.c1oduy.mp3",
+      "k": "c1oduy",
+      "seconds": 1,
+      "model": "eleven_text_to_sound_v2",
+      "bytes": 17179
+    },
+    "shop": {
+      "f": "shop.xt7jzw.mp3",
+      "k": "xt7jzw",
+      "seconds": 1.5,
+      "model": "eleven_text_to_sound_v2",
+      "bytes": 24702
+    },
+    "joined": {
+      "f": "joined.un0x0q.mp3",
+      "k": "un0x0q",
+      "seconds": 1.2,
+      "model": "eleven_text_to_sound_v2",
+      "bytes": 20105
+    },
+    "end": {
+      "f": "end.o6mdqd.mp3",
+      "k": "o6mdqd",
+      "seconds": 8,
+      "model": "eleven_text_to_sound_v2",
+      "bytes": 129192
+    },
+    "crack": {
+      "f": "crack.s7f410.mp3",
+      "k": "s7f410",
+      "seconds": 2.5,
+      "model": "eleven_text_to_sound_v2",
+      "bytes": 40585
+    },
+    "rumble": {
+      "f": "rumble.5hpawy.mp3",
+      "k": "5hpawy",
+      "seconds": 4,
+      "model": "eleven_text_to_sound_v2",
+      "bytes": 65244
+    }
+  }
+}

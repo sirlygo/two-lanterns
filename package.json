@@ -8,7 +8,8 @@
     "verify": "node scripts/verify-art.cjs && node scripts/verify-descent.cjs && node scripts/verify-pages.cjs && node scripts/verify-adventure.cjs && node scripts/verify-narration.cjs && node scripts/verify-extras.cjs",
     "qa": "node scripts/browser-art-qa.cjs && node scripts/browser-descent-qa.cjs && node scripts/browser-story-qa.cjs && node scripts/browser-adventure-qa.cjs",
     "narrate": "node scripts/narrate.cjs",
-    "music": "node scripts/music.cjs"
+    "music": "node scripts/music.cjs",
+    "sfx": "node scripts/sfx.cjs"
   },
   "devDependencies": {
     "playwright": "1.62.1",

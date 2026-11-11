@@ -1,6 +1,7 @@
 /* Two Lanterns :: sound and touch.
-   The effects are made in the browser as they are needed: a toll at each new room, dice, a short phrase for each outcome, coin at
-   the stall, and a small buzz on phones that can. Under them plays the score in audio/music (made by scripts/music.cjs): a title
+   The effects are recordings made by scripts/sfx.cjs and carried inside the page: a toll at each new room, dice, a short phrase
+   for each outcome, coin at the stall, and a small buzz on phones that can. An effect that has not been made is built in the
+   browser instead, as all of them once were. Under them plays the score in audio/music (made by scripts/music.cjs): a title
    theme, three moods for the descent that follow the Bell, the chandler's landing and the ending, cross-faded and looped. Where a
    track has not been made the next nearest is used, and with no tracks at all a low drone made in the browser stands in. One button in the header steps through All sound, Effects only and Off, and the choice is saved on this device.
    It watches the page and never touches the game: with this file left out, the game plays exactly as before.
@@ -10,6 +11,8 @@
   var STORE = 'twolanterns.sound', MODES = ['all', 'fx', 'off'];
   var MUSIC = __MUSIC_MANIFEST__;      /* { base, tracks: { id: { f } } } or null, written in by the build */
   var hasMusic = !!(MUSIC && MUSIC.tracks && Object.keys(MUSIC.tracks).length);
+  var SFX = __SFX_MANIFEST__;      /* { id: { d: the recording in base64, gain } } or null, written in by the build */
+  var shots = {};      /* id -> { buf, at, gain }: decoded, with the silence before the sound measured and the loudness evened out */
   var LABEL = { all: 'Sound: all', fx: 'Sound: effects only', off: 'Sound: off' };
   var ICON = {
     all: '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z" fill="currentColor"/><path d="M15 9a4.2 4.2 0 0 1 0 6M17.6 6.6a7.6 7.6 0 0 1 0 10.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>',
@@ -24,7 +27,7 @@
   var still = false;
   try { still = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
 
-  function note(n) { log.push(n); if (log.length > 60) log.shift(); }
+  function note(n) { log.push(n); if (log.length > 240) log.shift(); }
   function T() { return window.__tl || null; }
   function buzz(p) { try { if (mode !== 'off' && touched && !still && navigator.vibrate) navigator.vibrate(p); } catch (e) {} }
 
@@ -48,6 +51,7 @@
       for (var i = 0; i < n; i++) ch[i] = Math.random() * 2 - 1;
       noiseBuf = b;
     } catch (e) { ctx = null; return false; }
+    unpack();
     return true;
   }
   function wake() {
@@ -73,29 +77,80 @@
   var CUE = {
     tick: function () { hiss('highpass', 2600, 0.7, 0.03, 0.05); },
     rattle: function () { for (var i = 0; i < 9; i++) hiss('bandpass', 1100 + Math.random() * 1500, 5, 0.035, 0.16, i * 0.09 + Math.random() * 0.02); },
-    land: function () { hiss('bandpass', 900, 3, 0.06, 0.3); tone('sine', 150, 70, 0.14, 0.3); buzz(14); },
+    land: function () { hiss('bandpass', 900, 3, 0.06, 0.3); tone('sine', 150, 70, 0.14, 0.3); },
     toll: function (k) { bell(196 * Math.pow(2, -Math.min(7, k) / 9), 4.2, 0.2); },
     t0: function (w, hi) { tone('sine', 82, 38, 0.7, 0.5, w); hiss('lowpass', 240, 0.8, 0.5, 0.35, w); tone('sawtooth', 110 * hi, 104 * hi, 0.5, 0.05, w); },
     t1: function (w, hi) { tone('triangle', 196 * hi, 185 * hi, 0.35, 0.16, w); hiss('lowpass', 500, 1, 0.12, 0.14, w); },
     t2: function (w, hi) { bell(392 * hi, 0.9, 0.09, w); bell(523.25 * hi, 1.1, 0.09, w + 0.13); },
     t3: function (w, hi) { bell(392 * hi, 0.9, 0.09, w); bell(493.88 * hi, 0.9, 0.09, w + 0.11); bell(587.33 * hi, 1.0, 0.09, w + 0.22); bell(783.99 * hi, 1.8, 0.1, w + 0.34); },
-    coin: function () { tone('sine', 2350, 0, 0.22, 0.09); tone('sine', 3520, 0, 0.3, 0.06, 0.05); tone('sine', 2960, 0, 0.25, 0.05, 0.11); buzz(8); },
+    coin: function () { tone('sine', 2350, 0, 0.22, 0.09); tone('sine', 3520, 0, 0.3, 0.06, 0.05); tone('sine', 2960, 0, 0.25, 0.05, 0.11); },
     shop: function () { bell(880, 1.1, 0.06); bell(1174.7, 1.3, 0.05, 0.16); },
-    joined: function () { bell(523.25, 0.9, 0.07); bell(783.99, 1.3, 0.07, 0.15); buzz([10, 40, 10]); },
+    joined: function () { bell(523.25, 0.9, 0.07); bell(783.99, 1.3, 0.07, 0.15); },
     end: function (kind) {
       bell(98, 7, 0.32); bell(196, 5, 0.1, 0.02);
       if (kind === 'break') { hiss('highpass', 1800, 0.6, 0.35, 0.3, 0.5); tone('sawtooth', 300, 60, 0.9, 0.12, 0.5); }
       else if (kind === 'collapse' || kind === 'deadlock') { hiss('lowpass', 160, 0.7, 3, 0.5, 0.4); }
       else if (kind === 'ring') { bell(98, 7, 0.26, 1.6); }
-      buzz([30, 60, 30]);
     }
   };
   function play(name, a, b) {
     note(name + (a === undefined || a === null ? '' : ':' + a));
     if (mode === 'off' || !touched) return;
+    if (TOUCH[name]) buzz(TOUCH[name]);
     wake(); if (!ctx || ctx.state !== 'running') return;
-    try { CUE[name](a, b); } catch (e) {}
+    try { if (REC[name] && REC[name](a, b)) note('rec:' + name); else CUE[name](a, b); } catch (e) {}
   }
+
+  /* ---------- the recordings ---------- */
+  var TOUCH = { land: 14, coin: 8, joined: [10, 40, 10], end: [30, 60, 30] };
+  function unpack() {
+    if (!SFX || !ctx) return;
+    Object.keys(SFX).forEach(function (id) {
+      var e = SFX[id]; if (!e || !e.d || shots[id] !== undefined) return;
+      shots[id] = null;
+      try {
+        var bin = atob(e.d), u = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i);
+        var done = function (buf) {
+          var ch = buf.getChannelData(0), n = ch.length, peak = 0, at = 0, i;
+          for (i = 0; i < n; i++) { var v = ch[i] < 0 ? -ch[i] : ch[i]; if (v > peak) peak = v; }
+          if (peak < 0.002) return;      /* a silent take is no use: the browser-made sound stays */
+          for (i = 0; i < n; i++) { if ((ch[i] < 0 ? -ch[i] : ch[i]) > peak * 0.06) { at = i; break; } }
+          shots[id] = { buf: buf, at: Math.max(0, at / buf.sampleRate - 0.004), gain: Math.min(30, 0.8 / peak) * (+e.gain > 0 ? +e.gain : 1) };      /* some takes come back very quiet */
+          note('sfx-ready:' + id);
+        };
+        var pr = ctx.decodeAudioData(u.buffer, done, function () {});
+        if (pr && pr.catch) pr.catch(function () {});
+      } catch (err) { /* this one keeps its browser-made sound */ }
+    });
+  }
+  function shot(id, when, rate, level) {
+    var s = shots[id]; if (!s || !ctx) return false;
+    var src = ctx.createBufferSource(), g = ctx.createGain();
+    src.buffer = s.buf; src.playbackRate.value = rate || 1; g.gain.value = s.gain * (level === undefined ? 1 : level);
+    src.connect(g); g.connect(master);
+    src.start(ctx.currentTime + (when || 0), s.at);
+    return true;
+  }
+  /* each returns true when a recording played; false leaves the cue to the browser-made sound */
+  var TIER = ['disaster', 'scrape', 'success', 'triumph'];
+  function tier(n) { return function (w, hi) { return shot(TIER[n], w, hi > 1 ? 1.12 : 1, 0.8); }; }
+  var REC = {
+    tick: function () { return shot('tick', 0, 1, 0.35); },
+    rattle: function () { return shot('rattle', 0, 1, 0.7); },
+    land: function () { return shot('land', 0, 1, 0.8); },
+    toll: function (k) { return shot('toll', 0, Math.pow(2, -Math.min(7, k) / 14), 0.8); },
+    t0: tier(0), t1: tier(1), t2: tier(2), t3: tier(3),
+    coin: function () { return shot('coin', 0, 1, 0.7); },
+    shop: function () { return shot('shop', 0, 1, 0.6); },
+    joined: function () { return shot('joined', 0, 1, 0.7); },
+    end: function (kind) {
+      if (!shot('end', 0, 1, 1)) return false;
+      if (kind === 'break') shot('crack', 0.6, 1, 0.9);
+      else if (kind === 'collapse' || kind === 'deadlock') shot('rumble', 0.4, 1, 0.9);
+      else if (kind === 'ring') shot('end', 2.2, 1, 0.75);
+      return true;
+    }
+  };
 
   /* ---------- the bed: what the Undertoll sounds like when nothing is happening ---------- */
   function bedOn() {
@@ -268,7 +323,7 @@
   }
   function first() { if (!touched) { touched = true; } wake(); }
 
-  window.__sound = { state: function () { return { mode: mode, ctx: ctx ? ctx.state : 'none', bed: !!bed, touched: touched, music: hasMusic ? (mus.on ? mus.id : '') : null, tracks: hasMusic ? Object.keys(MUSIC.tracks) : [], decks: mus.decks ? mus.decks.map(function (d) { return { id: d.id, v: Math.round(d.v * 100) / 100, playing: !d.a.paused, at: Math.round(d.a.currentTime * 10) / 10, routed: !!d.g }; }) : [] }; }, log: log, cues: Object.keys(CUE) };
+  window.__sound = { state: function () { return { mode: mode, ctx: ctx ? ctx.state : 'none', bed: !!bed, touched: touched, music: hasMusic ? (mus.on ? mus.id : '') : null, sfx: Object.keys(shots).filter(function (k) { return !!shots[k]; }), lead: Object.keys(shots).filter(function (k) { return !!shots[k]; }).map(function (k) { return Math.round(shots[k].at * 100) / 100 + '/' + Math.round(shots[k].gain * 10) / 10; }), tracks: hasMusic ? Object.keys(MUSIC.tracks) : [], decks: mus.decks ? mus.decks.map(function (d) { return { id: d.id, v: Math.round(d.v * 100) / 100, playing: !d.a.paused, at: Math.round(d.a.currentTime * 10) / 10, routed: !!d.g }; }) : [] }; }, log: log, cues: Object.keys(CUE) };
 
   function init() {
     host = document.getElementById('app'); if (!host) return;

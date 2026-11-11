@@ -13,6 +13,12 @@ assert(!snd.includes('__MUSIC_MANIFEST__'), 'The music list was not written into
 const mm = snd.match(/var MUSIC = (.*?);\s+\/\* \{ base/); assert(mm, 'Missing the music list');
 const music = JSON.parse(mm[1]), tracks = music ? Object.keys(music.tracks) : [];
 for (const t of tracks) assert(fs.existsSync(path.join(root, music.base, music.tracks[t].f)), 'Missing music file for ' + t);
+assert(!snd.includes('__SFX_MANIFEST__'), 'The effects were not written into the page');
+const sm = snd.match(/var SFX = (.*?);\s+\/\* \{ id:/); assert(sm, 'Missing the effects list');
+const sfx = JSON.parse(sm[1]), effects = sfx ? Object.keys(sfx) : [];
+for (const e of effects) assert(Buffer.from(sfx[e].d, 'base64').length > 600, 'Effect ' + e + ' is empty');
+const known = ['tick', 'rattle', 'land', 'toll', 'disaster', 'scrape', 'success', 'triumph', 'coin', 'shop', 'joined', 'end', 'crack', 'rumble'];
+for (const e of effects) assert(known.includes(e), 'The game has no use for an effect called ' + e);
 const scripts = [...html.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/g)];
 assert(scripts.at(-1)[1].includes('window.__tl = '), 'The game must stay the last script on the page');
 assert(html.includes('<link rel="manifest" href="manifest.webmanifest">'), 'Missing manifest link');
@@ -52,4 +58,4 @@ assert.deepEqual(got(null, { games: 10 }).sort(), ['first', 'ten'], 'Feat ten');
 assert.deepEqual(got(null, { callings: 4 }).sort(), ['callings', 'first'], 'Feat callings');
 assert.equal(Object.keys(cases).length + 6, 32, 'Every feat has a test');
 assert.deepEqual(Array.from(F.evaluate({}, C0)), [], 'An unfinished descent earns nothing');
-console.log(JSON.stringify({ ok: true, feats: F.FEATS.length, music: tracks, sound: true, install: true, offline: true }));
+console.log(JSON.stringify({ ok: true, feats: F.FEATS.length, music: tracks, effects, sound: true, install: true, offline: true }));

@@ -37,7 +37,7 @@ These events fit between the existing eight rooms. Saves and online snapshots ca
 
 Three extras are baked into `index.html` by `scripts/build-extras.cjs`, the last step of `npm run build`. None of them edits the game: each one only watches the page, so the rules, the story and saved games are untouched.
 
-- `sound/`: every sound is made in the browser (no audio files). A low bed that tightens as the Bell grows restless, a toll for each room, dice, a phrase for each outcome, coin at the stall, and a short buzz on phones that support it. The button in the header steps through all sound, effects only and off, and the bed drops under the narrator.
+- `sound/`: the score and the effects (see Music and Sound effects below); anything not yet recorded is made in the browser. A low bed that tightens as the Bell grows restless, a toll for each room, dice, a phrase for each outcome, coin at the stall, and a short buzz on phones that support it. The button in the header steps through all sound, effects only and off, and the bed drops under the narrator.
 - `feats/`: 32 things worth doing on the way down, kept on the device, shown on the ending and in the Book of Endings. Erasing the Book erases them.
 - `manifest.webmanifest`, `sw.js`, `pwa/`: lets a phone add the game to its home screen and open it with no signal (one device; online rooms need the network). These files must be published beside `index.html`. The network is always tried first, so a new version shows up on the next load with a connection.
 
@@ -57,3 +57,18 @@ npm run build && npm run verify
 It uses the same key as the narrator (`.env.local`) and is billed by length against the ElevenLabs plan: the six tracks come to about ten and a half minutes. Tracks land in `audio/music/` and are listed in `music/manifest.json`; publish that folder beside `index.html`. To skip a slow opening or a fade at the end without paying for a new take, give the track `"from"` and `"to"` (seconds) in `music/tracks.json` and build again: the game starts it there and brings it round there. `"gain"` (for example 0.65) turns one track down against the others. To change a track, edit its prompt (or the shared `style`) and run `npm run music` again; `--force` makes a new take of the same prompt.
 
 In the game the tracks cross-fade, loop, drop under the narrator, and follow the sound button (all sound plays them, effects only and off do not). Until a track exists the nearest one is used, and with none at all the browser-made drone plays as before.
+
+## Sound effects
+
+The effects are made with the ElevenLabs Sound Effects API, from the prompts in `sfx/effects.json`: the tap, the dice (`rattle`, `land`), the room bell (`toll`), one for each outcome (`disaster`, `scrape`, `success`, `triumph`), `coin` and `shop` at the chandler's, `joined` when a partner arrives online, and the ending (`end`, with `crack` or `rumble` after it when the Bell breaks or the roof comes down).
+
+```
+npm run sfx -- --list           what exists (free)
+npm run sfx -- --only coin      make one first and listen to it
+npm run sfx                     make the rest
+npm run build && npm run verify
+```
+
+It uses the same key as the narrator and the music. Each effect's cost is printed as it is made; the fourteen come to about 33 seconds of sound. Files land in `audio/sfx/` and are listed in `sfx/manifest.json`, and the build copies them into `index.html` itself, so they play at once, with no signal and from a folder, and only `index.html` needs publishing. To change one, edit its prompt (or the shared `style`) and run `npm run sfx` again; `--force` makes a new take of the same prompt, and `"gain"` (for example 0.6) turns one effect down against the others.
+
+In the game the silence before each recording is skipped and their loudness is evened out. An effect that has not been made keeps its browser-made sound, so they can be replaced one at a time.
