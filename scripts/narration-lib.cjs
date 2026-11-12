@@ -76,6 +76,8 @@ function buildItems(game, cfg) {
   for (const [id, text] of Object.entries(adventure.text)) items.push({ id: 'adventure-' + id, label: id, display: text, spoken: text });
   for (const [id, c] of Object.entries(adventure.deals)) items.push({ id: 'adventure-deal-' + id, label: c.title, display: c.text, spoken: c.text });
   for (const [id, c] of Object.entries(adventure.combos)) items.push({ id: 'adventure-combo-' + id, label: c.title, display: c.text, spoken: c.text });
+  /* the deeper rules: every passage that reads the same in every descent (one names a lantern, so it stays unvoiced) */
+  for (const [id, text] of Object.entries(require('../deeper/content.cjs').text)) if (!/\{\w+\}/.test(text)) items.push({ id: 'deeper-' + id, label: 'Deeper: ' + id, display: text, spoken: text });
   const swaps = Object.entries(cfg.pronounce || {}).map(([from, to]) => [new RegExp('\\b' + from.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'g'), String(to)]);
   const keys = new Set(), ids = new Set();
   for (const it of items) {

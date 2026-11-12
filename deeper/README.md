@@ -16,7 +16,7 @@ Five additions for fresh descents, built on the Adventure layer (`adventure/`). 
 
 ## Voice
 
-The new passages are shown but not recorded: `scripts/narration-lib.cjs` does not collect them, so they have no Listen clip and do not count as missing.
+The ten passages that read the same in every descent are collected by `scripts/narration-lib.cjs` (`deeper-fork`, `deeper-bell` and so on), so `npm run narrate` records them with the rest. The one line that names a lantern (`forkSplit`) stays unvoiced; the narrator passes over it.
 
 ## Checks
 
