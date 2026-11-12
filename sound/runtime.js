@@ -3,43 +3,50 @@
    for each outcome, coin at the stall, and a small buzz on phones that can. An effect that has not been made is built in the
    browser instead, as all of them once were. Under them plays the score in audio/music (made by scripts/music.cjs): a title
    theme, three moods for the descent that follow the Bell, the chandler's landing and the ending, cross-faded and looped. Where a
-   track has not been made the next nearest is used, and with no tracks at all a low drone made in the browser stands in. One button in the header steps through All sound, Effects only and Off, and the choice is saved on this device.
+   track has not been made the next nearest is used, and with no tracks at all a low drone made in the browser stands in.
+   How loud each part is, and whether there is sound at all, is set on the Options panel (options/runtime.js), which keeps the
+   choices on this device and hands them here through window.__sound.set. One button in the header steps through All sound, Effects only and Off, and the choice is saved on this device.
    It watches the page and never touches the game: with this file left out, the game plays exactly as before.
    scripts/build-extras.cjs injects it into <head>. */
 (function () {
   'use strict';
-  var STORE = 'twolanterns.sound', MODES = ['all', 'fx', 'off'];
+  var STORE = 'twolanterns.options';
   var MUSIC = __MUSIC_MANIFEST__;      /* { base, tracks: { id: { f } } } or null, written in by the build */
   var hasMusic = !!(MUSIC && MUSIC.tracks && Object.keys(MUSIC.tracks).length);
   var SFX = __SFX_MANIFEST__;      /* { id: { d: the recording in base64, gain } } or null, written in by the build */
   var shots = {};      /* id -> { buf, at, gain }: decoded, with the silence before the sound measured and the loudness evened out */
-  var LABEL = { all: 'Sound: all', fx: 'Sound: effects only', off: 'Sound: off' };
-  var ICON = {
-    all: '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z" fill="currentColor"/><path d="M15 9a4.2 4.2 0 0 1 0 6M17.6 6.6a7.6 7.6 0 0 1 0 10.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>',
-    fx: '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z" fill="currentColor"/><path d="M15 9a4.2 4.2 0 0 1 0 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>',
-    off: '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z" fill="currentColor"/><path d="M15.5 9.5l5 5M20.5 9.5l-5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>'
-  };
-  var mode = 'all', host = null, queued = false, touched = false;
-  var ctx = null, master = null, fx = null, amb = null, bed = null, noiseBuf = null, dripT = null, duckT = null;
+  var opt = { mute: false, music: 80, fx: 80, buzz: true }, host = null, queued = false, touched = false;
+  var ctx = null, master = null, fx = null, rec = null, amb = null, bed = null, noiseBuf = null, dripT = null, duckT = null;
   var last = { room: -1, intro: '', rolling: false, res: '', buys: -1, screen: '', linked: false, end: '', stall: -1 };
   var log = [];
-  try { var s = localStorage.getItem(STORE); if (MODES.indexOf(s) >= 0) mode = s; } catch (e) {}
+  function take(o) {      /* only what is understood, and only in range */
+    if (!o || typeof o !== 'object') return;
+    if (typeof o.mute === 'boolean') opt.mute = o.mute;
+    if (typeof o.buzz === 'boolean') opt.buzz = o.buzz;
+    ['music', 'fx'].forEach(function (k) { var v = +o[k]; if (o[k] !== undefined && v >= 0 && v <= 100) opt[k] = Math.round(v); });
+  }
+  try { take(JSON.parse(localStorage.getItem(STORE) || 'null')); } catch (e) {}
+  /* a slider at 80 is the level the game was mixed at; above it is louder, and the bottom of the slider is silence */
+  function vol(k) { return opt.mute ? 0 : Math.pow(opt[k] / 80, 1.6); }
+  function wantMusic() { return !opt.mute && opt.music > 0; }
+  function wantFx() { return !opt.mute && opt.fx > 0; }
   var still = false;
   try { still = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
 
   function note(n) { log.push(n); if (log.length > 240) log.shift(); }
   function T() { return window.__tl || null; }
-  function buzz(p) { try { if (mode !== 'off' && touched && !still && navigator.vibrate) navigator.vibrate(p); } catch (e) {} }
+  function buzz(p) { try { if (opt.buzz && touched && !still && navigator.vibrate) navigator.vibrate(p); } catch (e) {} }
 
   /* ---------- the instrument ---------- */
   function boot() {
-    if (ctx || mode === 'off') return !!ctx;
+    if (ctx || opt.mute) return !!ctx;
     var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return false;
     try {
       ctx = new AC();
       var comp = ctx.createDynamicsCompressor(); comp.threshold.value = -16; comp.ratio.value = 5; comp.connect(ctx.destination);
       master = ctx.createGain(); master.gain.value = 0.9; master.connect(comp);
-      fx = ctx.createGain(); fx.gain.value = 1; fx.connect(master);
+      fx = ctx.createGain(); fx.gain.value = vol('fx'); fx.connect(master);
+      rec = ctx.createGain(); rec.gain.value = vol('fx'); rec.connect(master);
       /* a stone room: one echo, darkened, fed back a little */
       var d = ctx.createDelay(1); d.delayTime.value = 0.29;
       var fb = ctx.createGain(); fb.gain.value = 0.33;
@@ -55,10 +62,10 @@
     return true;
   }
   function wake() {
-    if (mode === 'off') return;
+    if (opt.mute) return;
     if (!boot()) return;
     if (ctx.state === 'suspended' && !document.hidden) { try { ctx.resume(); } catch (e) {} }
-    if (mode === 'all') { if (hasMusic) musicOn(); else bedOn(); }
+    if (wantMusic()) { if (hasMusic) musicOn(); else bedOn(); }
   }
   function env(g, t, peak, a, dur) { g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(Math.max(0.0002, peak), t + a); g.gain.exponentialRampToValueAtTime(0.0001, t + dur); }
   function tone(type, f0, f1, dur, peak, when, dest) {
@@ -95,8 +102,9 @@
   };
   function play(name, a, b) {
     note(name + (a === undefined || a === null ? '' : ':' + a));
-    if (mode === 'off' || !touched) return;
+    if (!touched) return;
     if (TOUCH[name]) buzz(TOUCH[name]);
+    if (!wantFx()) return;
     wake(); if (!ctx || ctx.state !== 'running') return;
     try { if (REC[name] && REC[name](a, b)) note('rec:' + name); else CUE[name](a, b); } catch (e) {}
   }
@@ -130,7 +138,7 @@
     var s = shots[id]; if (!s || !ctx) return false;
     var src = ctx.createBufferSource(), g = ctx.createGain();
     src.buffer = s.buf; src.playbackRate.value = rate || 1; g.gain.value = s.gain * (level === undefined ? 1 : level);
-    src.connect(g); g.connect(master);
+    src.connect(g); g.connect(rec);
     src.start(ctx.currentTime + (when || 0), s.at);
     return true;
   }
@@ -180,7 +188,7 @@
     if (!ctx || !bed) return;
     var talk = false; try { talk = !!(window.__narrator && window.__narrator.state().playing); } catch (e) {}
     var m = mood();
-    try { amb.gain.setTargetAtTime(talk ? 0.035 : 0.11, ctx.currentTime, 0.6); bed.unease.gain.setTargetAtTime(m * 0.22, ctx.currentTime, 1.5); } catch (e) {}
+    try { amb.gain.setTargetAtTime((talk ? 0.035 : 0.11) * vol('music'), ctx.currentTime, 0.6); bed.unease.gain.setTargetAtTime(m * 0.22, ctx.currentTime, 1.5); } catch (e) {}
   }
   function drip() {
     clearTimeout(dripT);
@@ -244,7 +252,7 @@
     mus.want = wanted();
     var id = pick(mus.want); if (id !== mus.id) turn(id, false);
     var talk = false; try { talk = !!(window.__narrator && window.__narrator.state().playing); } catch (e) {}
-    var top = talk ? UNDER : LOUD, step = 120 / FADE;
+    var top = (talk ? UNDER : LOUD) * vol('music'), step = 120 / FADE * Math.max(1, vol('music'));
     for (var i = 0; i < 2; i++) {
       var d = mus.decks[i], goal = d.to * top * (d.gain || 1);
       if (d.v !== goal) { d.v = d.v < goal ? Math.min(goal, d.v + step * LOUD) : Math.max(goal, d.v - step * LOUD); setv(d); }
@@ -268,7 +276,6 @@
   /* ---------- reading the page ---------- */
   function scan() {
     queued = false;
-    mount();
     var t = T(); if (!t || !t.S) return;
     var S = t.S, scr = host.querySelector('.screen'), cls = scr ? scr.className : '';
     var has = function (c) { return (' ' + cls + ' ').indexOf(' ' + c + ' ') >= 0; };
@@ -303,30 +310,21 @@
   }
   function queue() { if (queued) return; queued = true; (window.requestAnimationFrame || window.setTimeout)(scan, 16); }
 
-  /* ---------- the button ---------- */
-  function paint(b) { b.innerHTML = ICON[mode] + '<span class="sr">' + LABEL[mode] + '</span>'; b.setAttribute('title', LABEL[mode] + '. Tap to change.'); b.setAttribute('aria-label', LABEL[mode] + '. Change sound.'); b.setAttribute('data-mode', mode); }
-  function mount() {
-    var top = host.querySelector('header.top'); if (!top) return;
-    var b = top.querySelector('.snd');
-    if (!b) { b = document.createElement('button'); b.type = 'button'; b.className = 'snd'; paint(b); top.appendChild(b); }
-    else if (b.getAttribute('data-mode') !== mode) paint(b);
-  }
+  /* ---------- taps, and what the Options panel asks for ---------- */
   function onClick(e) {
     var t = e.target && e.target.closest ? e.target : null; if (!t) return;
-    var b = t.closest('.snd');
-    if (b) {
-      mode = MODES[(MODES.indexOf(mode) + 1) % MODES.length];
-      try { localStorage.setItem(STORE, mode); } catch (err) {}
-      paint(b);
-      if (mode === 'off') { bedOff(); musicOff(); if (ctx) { try { ctx.suspend(); } catch (err) {} } }
-      else { wake(); if (mode === 'fx') { bedOff(); musicOff(); } play('tick'); }
-      return;
-    }
     if (t.closest('button, .opt, .rcard, summary, [data-act]')) play('tick');
+  }
+  function apply() {
+    if (opt.mute) { bedOff(); musicOff(); if (ctx) { try { ctx.suspend(); } catch (e) {} } return; }
+    if (!touched) return;
+    wake(); if (!ctx) return;
+    try { fx.gain.setTargetAtTime(vol('fx'), ctx.currentTime, 0.05); rec.gain.setTargetAtTime(vol('fx'), ctx.currentTime, 0.05); } catch (e) {}
+    if (!wantMusic()) { bedOff(); musicOff(); } else level();
   }
   function first() { if (!touched) { touched = true; } wake(); }
 
-  window.__sound = { state: function () { return { mode: mode, ctx: ctx ? ctx.state : 'none', bed: !!bed, touched: touched, music: hasMusic ? (mus.on ? mus.id : '') : null, sfx: Object.keys(shots).filter(function (k) { return !!shots[k]; }), lead: Object.keys(shots).filter(function (k) { return !!shots[k]; }).map(function (k) { return Math.round(shots[k].at * 100) / 100 + '/' + Math.round(shots[k].gain * 10) / 10; }), tracks: hasMusic ? Object.keys(MUSIC.tracks) : [], decks: mus.decks ? mus.decks.map(function (d) { return { id: d.id, v: Math.round(d.v * 100) / 100, playing: !d.a.paused, at: Math.round(d.a.currentTime * 10) / 10, routed: !!d.g }; }) : [] }; }, log: log, cues: Object.keys(CUE) };
+  window.__sound = { get: function () { return { mute: opt.mute, music: opt.music, fx: opt.fx, buzz: opt.buzz }; }, set: function (o) { take(o); apply(); return this.get(); }, test: function (name) { play(name || 'coin'); }, state: function () { return { mode: opt.mute ? 'off' : opt.music > 0 ? 'all' : 'fx', mute: opt.mute, levels: [opt.music, opt.fx], ctx: ctx ? ctx.state : 'none', bed: !!bed, touched: touched, music: hasMusic ? (mus.on ? mus.id : '') : null, sfx: Object.keys(shots).filter(function (k) { return !!shots[k]; }), lead: Object.keys(shots).filter(function (k) { return !!shots[k]; }).map(function (k) { return Math.round(shots[k].at * 100) / 100 + '/' + Math.round(shots[k].gain * 10) / 10; }), tracks: hasMusic ? Object.keys(MUSIC.tracks) : [], decks: mus.decks ? mus.decks.map(function (d) { return { id: d.id, v: Math.round(d.v * 100) / 100, playing: !d.a.paused, at: Math.round(d.a.currentTime * 10) / 10, routed: !!d.g }; }) : [] }; }, log: log, cues: Object.keys(CUE) };
 
   function init() {
     host = document.getElementById('app'); if (!host) return;
@@ -335,6 +333,6 @@
   }
   document.addEventListener('click', onClick);
   ['pointerdown', 'keydown', 'touchstart'].forEach(function (t) { document.addEventListener(t, first, { capture: true, passive: true }); });
-  document.addEventListener('visibilitychange', function () { if (!ctx) return; musicHide(document.hidden); try { if (document.hidden) ctx.suspend(); else if (mode !== 'off') ctx.resume(); } catch (e) {} });
+  document.addEventListener('visibilitychange', function () { if (!ctx) return; musicHide(document.hidden); try { if (document.hidden) ctx.suspend(); else if (!opt.mute) ctx.resume(); } catch (e) {} });
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();

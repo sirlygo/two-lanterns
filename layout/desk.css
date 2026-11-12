@@ -1,0 +1,44 @@
+/* Two Lanterns :: wide screens, and the room where a game is hosted or joined.
+   On a computer the painting stands to the left and stays in view while the words, the choices and the buttons run down the
+   right, so a room can be read and answered without scrolling past the picture. Phones and tablets keep one column.
+   The online room puts what you came to do first (your name, host or join) and the story after it. Styles only: no markup changes. */
+
+/* ---------- the online room, at every width ---------- */
+.screen.lobby{display:grid;grid-template-columns:minmax(0,1fr)}
+.screen.lobby>.long-story{order:20;margin-top:1.6rem}
+.screen.lobby>.nv{order:21}
+.lobby form{width:100%;max-width:720px;gap:16px}
+.lobby form>.field{width:100%;max-width:420px;margin-inline:auto}
+.lobby .lgrid{position:relative;gap:14px}
+.lobby .lcard{position:relative;overflow:hidden;gap:12px;padding:22px 18px 18px;border-radius:12px;border-color:var(--line2);background:linear-gradient(180deg,var(--card2),var(--card));box-shadow:0 18px 40px -28px #000;transition:border-color .15s,transform .15s}
+.lobby .lcard::before{content:"";position:absolute;inset:0 0 auto;height:3px;background:var(--who)}
+.lobby .lcard:first-child{--who:var(--ember);--who-d:var(--ember-d);--who-a:var(--ember-a)}
+.lobby .lcard:last-child{--who:var(--verd);--who-d:var(--verd-d);--who-a:var(--verd-a)}
+.lobby .lcard:focus-within{border-color:var(--who)}
+.lobby .lcard h3{color:var(--who);font-size:1.08rem;letter-spacing:.1em}
+.lobby .lcard p{min-height:2.9em;margin:0}
+.lobby .lcard .btn{width:100%;justify-self:stretch;margin-top:auto}
+.lobby .lcard{grid-template-rows:auto auto 1fr auto}
+.lobby .lcard:first-child{grid-template-rows:auto 1fr auto}
+.lobby .codeinput{font-size:1.7rem!important;padding-block:.62rem!important;border-color:var(--verd-d)!important}
+.lobby .lcard:has(.codeinput:placeholder-shown) button[type=submit]{opacity:.5}
+.lobby .pstat{width:fit-content;max-width:100%;margin-inline:auto;padding:.5rem 1rem;border:1px solid var(--line);border-radius:999px;background:var(--card)}
+.lobby.room .roomcode{gap:12px;margin:1.4rem 0 .7rem}
+.lobby.room .roomcode span{width:clamp(58px,18vw,92px);font-size:clamp(2.1rem,9vw,3.3rem);box-shadow:0 18px 40px -22px #000,0 0 46px -20px var(--ember)}
+.lobby.room .roomcode span:nth-child(even){box-shadow:0 18px 40px -22px #000,0 0 46px -20px var(--verd)}
+.lobby.room .bar.static{justify-content:center;margin-top:1rem}
+@media (min-width:700px){
+  .lobby .lgrid::after{content:"or";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:grid;place-items:center;width:36px;height:36px;border-radius:50%;border:1px solid var(--line2);background:var(--bg);color:var(--mute);font:600 .68rem/1 var(--disp);letter-spacing:.1em;text-transform:uppercase}
+}
+
+/* ---------- a computer ---------- */
+@media (min-width:1100px){
+  .wrap{max-width:1320px}
+  .screen:has(>.plate){display:grid;grid-template-columns:minmax(0,1.14fr) minmax(0,1fr);column-gap:clamp(28px,3.4vw,52px);align-items:start;align-content:start}
+  .screen:has(>.plate)>*{grid-column:2;min-width:0}
+  .screen:has(>.plate)>.plate{grid-column:1;grid-row:1/span 80;position:sticky;top:18px;align-self:start;max-height:calc(100vh - 110px)}
+  .screen:not(:has(>.plate)){max-width:980px;margin-inline:auto}
+  .screen:has(>.plate)>h1:first-of-type,.screen:has(>.plate)>h2:first-of-type{margin-top:.2rem}
+  .screen:has(>.plate)>.bar:not(.static){margin-top:22px}
+}
+@media (min-width:1500px){.wrap{max-width:1440px}}

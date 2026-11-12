@@ -11,7 +11,7 @@
   var SPOTS = '.screen [data-narrate], .screen.stall p.story, .screen.title p.tag';
   var PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5.5v13l11-6.5z" fill="currentColor"></path></svg>';
   var STOP = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="6.5" y="6.5" width="11" height="11" rx="1.5" fill="currentColor"></rect></svg>';
-  var on = false, activated = false, audio = null, loaded = null, shown = null, auto = null, hush = null;
+  var on = false, activated = false, audio = null, loaded = null, shown = null, auto = null, hush = null, loud = 1;
   var queued = false, host = null;
   var passages = [], position = 0, running = false;
   var publicPassages = [], fullPassages = [];
@@ -32,6 +32,7 @@
     if (audio) return audio;
     audio = new Audio();
     audio.preload = 'none';
+    try { audio.volume = loud; } catch (e) {}
     ['play', 'pause', 'ended', 'error', 'loadedmetadata', 'timeupdate'].forEach(function (t) { audio.addEventListener(t, sync); });
     audio.addEventListener('ended', function () {
       if (!running || !current()) return;
@@ -214,6 +215,16 @@
   }
 
   window.__narrator = {
+    /* for the Options panel: how loud the voice is (0 to 1), and the same switch the Narrator control on the page works */
+    volume: function (v) { if (v !== undefined && +v >= 0 && +v <= 1) { loud = +v; if (audio) { try { audio.volume = loud; } catch (e) {} } } return loud; },
+    set: function (want) {
+      want = !!want; if (want === on) return on;
+      on = want; activated = true;
+      try { localStorage.setItem(STORE, on ? 'on' : 'off'); } catch (err) {}
+      if (!on) halt(); else if (shown) { auto = shown; start(); } else prime();
+      sync();
+      return on;
+    },
     key: narrationKey,
     clips: M.clips,
     state: function () {

@@ -1,8 +1,1 @@
-/* Two Lanterns :: the sound button, in the header beside the progress marks. */
-.top .snd{flex:none;display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;margin-left:auto;padding:0;border:1px solid var(--line);border-radius:50%;background:rgba(13,24,31,.6);color:var(--mute);cursor:pointer;transition:color .15s,border-color .15s}
-.top .where{margin-left:auto}
-.top .where+.snd{margin-left:0}
-.top .snd:hover,.top .snd:focus-visible{color:var(--fg);border-color:var(--line2)}
-.top .snd svg{width:20px;height:20px}
-.top .snd[data-mode="off"]{color:var(--dim);opacity:.8}
-.top .where:empty{display:none}
+/* Two Lanterns :: sound has nothing of its own to show: its controls are on the Options panel (options/options.css). */

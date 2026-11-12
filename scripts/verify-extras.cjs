@@ -6,7 +6,7 @@ const path = require('node:path');
 const assert = require('node:assert/strict');
 const root = path.resolve(__dirname, '..');
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-for (const id of ['sound-css', 'feats-css']) assert(html.includes('<style id="' + id + '">'), 'Missing ' + id);
+for (const id of ['options-css', 'sound-css', 'feats-css', 'layout-css']) assert(html.includes('<style id="' + id + '">'), 'Missing ' + id);
 const grab = id => { const m = html.match(new RegExp('<script id="' + id + '">([\\s\\S]*?)</script>')); assert(m, 'Missing ' + id); new vm.Script(m[1]); return m[1]; };
 const snd = grab('sound-runtime'); grab('offline-register');
 assert(!snd.includes('__MUSIC_MANIFEST__'), 'The music list was not written into the page');
@@ -26,6 +26,16 @@ const man = JSON.parse(fs.readFileSync(path.join(root, 'manifest.webmanifest'), 
 for (const i of man.icons) assert(fs.existsSync(path.join(root, i.src)), 'Missing icon ' + i.src);
 new vm.Script(fs.readFileSync(path.join(root, 'sw.js'), 'utf8'));
 
+/* options: saved choices are made safe, an old sound setting is carried over, and it comes before the sound part */
+assert(html.indexOf('<script id="options-runtime">') < html.indexOf('<script id="sound-runtime">'), 'Options must come before sound');
+const octx = vm.createContext({}); vm.runInContext(grab('options-runtime'), octx);
+const O = octx.__options, plain = o => JSON.parse(JSON.stringify(o));
+assert.deepEqual(plain(O.normalize(null)), { v: 1, mute: false, music: 80, fx: 80, voice: 100, buzz: true, text: 0, calm: false }, 'Option defaults');
+assert.deepEqual(plain(O.normalize({ music: '40', fx: 150, voice: -1, mute: 'yes', buzz: false, text: 2, calm: true, junk: 1 })), { v: 1, mute: false, music: 40, fx: 80, voice: 100, buzz: false, text: 2, calm: true }, 'Options made safe');
+assert.equal(O.fromOld('fx').music, 0, 'Effects only becomes music at nothing');
+assert.equal(O.fromOld('off').mute, true, 'Off becomes sound off');
+assert.equal(O.fromOld('all').mute || O.fromOld('all').music === 0, false, 'All sound stays on');
+assert(snd.includes("'twolanterns.options'") && grab('options-runtime').includes("'twolanterns.options'"), 'Sound and options must share one store');
 const ctx = vm.createContext({}); vm.runInContext(grab('feats-runtime'), ctx);
 const F = ctx.__feats; assert(F && F.FEATS.length === 32, 'Expected 32 feats');
 assert.equal(new Set(F.FEATS.map(f => f.id)).size, 32, 'Feat ids must be unique');
@@ -58,4 +68,4 @@ assert.deepEqual(got(null, { games: 10 }).sort(), ['first', 'ten'], 'Feat ten');
 assert.deepEqual(got(null, { callings: 4 }).sort(), ['callings', 'first'], 'Feat callings');
 assert.equal(Object.keys(cases).length + 6, 32, 'Every feat has a test');
 assert.deepEqual(Array.from(F.evaluate({}, C0)), [], 'An unfinished descent earns nothing');
-console.log(JSON.stringify({ ok: true, feats: F.FEATS.length, music: tracks, effects, sound: true, install: true, offline: true }));
+console.log(JSON.stringify({ ok: true, feats: F.FEATS.length, music: tracks, effects, options: true, layout: true, sound: true, install: true, offline: true }));

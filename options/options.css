@@ -1,0 +1,42 @@
+/* Two Lanterns :: the Options cog in the header, the panel it opens, and the two display choices it makes. */
+.top .optbtn{flex:none;display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;margin-left:auto;padding:0;border:1px solid var(--line);border-radius:50%;background:rgba(13,24,31,.6);color:var(--mute);cursor:pointer;transition:color .15s,border-color .15s,transform .3s}
+.top .where{margin-left:auto}
+.top .where+.optbtn{margin-left:0}
+.top .where:empty{display:none}
+.top .optbtn:hover,.top .optbtn:focus-visible{color:var(--fg);border-color:var(--line2);transform:rotate(30deg)}
+.top .optbtn svg{width:21px;height:21px}
+
+html.tl-t1{font-size:112.5%}html.tl-t1 body{font-size:19px}
+html.tl-t2{font-size:125%}html.tl-t2 body{font-size:21px}
+html.tl-calm *,html.tl-calm *::before,html.tl-calm *::after{animation-duration:.001s!important;animation-delay:0s!important;animation-iteration-count:1!important;transition-duration:.001s!important;scroll-behavior:auto!important}
+html.tl-opts{overflow:hidden}
+
+dialog.tlo{width:min(460px,calc(100vw - 24px));max-height:min(86vh,720px);margin:auto;padding:0;border:1px solid var(--line2);border-radius:12px;background:var(--bg2);color:var(--fg);font-family:var(--text);box-shadow:0 30px 80px -20px #000,0 0 0 1px rgba(0,0,0,.4);overflow:auto;overscroll-behavior:contain}
+dialog.tlo::backdrop{background:rgba(4,7,10,.72);backdrop-filter:blur(3px)}
+dialog.tlo[open]{animation:optsin .18s ease both}
+@keyframes optsin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.opts-head{position:sticky;top:0;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px 12px;background:var(--bg2);border-bottom:1px solid var(--line)}
+.opts-head h2{margin:0;font:700 1.05rem/1.2 var(--disp);letter-spacing:.14em;text-transform:uppercase;color:var(--fg)}
+.opts-x{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;margin:-6px -8px -6px 0;border:0;border-radius:50%;background:none;color:var(--mute);font-size:1.7rem;line-height:1;cursor:pointer}
+.opts-x:hover,.opts-x:focus-visible{color:var(--fg);background:var(--card)}
+.tlo section{padding:14px 18px 6px;border-bottom:1px solid var(--line)}
+.tlo section h3{margin:0 0 6px;font:600 .72rem/1 var(--disp);letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+.opts-row{display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:48px;padding:4px 0}
+.opts-l{display:grid;gap:1px;min-width:0;font-size:1rem;line-height:1.3}
+.opts-l small{font-size:.82rem;color:var(--mute)}
+.opts-slide{display:grid;grid-template-columns:minmax(74px,6.2rem) minmax(0,1fr) 2.4ch;cursor:pointer}
+.opts-slide output{font:600 .9rem/1 var(--disp);color:var(--mute);text-align:right;font-variant-numeric:tabular-nums}
+.opts-slide input{width:100%;height:28px;margin:0;background:none;accent-color:var(--ember);cursor:pointer}
+.opts-slide input:disabled{opacity:.4;cursor:default}
+.opts-sw{flex:none;position:relative;width:52px;height:30px;padding:0;border:1px solid var(--line2);border-radius:999px;background:var(--card);cursor:pointer;transition:background .15s,border-color .15s}
+.opts-sw .opts-knob{position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:var(--dim);transition:transform .15s,background .15s}
+.opts-sw[aria-checked="true"]{background:var(--verd-a);border-color:var(--verd-d)}
+.opts-sw[aria-checked="true"] .opts-knob{transform:translateX(22px);background:var(--verd)}
+.opts-seg{display:inline-flex;border:1px solid var(--line2);border-radius:8px;overflow:hidden}
+.opts-seg button{min-height:38px;padding:0 .8rem;border:0;border-left:1px solid var(--line2);background:var(--card);color:var(--mute);font:600 .78rem/1 var(--disp);letter-spacing:.06em;cursor:pointer}
+.opts-seg button:first-child{border-left:0}
+.opts-seg button[aria-pressed="true"]{background:var(--ember-a);color:var(--ember)}
+.tlo .btn.small{min-height:40px;padding:.55rem 1.1rem;font-size:.78rem}
+.opts-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 18px 16px}
+.opts-foot .fine{margin:0;color:var(--mute);font-size:.85rem}
+.tlo :focus-visible{outline:2px solid var(--ember);outline-offset:2px}

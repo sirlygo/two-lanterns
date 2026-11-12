@@ -43,6 +43,14 @@ Three extras are baked into `index.html` by `scripts/build-extras.cjs`, the last
 
 `npm run verify` now also runs `scripts/verify-extras.cjs`, which tests every feat against a descent that should earn it.
 
+## Options, wide screens and the online room
+
+- `options/`: the cog in the header opens one panel for sound on or off, the music, effects and narrator volumes, whether the narrator reads every screen, text size, less motion, full screen, and the buzz on phones. Choices are kept on the device (`twolanterns.options`); a choice made with the old three-way sound button is carried over. The narrator volume slider is left out on phones that do not let a page set it.
+- `layout/desk.css`: on screens 1100 pixels wide and more, the painting stands on the left and stays in view while the words, choices and buttons run down the right. Phones and tablets keep one column.
+- The same file restyles the online room: your name and the Host and Join cards come first, the story after, and the room code is larger.
+
+All three are part of the extras that `scripts/build-extras.cjs` bakes in, and none of them changes the game's own markup or rules. The narrator gained two small calls for the panel to use (`window.__narrator.volume` and `.set`).
+
 ## Music
 
 The score is made with the ElevenLabs Music API, from the prompts in `music/tracks.json`: a title theme, three moods for the descent (`calm`, `restless`, `awake`, chosen by how restless the Bell is), the chandler's landing and the ending.
