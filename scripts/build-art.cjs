@@ -26,6 +26,7 @@ html=html.replace(/function blankDie\(\) \{ return `<svg[^\n]+\n/,'function blan
 html=pack.inject(html,added);
 html=require('./story-edits.cjs')(html,root);
 html=require('./adventure-edits.cjs')(html,root);
+html=require('./deeper-edits.cjs')(html,root);
 html=require('./ui-edits.cjs')(html);
 html=require('./net-edits.cjs')(html,root);
 html=html.replace(/ · art drawn in code/g,' · Undertoll art edition');

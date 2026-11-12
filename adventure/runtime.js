@@ -13,6 +13,8 @@
   const toll = (S, n) => { S.toll = Math.max(0, S.toll + n); };
   const roll = (S, p, who, salt) => 1 + E.hash(state(S).seed + '|' + p.id + '|' + p.depth + '|' + p.round + '|' + who + '|' + salt) % 6;
   const accepted = d => d && (d.response === 0 || d.response === 1);
+  /* further kinds of interlude register themselves here (deeper/runtime.js): { prepare, options, scene, title, lines, resolve } */
+  A.kinds = {}; A.util = { state, record, hp, reroll, relic, toll, roll, KS };
   A.active = S => { const a = state(S), t = a && a.twist; return t && S.room >= t.from && S.room < t.until ? t : null; };
   A.key = S => { const p = state(S) && state(S).phase; return p ? [p.id, p.stage, p.depth, p.round].join(':') : ''; };
   A.start = function (S) {
@@ -57,6 +59,7 @@
     a.settled = true; record(S, 'bargains', 'The chandler settled the private bargains before the Bellheart.');
   }
   function prepare(S, p) {
+    if (A.kinds[p.kind] && A.kinds[p.kind].prepare) A.kinds[p.kind].prepare(S, p);
     if (p.kind === 'bargain') state(S).dealt = true;
     if (p.kind === 'twist') {
       const type = state(S).schedule.twist;
@@ -86,6 +89,7 @@
   A.options = function (S, who) {
     const a = state(S), p = a && a.phase; if (!p || p.stage !== 'offer') return [];
     const opt = (i, title, note, cost = 0) => ({ i, title, note, disabled: S.p[who].gold < cost });
+    if (A.kinds[p.kind]) return A.kinds[p.kind].options(S, who, p, opt);
     switch (p.kind) {
       case 'risk': return p.depth ? [opt(0, 'Bank the find', 'Keep the first reward; no further risk.'), opt(1, 'One more step', 'Both must agree. D6: 4–6 gives 2 gold each; 1–3 costs 2 health each and +1 Undertoll.')]
         : [opt(0, 'Leave safely', 'Either lantern can end the search; no cost.'), opt(1, 'Search once more', 'Both must agree. D6: 3–6 gives 1 gold each; 1–2 costs 1 health each.')];
@@ -100,11 +104,12 @@
     }
     return [];
   };
-  A.scene = function (S) { const p = state(S).phase; return { risk: p.rid, bargain: 'stall', guide: 'nim', guideReturn: 'nim-return', merchant: 'stall', festival: 'festival', falseexit: 'falseexit', huntsman: 'huntsman', twist: 'q-lantern', settlement: 'stall2' }[p.kind]; };
-  A.title = function (S) { const p = state(S).phase; return { risk: p.depth ? 'One more step?' : 'Leave it alone?', bargain: 'A folded note', guide: 'Nim’s temporary difficulty', guideReturn: 'A familiar pair of boots', merchant: 'The Ragpicker’s Counter', festival: 'The Lanterns’ Wake', falseexit: 'Almost home', huntsman: 'The Bellmarked Huntsman', twist: 'The stair changes its mind', settlement: 'Accounts before the Bell' }[p.kind]; };
+  A.scene = function (S) { const p = state(S).phase; if (A.kinds[p.kind]) return A.kinds[p.kind].scene(S, p); return { risk: p.rid, bargain: 'stall', guide: 'nim', guideReturn: 'nim-return', merchant: 'stall', festival: 'festival', falseexit: 'falseexit', huntsman: 'huntsman', twist: 'q-lantern', settlement: 'stall2' }[p.kind]; };
+  A.title = function (S) { const p = state(S).phase; if (A.kinds[p.kind]) return A.kinds[p.kind].title(S, p); return { risk: p.depth ? 'One more step?' : 'Leave it alone?', bargain: 'A folded note', guide: 'Nim’s temporary difficulty', guideReturn: 'A familiar pair of boots', merchant: 'The Ragpicker’s Counter', festival: 'The Lanterns’ Wake', falseexit: 'Almost home', huntsman: 'The Bellmarked Huntsman', twist: 'The stair changes its mind', settlement: 'Accounts before the Bell' }[p.kind]; };
   A.lines = function (S, who) {
     const a = state(S), p = a.phase;
     if (p.stage === 'result') return p.lines;
+    if (A.kinds[p.kind]) return A.kinds[p.kind].lines(S, who, p);
     if (p.kind === 'bargain') return [C.text.bargain, C.deals[a.contracts[who].id].text];
     const key = { risk: p.depth ? 'riskDeep' : 'risk', guide: 'nim', guideReturn: a.guide.affinity >= 2 ? 'nimFriend' : 'nimBusiness', merchant: 'merchant', festival: 'festival', falseexit: 'falseexit', huntsman: p.round ? 'huntAgain' : 'huntsman' }[p.kind];
     return key ? [C.text[key]] : [];
@@ -112,6 +117,7 @@
   function resolvePhase(S, p) {
     const a = state(S), v = p.votes;
     p.stage = 'result'; p.lines = []; p.details = []; p.ready = [false, false];
+    if (A.kinds[p.kind]) { A.kinds[p.kind].resolve(S, p, v); return; }
     if (p.kind === 'risk') {
       if (!v.every(n => n === 1)) { p.lines = [C.text[p.depth ? 'riskBank' : 'riskSafe']]; return; }
       const d = roll(S, p, 0, 'search'), success = d >= (p.depth ? 4 : 3);

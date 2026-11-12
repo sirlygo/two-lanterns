@@ -806,6 +806,13 @@ h1{letter-spacing:.09em}h1 em{background:none;-webkit-text-fill-color:var(--verd
 @media(max-width:600px){.adv-terms,.adv-deal,.adv-combo{padding:.85rem}.adventure .long-story{font-size:1rem}}
 
 </style>
+<style id="deeper-css">
+.deep-status{border-color:#e4ae6055;background:#e4ae6008}
+.deep-status b{color:var(--ember,#e4ae60)}
+.deep-status span{display:block;width:100%}
+.res .deep-lend{margin-top:6px}
+
+</style>
 <style id="narrator-css">
 /* Two Lanterns :: narrator controls. Built on the page's own tokens, so the Undertoll theme carries through. */
 .nv{display:flex;align-items:center;flex-wrap:wrap;gap:.6rem 1rem;margin-top:.9rem;max-width:64ch}
@@ -4459,6 +4466,8 @@ g.Story = T;
   const toll = (S, n) => { S.toll = Math.max(0, S.toll + n); };
   const roll = (S, p, who, salt) => 1 + E.hash(state(S).seed + '|' + p.id + '|' + p.depth + '|' + p.round + '|' + who + '|' + salt) % 6;
   const accepted = d => d && (d.response === 0 || d.response === 1);
+  /* further kinds of interlude register themselves here (deeper/runtime.js): { prepare, options, scene, title, lines, resolve } */
+  A.kinds = {}; A.util = { state, record, hp, reroll, relic, toll, roll, KS };
   A.active = S => { const a = state(S), t = a && a.twist; return t && S.room >= t.from && S.room < t.until ? t : null; };
   A.key = S => { const p = state(S) && state(S).phase; return p ? [p.id, p.stage, p.depth, p.round].join(':') : ''; };
   A.start = function (S) {
@@ -4503,6 +4512,7 @@ g.Story = T;
     a.settled = true; record(S, 'bargains', 'The chandler settled the private bargains before the Bellheart.');
   }
   function prepare(S, p) {
+    if (A.kinds[p.kind] && A.kinds[p.kind].prepare) A.kinds[p.kind].prepare(S, p);
     if (p.kind === 'bargain') state(S).dealt = true;
     if (p.kind === 'twist') {
       const type = state(S).schedule.twist;
@@ -4532,6 +4542,7 @@ g.Story = T;
   A.options = function (S, who) {
     const a = state(S), p = a && a.phase; if (!p || p.stage !== 'offer') return [];
     const opt = (i, title, note, cost = 0) => ({ i, title, note, disabled: S.p[who].gold < cost });
+    if (A.kinds[p.kind]) return A.kinds[p.kind].options(S, who, p, opt);
     switch (p.kind) {
       case 'risk': return p.depth ? [opt(0, 'Bank the find', 'Keep the first reward; no further risk.'), opt(1, 'One more step', 'Both must agree. D6: 4–6 gives 2 gold each; 1–3 costs 2 health each and +1 Undertoll.')]
         : [opt(0, 'Leave safely', 'Either lantern can end the search; no cost.'), opt(1, 'Search once more', 'Both must agree. D6: 3–6 gives 1 gold each; 1–2 costs 1 health each.')];
@@ -4546,11 +4557,12 @@ g.Story = T;
     }
     return [];
   };
-  A.scene = function (S) { const p = state(S).phase; return { risk: p.rid, bargain: 'stall', guide: 'nim', guideReturn: 'nim-return', merchant: 'stall', festival: 'festival', falseexit: 'falseexit', huntsman: 'huntsman', twist: 'q-lantern', settlement: 'stall2' }[p.kind]; };
-  A.title = function (S) { const p = state(S).phase; return { risk: p.depth ? 'One more step?' : 'Leave it alone?', bargain: 'A folded note', guide: 'Nim’s temporary difficulty', guideReturn: 'A familiar pair of boots', merchant: 'The Ragpicker’s Counter', festival: 'The Lanterns’ Wake', falseexit: 'Almost home', huntsman: 'The Bellmarked Huntsman', twist: 'The stair changes its mind', settlement: 'Accounts before the Bell' }[p.kind]; };
+  A.scene = function (S) { const p = state(S).phase; if (A.kinds[p.kind]) return A.kinds[p.kind].scene(S, p); return { risk: p.rid, bargain: 'stall', guide: 'nim', guideReturn: 'nim-return', merchant: 'stall', festival: 'festival', falseexit: 'falseexit', huntsman: 'huntsman', twist: 'q-lantern', settlement: 'stall2' }[p.kind]; };
+  A.title = function (S) { const p = state(S).phase; if (A.kinds[p.kind]) return A.kinds[p.kind].title(S, p); return { risk: p.depth ? 'One more step?' : 'Leave it alone?', bargain: 'A folded note', guide: 'Nim’s temporary difficulty', guideReturn: 'A familiar pair of boots', merchant: 'The Ragpicker’s Counter', festival: 'The Lanterns’ Wake', falseexit: 'Almost home', huntsman: 'The Bellmarked Huntsman', twist: 'The stair changes its mind', settlement: 'Accounts before the Bell' }[p.kind]; };
   A.lines = function (S, who) {
     const a = state(S), p = a.phase;
     if (p.stage === 'result') return p.lines;
+    if (A.kinds[p.kind]) return A.kinds[p.kind].lines(S, who, p);
     if (p.kind === 'bargain') return [C.text.bargain, C.deals[a.contracts[who].id].text];
     const key = { risk: p.depth ? 'riskDeep' : 'risk', guide: 'nim', guideReturn: a.guide.affinity >= 2 ? 'nimFriend' : 'nimBusiness', merchant: 'merchant', festival: 'festival', falseexit: 'falseexit', huntsman: p.round ? 'huntAgain' : 'huntsman' }[p.kind];
     return key ? [C.text[key]] : [];
@@ -4558,6 +4570,7 @@ g.Story = T;
   function resolvePhase(S, p) {
     const a = state(S), v = p.votes;
     p.stage = 'result'; p.lines = []; p.details = []; p.ready = [false, false];
+    if (A.kinds[p.kind]) { A.kinds[p.kind].resolve(S, p, v); return; }
     if (p.kind === 'risk') {
       if (!v.every(n => n === 1)) { p.lines = [C.text[p.depth ? 'riskBank' : 'riskSafe']]; return; }
       const d = roll(S, p, 0, 'search'), success = d >= (p.depth ? 4 : 3);
@@ -4716,6 +4729,165 @@ g.Story = T;
     return out;
   };
   g.Adventure = A;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+
+/* Two Lanterns :: the deeper rules, for fresh descents only (S.deep). A descent begun before them keeps the rules it began with.
+   - The fork: after the first, third and fifth rooms the stair divides. The lit stair is the room that was dealt; the dark door
+     is another room, where every roll is 1 harder and every success pays 1 more gold. If the lanterns disagree, whoever
+     chooses first in the rooms decides.
+   - The landings: leaving each chandler's landing, each lantern takes one of three things it has learned.
+   - Wounds: a scar taken in a room is a named wound, -1 to the stat that was being used, for the next two rooms.
+   - Relics answer once: each relic can be called on one time, to reroll a partner's die or to stand firm against the Bell.
+   - The Bell: before the last room, two exchanges. A lantern that holds both times has +1 on its last roll; one that gives
+     ground both times has -1.
+   The fork, the landings and the Bell are interludes of the Adventure layer, so they keep its nonces, privacy and saves. */
+(function (g) {
+  'use strict';
+  const C = {"text":{"fork":"The stair divides. One way is lit, in the grudging manner of a town that still pays somebody to trim wicks. The other is a door standing a hand open on the dark, and whatever is behind it has not been counted by anyone in a long time. You can hear your partner deciding.","forkLit":"You keep to the lit stair. It is the sensible way, and it knows it.","forkDark":"You take the dark door. The lamps shrink to the size of what you are holding, and the stair on the far side has more on it than it should.","forkSplit":"You wanted different doors. It was {n}’s turn to have the choosing of it.","upgrade0":"A landing is the only place on this stair where anyone has time to think about how they have been doing it. You have both learned something on the way down. It is not the same thing.","upgrade1":"The last landing. Below it the stair stops pretending to be a stair. Whatever you are going to be when you reach the Bell, this is where you finish becoming it.","upgradeDone":"You shoulder what you have learned and go on down.","bell":"The Bell is not waiting for you. It is turning, slowly, on a yoke nobody has greased in your lifetime, and the air turns with it. Before either of you can choose what to do about it, you have to get close enough to choose. It will not make that easy twice.","bellRound":"The Bell has noticed. The rope walks across the floor on its own and the sound comes up through your boots. One more exchange and you will be standing where the choice is.","bellAgain":"It turns the other way now, faster. What worked a moment ago it has already learned. Find another way to stand your ground.","bellDone":"You are at the Bellheart. Whoever held their ground stands a little surer for it, and whoever gave it twice will feel that in the last throw. There is only the choice left."},"wounds":{"M":{"name":"Wrenched shoulder","line":"{n} has a wrenched shoulder"},"G":{"name":"Shaking hands","line":"{n}’s hands are shaking"},"L":{"name":"Ringing ears","line":"{n}’s ears are ringing"},"S":{"name":"Cold dread","line":"{n} is carrying a cold dread"}},"upgrades":[[{"id":"low","title":"Steadier hands","note":"+1 {low}, your weakest stat."},{"id":"breath","title":"A deep breath","note":"Heal to full health."},{"id":"coin","title":"A coin in the boot","note":"+2 gold."}],[{"id":"high","title":"What you are good at","note":"+1 {high}, your strongest stat."},{"id":"bone","title":"A knucklebone","note":"One more reroll, to throw in any room."},{"id":"bind","title":"Bind the wounds","note":"Clear your wounds and heal 2 health."}]],"approaches":[{"k":"M","title":"Hold the rope"},{"k":"G","title":"Slip the stay"},{"k":"L","title":"Read the casting marks"},{"k":"S","title":"Sing the counter-note"}]}, E = g.Engine, D = g.Data, A = g.Adventure, U = A.util, KS = U.KS;
+  const X = { content: C, base: {} };
+  const deep = S => (S && S.deep && S.deep.v === 1 && U.state(S) ? S.deep : null);
+  const fill = (t, o) => t.replace(/\{(\w+)\}/g, (m, k) => (o[k] === undefined ? m : o[k]));
+  const least = c => KS.reduce((k, n) => (c.stats[n] < c.stats[k] ? n : k), 'M'), most = c => KS.reduce((k, n) => (c.stats[n] > c.stats[k] ? n : k), 'M');
+  X.start = function (S) { S.deep = { v: 1, wounds: [[], []], called: [[], []], dark: [], footing: [0, 0] }; };
+  X.wounds = (S, who) => { const d = deep(S); return d ? d.wounds[who].filter(w => w.until > S.room).map(w => w.k) : []; };
+  X.charges = (S, who) => { const d = deep(S); return d ? S.p[who].relics.filter(id => d.called[who].indexOf(id) < 0) : []; };
+  X.isDark = S => { const d = deep(S); return !!d && d.dark.indexOf(S.room) >= 0; };
+  X.footing = (S, who) => { const d = deep(S); return d ? d.footing[who] : 0; };
+  function spend(S, who) { const id = X.charges(S, who)[0]; if (!id) return null; deep(S).called[who].push(id); return id; }
+  const relicName = id => (D.relics[id] ? D.relics[id].name : 'relic');
+
+  /* ---------- the fork ---------- */
+  function describe(S, rid) {
+    const r = D.byId[rid], rel = r && D.relics[r.relic], out = [];
+    if (rel) out.push('Its relic: ' + rel.name + ' (+' + (rel.amt || 1) + ' ' + D.stats[rel.k] + ').');
+    const edged = [0, 1].filter(i => (r.perks || []).some(pk => S.p[i].tags.indexOf(pk.tag) >= 0)).map(i => S.p[i].name);
+    out.push(edged.length === 2 ? 'You both have an edge there.' : edged.length ? edged[0] + ' has an edge there.' : 'Neither of you has an edge there.');
+    return out.join(' ');
+  }
+  A.kinds.fork = {
+    options: (S, who, p) => [
+      { i: 0, title: 'The lit stair: ' + D.byId[p.lit].title, note: describe(S, p.lit), disabled: false },
+      { i: 1, title: 'The dark door: ' + D.byId[p.dark].title, note: describe(S, p.dark) + ' Riskier and richer: every roll there is 1 harder, and every success pays 1 more gold.', disabled: false }],
+    scene: (S, p) => p.from, title: () => 'The stair divides', lines: () => [C.text.fork],
+    resolve(S, p, v) {
+      const d = deep(S), lead = E.first(S), pick = v[0] === v[1] ? v[0] : v[lead];
+      if (v[0] !== v[1]) p.lines.push(fill(C.text.forkSplit, { n: S.p[lead].name }));
+      if (pick === 1 && d && p.slot === S.room && !E.room(S).finale) {
+        S.order = E.order(S).slice(); S.order[p.slot] = p.dark; d.dark.push(p.slot);
+        U.record(S, 'fork', 'You took the dark door to ' + D.byId[p.dark].title + '.');
+      }
+      p.lines.push(C.text[pick === 1 ? 'forkDark' : 'forkLit']);
+      p.details.push('Next: ' + D.byId[pick === 1 ? p.dark : p.lit].title + (pick === 1 ? '. Rolls −1; each success +1 gold.' : '.'));
+    }
+  };
+  function fork(S, from) {
+    const a = U.state(S), order = E.order(S), slot = S.room, pool = D.pool.filter(id => order.indexOf(id) < 0 && D.byId[id]);
+    if (!a || !pool.length || !D.byId[order[slot]] || D.byId[order[slot]].finale) return;
+    A.enqueue(S, 'fork', { slot, lit: order[slot], dark: pool[E.hash(a.seed + '|fork|' + slot) % pool.length], from });
+  }
+
+  /* ---------- the landings ---------- */
+  A.kinds.upgrade = {
+    options: (S, who, p) => C.upgrades[p.landing ? 1 : 0].map((u, i) => ({ i, title: u.title, note: fill(u.note, { low: D.stats[least(S.p[who])], high: D.stats[most(S.p[who])] }), disabled: false })),
+    scene: (S, p) => (p.landing ? 'stall2' : 'stall'), title: () => 'What the stair has taught you', lines: (S, who, p) => [C.text[p.landing ? 'upgrade1' : 'upgrade0']],
+    resolve(S, p, v) {
+      const d = deep(S);
+      v.forEach((n, i) => {
+        const u = C.upgrades[p.landing ? 1 : 0][n], c = S.p[i]; if (!u) return;
+        let got = u.title;
+        if (u.id === 'low') { const k = least(c); c.stats[k]++; got += ': +1 ' + D.stats[k]; }
+        else if (u.id === 'high') { const k = most(c); c.stats[k]++; got += ': +1 ' + D.stats[k]; }
+        else if (u.id === 'breath') { U.hp(S, i, Math.max(0, c.maxHp - c.hp)); got += ': healed to full'; }
+        else if (u.id === 'coin') { c.gold += 2; got += ': +2 gold'; }
+        else if (u.id === 'bone') { U.reroll(S, i); got += ': +1 reroll'; }
+        else if (u.id === 'bind') { if (d) d.wounds[i] = []; U.hp(S, i, 2); got += ': wounds cleared, healed 2'; }
+        p.details.push(c.name + ' · ' + got + '.');
+      });
+      p.lines = [C.text.upgradeDone];
+    }
+  };
+
+  /* ---------- the Bell ---------- */
+  A.kinds.bell = {
+    prepare(S, p) { if (!p.used) p.used = [[], []]; },
+    options(S, who, p) {
+      const target = p.round ? 6 : 5, c = S.p[who], hurt = X.wounds(S, who);
+      const out = C.approaches.map((ap, i) => { const mod = c.stats[ap.k] - (hurt.indexOf(ap.k) >= 0 ? 1 : 0);
+        return { i, title: ap.title, note: 'D6 + ' + mod + ' ' + D.stats[ap.k] + ' against ' + target + '.' + ((p.used[who] || []).indexOf(i) >= 0 ? ' The Bell has learned this.' : ''), disabled: (p.used[who] || []).indexOf(i) >= 0 }; });
+      const ch = X.charges(S, who);
+      if (ch.length) out.push({ i: 4, title: 'Call on the ' + relicName(ch[0]), note: 'Stand firm without a roll. A relic answers once.', disabled: false });
+      return out;
+    },
+    scene: () => 'bellheart', title: (S, p) => (p.round ? 'The Bell turns' : 'The Bell stirs'), lines: (S, who, p) => [C.text[p.round ? 'bellAgain' : 'bell']],
+    resolve(S, p, v) {
+      const d = deep(S), target = p.round ? 6 : 5; p.won = p.won || [0, 0];
+      v.forEach((n, i) => {
+        const c = S.p[i]; let good = false;
+        if (n === 4) { const id = spend(S, i); good = !!id; p.details.push(c.name + ' called on the ' + relicName(id) + ': held.'); }
+        else {
+          const k = KS[n], roll = U.roll(S, p, i, 'bell'), mod = c.stats[k] - (X.wounds(S, i).indexOf(k) >= 0 ? 1 : 0);
+          good = roll + mod >= target; p.used[i].push(n);
+          p.details.push(c.name + ': ' + roll + ' + ' + mod + ' ' + D.stats[k] + ' against ' + target + (good ? '; held.' : p.round ? '; gave ground, Undertoll +1.' : '; gave ground, −1 health.'));
+          if (!good) { if (p.round) U.toll(S, 1); else U.hp(S, i, -1); }
+        }
+        if (good) p.won[i]++;
+      });
+      if (!p.round) { p.lines = [C.text.bellRound]; p.next = 'bellAgain'; return; }
+      p.lines = [C.text.bellDone];
+      if (d) p.won.forEach((n, i) => { d.footing[i] = n - 1; p.details.push(S.p[i].name + (n >= 2 ? ' held both times: +1 on the last roll.' : n === 1 ? ' held once: no change to the last roll.' : ' gave ground both times: −1 on the last roll.')); });
+      if (p.won.every(n => n >= 2)) { S.trust++; p.details.push('Neither of you gave ground: trust +1.'); }
+      U.record(S, 'bell', 'Before the last choice, the Bell was faced twice: ' + S.p.map((c, i) => c.name + ' held ' + p.won[i] + ' of 2').join(', ') + '.');
+    }
+  };
+
+  /* ---------- relics answer once: reroll your partner's die ---------- */
+  X.canLend = (S, who) => !!deep(S) && !!S.rl && !(S.rl.lit && S.rl.lit[1 - who]) && X.charges(S, who).length > 0;
+  X.lend = function (S, who) {
+    if (!X.canLend(S, who)) return false;
+    const id = spend(S, who); S.rl.lit = S.rl.lit || [null, null]; S.rl.lit[1 - who] = id;
+    S.rl.d[1 - who] = 1 + Math.floor(Math.random() * 6);
+    return true;
+  };
+
+  /* ---------- into the engine ---------- */
+  for (const k of ['begin', 'parts', 'effects', 'commit', 'leave']) X.base[k] = E[k];
+  E.begin = function (S) { X.base.begin(S); X.start(S); };
+  E.parts = function (S, who, room, oi) {
+    const parts = X.base.parts(S, who, room, oi), d = deep(S); if (!d) return parts;
+    const op = E.optsFor(S, who, room)[oi];
+    if (op && X.wounds(S, who).indexOf(op.k) >= 0) parts.push({ l: C.wounds[op.k].name, v: -1, kind: 'adventure' });
+    if (!room.finale && X.isDark(S)) parts.push({ l: 'The dark door', v: -1, kind: 'adventure' });
+    if (room.finale && d.footing[who]) parts.push({ l: d.footing[who] > 0 ? 'Footing at the Bell' : 'Wrong-footed by the Bell', v: d.footing[who], kind: 'adventure' });
+    return parts;
+  };
+  E.effects = function (S, ev) {
+    const r = X.base.effects(S, ev);
+    if (deep(S) && !ev.room.finale && X.isDark(S)) ev.tier.forEach((t, i) => { if (t >= 2) r.fx[i].gold++; });
+    return r;
+  };
+  E.commit = function (S) {
+    const d0 = deep(S), before = d0 ? S.p.map(c => c.scars) : null, slot = S.room;
+    const r = X.base.commit(S), d = deep(S); if (!d || !before) return r;
+    S.p.forEach((c, i) => {
+      const k = r.ev && r.ev.o && r.ev.o[i] && r.ev.o[i].k;
+      if (c.scars > before[i] && k && !r.finale) {
+        d.wounds[i] = d.wounds[i].filter(w => w.k !== k && w.until > S.room); d.wounds[i].push({ k, until: S.room + 2 });
+        U.record(S, 'wound', fill(C.wounds[k].line, { n: c.name }) + ' from ' + r.ev.room.title + '.');
+      }
+    });
+    if (!r.finale && (slot === 0 || slot === 2 || slot === 4)) fork(S, r.ev.room.id);
+    return r;
+  };
+  E.leave = function (S) {
+    const d = deep(S), due = E.stopDue(S), last = S.room >= E.slots(S) - 1;
+    const result = X.base.leave(S);
+    if (!d || due < 0) return result;
+    A.enqueue(S, 'upgrade', { landing: due });
+    if (last) A.enqueue(S, 'bell');
+    return result;
+  };
+  g.Deeper = X;
 })(typeof window !== 'undefined' ? window : globalThis);
 
 
@@ -5142,13 +5314,26 @@ if (typeof module !== 'undefined' && module.exports) module.exports = O;
 })(typeof window !== 'undefined' ? window : globalThis);
 
 
+/* Host-authoritative: a lantern calls on a relic to reroll its partner's die. */
+(function (g) {
+  'use strict';
+  const O = g.Online, apply = O.apply;
+  O.apply = function (S, seat, m) {
+    if (!m || m.a !== 'lend') return apply(S, seat, m);
+    if (!S.net || ![0, 1].includes(seat) || S.screen !== 'roll' || !g.Deeper.lend(S, seat)) return false;
+    S.net.ready = [false, false];      /* the results changed, so everyone reads them again */
+    return true;
+  };
+})(typeof window !== 'undefined' ? window : globalThis);
+
+
 /* Two Lanterns :: net.js. A room for two over PeerJS, which opens a WebRTC data channel between the two browsers.
    There is no game in here. It opens a room (host) or finds one (guest), keeps the line alive, wins the line back when it drops, and passes small JSON messages.
    The only server is PeerJS's public broker, and it is used just to introduce the two browsers: once the channel is open, every move goes straight between them.
    When the two browsers cannot reach each other at all, the broker carries the moves instead (see 'a line through the broker'). */
 (function (g) {
 'use strict';
-const Net = { V: 2 };
+const Net = { V: 3 };
 const PREFIX = 'twolanterns-';            /* room ids on a shared broker are global, so every room code gets this prefix */
 const ALPHA = 'BCDFGHJKLMNPQRSTVWXZ';     /* twenty consonants: no vowels (so no words) and nothing that reads as 0, 1, I or O */
 const BEAT = 2500, DEAD = 9000, DIAL_MS = 25000, HELLO_MS = 8000, OPEN_MS = 30000, RETRY = [900, 1800, 3000, 5000, 8000];
@@ -5810,6 +5995,27 @@ function adventureSummary() {
 }
 
 
+const DEEP = window.Deeper;
+/* what is weighing on the lanterns in this room: wounds, the dark door, footing won at the Bell */
+function deepStatus() {
+  if (!S.deep || !S.p) return '';
+  const bits = [];
+  S.p.forEach((c, i) => DEEP.wounds(S, i).forEach(k => bits.push(`<span><b>${esc(c.name)}</b> · ${esc(DEEP.content.wounds[k].name)}: −1 ${esc(D.stats[k])}</span>`)));
+  const room = E.room(S);
+  if (room && !room.finale && DEEP.isDark(S)) bits.unshift('<span><b>The dark door</b> · every roll −1; each success +1 gold</span>');
+  if (room && room.finale) S.p.forEach((c, i) => { const f = DEEP.footing(S, i); if (f) bits.push(`<span><b>${esc(c.name)}</b> · ${f > 0 ? 'footing at the Bell: +1' : 'wrong-footed by the Bell: −1'} on the last roll</span>`); });
+  return bits.length ? `<aside class="adv-status deep-status">${bits.join('')}</aside>` : '';
+}
+/* on a result card: call on a relic to reroll your partner's die, and the note left once somebody has */
+function deepLend(i) {
+  if (!S.deep || !S.rl) return '';
+  const lit = S.rl.lit && S.rl.lit[i], id = DEEP.charges(S, i)[0];
+  const note = lit ? `<span class="fine">${esc(S.p[1 - i].name)} called on the ${esc((D.relics[lit] || {}).name || 'relic')}: this die was rerolled</span>` : '';
+  const can = DEEP.canLend(S, i) && (!on() || i === O.me(S));
+  return note + (can ? `<button type="button" class="btn ghost small deep-lend" data-act="lend" data-i="${i}" title="Each relic answers once in a descent. The new roll replaces ${esc(S.p[1 - i].name)}’s, even if it is worse.">${ico('lantern')}Call on the ${esc((D.relics[id] || {}).name || 'relic')}: reroll ${esc(S.p[1 - i].name)}’s die</button>` : '');
+}
+
+
 function chrome(inner, where, bare) {
   inner = enrichStory(inner);
   const net = on();
@@ -6139,7 +6345,7 @@ function intro() {
     <p class="story" data-narrate>${esc(r.intro)}</p>
     ${r.combat ? '<p class="encounter-note">Wandering encounter · Choose your approach in secret. Fight, outwit, or talk your way through; the dice decide the cost.</p>' : ''}
     ${storyBits(r)}
-    ${moodLine}${advTwist()}
+    ${moodLine}${advTwist()}${deepStatus()}
     <div class="meta">${danger}${S.room > 0 ? toll : ''}${pagePill()}</div>
     <div class="minis">${mini(0)}${mini(1)}</div>
     ${on() ? pstat() : ''}
@@ -6324,7 +6530,7 @@ function choose() {
     <h2 data-focus tabindex="-1">${esc(r.title)}</h2>
     <p class="lead">${lede}${dealtLine}</p>
     ${net ? pstat() : ''}
-    ${whisper}${mirror}${edgeBox}${advTwist()}${advDeal()}
+    ${whisper}${mirror}${edgeBox}${advTwist()}${deepStatus()}${advDeal()}
     ${S.adventure ? `<details class="adv-hints"><summary>Ways to work together</summary><ul>${Object.values(ADV.content.combos).map(c => `<li>${esc(c.hint)}</li>`).join('')}</ul><p class="fine">A combination is discovered after both moves are revealed. Your partner’s choice stays hidden.</p></details>` : ''}
     <div class="opts" role="group" aria-label="Moves">${cards}</div>
     ${bar}
@@ -6397,7 +6603,7 @@ function roll() {
         <div class="math"><span class="die ${S.rl.rr[i] ? 'pop' : ''}" data-i="${i}">${A.die(ev.d[i])}</span><div class="eq">${mathLine(ev, i)}</div></div>
         <p class="story">${outText(r, ev, i)}</p>
         ${chips(r, ev, fx, after, i)}
-        ${rr}
+        ${rr}${deepLend(i)}
       </div></article>`;
   }).join('');
   const pg = ST.pageFor(S, ev);
@@ -6867,6 +7073,7 @@ app.addEventListener('input', e => {
 });
 
 Object.assign(ACT, { 'adventure-vote': t => adventureAct('vote', t), 'adventure-ready': t => adventureAct('ready', t), 'adventure-confess': t => adventureAct('confess', t) });
+Object.assign(ACT, { lend: t => { if (on()) { act({ a: 'lend' }); return; } if (DEEP.lend(S, +t.dataset.i)) { save(); render(false); } } });
 
 function boot(data) {
   data = data || {};

@@ -43,6 +43,10 @@ Three extras are baked into `index.html` by `scripts/build-extras.cjs`, the last
 
 `npm run verify` now also runs `scripts/verify-extras.cjs`, which tests every feat against a descent that should earn it.
 
+## The deeper rules
+
+Fresh descents choose their path at three forks, learn something at each landing, carry named wounds, can call on each relic once, and face the Bell twice before the last choice. See `deeper/README.md`.
+
 ## Options, wide screens and the online room
 
 - `options/`: the cog in the header opens one panel for sound on or off, the music, effects and narrator volumes, whether the narrator reads every screen, text size, less motion, full screen, and the buzz on phones. Choices are kept on the device (`twolanterns.options`); a choice made with the old three-way sound button is carried over. The narrator volume slider is left out on phones that do not let a page set it.

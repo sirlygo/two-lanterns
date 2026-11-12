@@ -5,8 +5,8 @@
   "description": "Two-player dungeon crawler with the Undertoll art edition",
   "scripts": {
     "build": "node scripts/build-art.cjs && node scripts/build-art-review.cjs && node scripts/build-narrator.cjs && node scripts/build-extras.cjs",
-    "verify": "node scripts/verify-art.cjs && node scripts/verify-descent.cjs && node scripts/verify-pages.cjs && node scripts/verify-adventure.cjs && node scripts/verify-narration.cjs && node scripts/verify-extras.cjs",
-    "qa": "node scripts/browser-art-qa.cjs && node scripts/browser-descent-qa.cjs && node scripts/browser-story-qa.cjs && node scripts/browser-adventure-qa.cjs",
+    "verify": "node scripts/verify-art.cjs && node scripts/verify-descent.cjs && node scripts/verify-pages.cjs && node scripts/verify-adventure.cjs && node scripts/verify-deeper.cjs && node scripts/verify-narration.cjs && node scripts/verify-extras.cjs",
+    "qa": "node scripts/browser-art-qa.cjs && node scripts/browser-descent-qa.cjs && node scripts/browser-story-qa.cjs && node scripts/browser-adventure-qa.cjs && node scripts/browser-deeper-qa.cjs",
     "narrate": "node scripts/narrate.cjs",
     "music": "node scripts/music.cjs",
     "sfx": "node scripts/sfx.cjs"

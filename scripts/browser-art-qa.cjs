@@ -69,7 +69,7 @@ let qaBrowser;
   }else if(state.screen==='adventure'){
     const p=await page.evaluate(()=>({kind:__tl.S.adventure.phase.kind,stage:__tl.S.adventure.phase.stage}));
     if(p.stage==='result')await page.locator('[data-act="adventure-ready"]').click();
-    else {const i=({risk:0,bargain:2,guide:0,guideReturn:1,merchant:1,festival:0,falseexit:2,huntsman:4})[p.kind];await page.locator('[data-act="adventure-vote"][data-i="'+i+'"]').click();}
+    else {const i=({risk:0,bargain:2,guide:0,guideReturn:1,merchant:1,festival:0,falseexit:2,huntsman:4})[p.kind];await page.locator(i===undefined?'[data-act="adventure-vote"]:not([disabled])':'[data-act="adventure-vote"][data-i="'+i+'"]').first().click();}
   }else if(state.screen==='handoff')await page.locator('[data-act="ho"]').click();
   else if(state.screen==='roll'){
     if(!state.rolled){await page.locator('[data-act="roll"]').click();await page.waitForFunction(()=>!__tl.ui.rolling);}
